@@ -3,37 +3,37 @@
         "creatures": [
             {
                 "name": "Creature 1P1",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 1"
             },
             {
                 "name": "Creature 2P1",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 1"
             },
             {
                 "name": "Creature 3P1",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 1"
             },
             {
                 "name": "Creature 1P2",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 2"
             },
             {
                 "name": "Creature 2P2",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 2"
             },
             {
                 "name": "Creature 3P2",
-                "initial_health": 4,
+                "initial_health": 2,
                 "attack": 1,
                 "player": "Player 2"
             }
@@ -45,53 +45,101 @@
             "attacker": "Creature 1P1",
             "defender": "Creature 1P2",
             "damage": 1,
-            "defender_remaining_health": 3
+            "defender_remaining_health": 1
         },
         {
             "turn": 2,
             "attacker": "Creature 1P2",
             "defender": "Creature 1P1",
             "damage": 1,
-            "defender_remaining_health": 3
+            "defender_remaining_health": 1
         },
         {
             "turn": 3,
             "attacker": "Creature 1P1",
             "defender": "Creature 1P2",
             "damage": 1,
-            "defender_remaining_health": 2
+            "defender_remaining_health": 0
+        },
+        {
+            "turn": 3,
+            "detail": "Creature 1P2 died."
         },
         {
             "turn": 4,
-            "attacker": "Creature 1P2",
+            "attacker": "Creature 2P2",
             "defender": "Creature 1P1",
             "damage": 1,
-            "defender_remaining_health": 2
+            "defender_remaining_health": 0
+        },
+        {
+            "turn": 4,
+            "detail": "Creature 1P1 died."
         },
         {
             "turn": 5,
-            "attacker": "Creature 1P1",
-            "defender": "Creature 1P2",
+            "attacker": "Creature 2P1",
+            "defender": "Creature 2P2",
             "damage": 1,
             "defender_remaining_health": 1
         },
         {
             "turn": 6,
-            "attacker": "Creature 1P2",
-            "defender": "Creature 1P1",
+            "attacker": "Creature 2P2",
+            "defender": "Creature 2P1",
             "damage": 1,
             "defender_remaining_health": 1
         },
         {
             "turn": 7,
-            "attacker": "Creature 1P1",
-            "defender": "Creature 1P2",
+            "attacker": "Creature 2P1",
+            "defender": "Creature 2P2",
             "damage": 1,
             "defender_remaining_health": 0
         },
         {
+            "turn": 7,
+            "detail": "Creature 2P2 died."
+        },
+        {
+            "turn": 8,
+            "attacker": "Creature 3P2",
+            "defender": "Creature 2P1",
+            "damage": 1,
+            "defender_remaining_health": 0
+        },
+        {
+            "turn": 8,
+            "detail": "Creature 2P1 died."
+        },
+        {
+            "turn": 9,
+            "attacker": "Creature 3P1",
+            "defender": "Creature 3P2",
+            "damage": 1,
+            "defender_remaining_health": 1
+        },
+        {
+            "turn": 10,
+            "attacker": "Creature 3P2",
+            "defender": "Creature 3P1",
+            "damage": 1,
+            "defender_remaining_health": 1
+        },
+        {
+            "turn": 11,
+            "attacker": "Creature 3P1",
+            "defender": "Creature 3P2",
+            "damage": 1,
+            "defender_remaining_health": 0
+        },
+        {
+            "turn": 11,
+            "detail": "Creature 3P2 died."
+        },
+        {
             "winner": "Player 1",
-            "turn": 7
+            "turn": 11
         }
     ]
 }

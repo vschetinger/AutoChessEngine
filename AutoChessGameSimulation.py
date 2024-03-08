@@ -53,7 +53,7 @@ class Game:
             attacker = attacker_player.get_first_alive_creature()
             defender = defender_player.get_first_alive_creature()
 
-            if attacker and defender:  # Both are alive
+            if attacker and defender:  # Both are selected
                 defender.take_damage(attacker.attack)
                 event = {
                     "turn": self.turn + 1,
@@ -64,18 +64,28 @@ class Game:
                 }
                 self.battle_log["events"].append(event)
 
+                # Check if the defender died to update the log appropriately
+                if not defender.is_alive:
+                    death_event = {
+                        "turn": self.turn + 1,
+                        "detail": f"{defender.name} died."
+                    }
+                    self.battle_log["events"].append(death_event)
+
             self.turn += 1
 
-            if not attacker.is_alive or not defender.is_alive:
-                winner = "Player 1" if defender_player.has_alive_creatures() else "Player 2"
+            # Check after updating the turn if any player has won
+            if not all(player.has_alive_creatures() for player in self.players):
+                winner = "Player 1" if self.players[0].has_alive_creatures() else "Player 2"
                 self.battle_log["events"].append({"winner": winner, "turn": self.turn})
                 break
 
         return self.battle_log
 
+
 # Instantiate multiple creatures for both players
-creatures_player1 = [Creature(health=4, attack=1, name=f"Creature {i}P1") for i in range(1, 4)]
-creatures_player2 = [Creature(health=4, attack=1, name=f"Creature {i}P2") for i in range(1, 4)]
+creatures_player1 = [Creature(health=2, attack=1, name=f"Creature {i}P1") for i in range(1, 4)]
+creatures_player2 = [Creature(health=2, attack=1, name=f"Creature {i}P2") for i in range(1, 4)]
 
 # Instantiate players with multiple creatures
 player1 = Player(creatures_player1)

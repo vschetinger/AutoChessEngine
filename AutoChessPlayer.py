@@ -1,6 +1,8 @@
 import pygame
 import json
 import sys
+import math
+
 
 class AutoChessPlayer:
     def __init__(self, battle_log_path):
@@ -38,6 +40,27 @@ class AutoChessPlayer:
                 'size': 30
             }
 
+
+    def draw_arrow(self, start, end, color, thickness=5):
+        # Draw the line
+        pygame.draw.line(self.screen, color, start, end, thickness)
+        
+        # Calculate the angle of the line
+        dx = end[0] - start[0]
+        dy = end[1] - start[1]
+        angle = math.atan2(dy, dx)
+        
+        # Calculate the points of the arrowhead
+        arrowhead_length = 20
+        arrowhead_angle = math.pi / 6
+        arrow_point1 = (end[0] - arrowhead_length * math.cos(angle - arrowhead_angle),
+                        end[1] - arrowhead_length * math.sin(angle - arrowhead_angle))
+        arrow_point2 = (end[0] - arrowhead_length * math.cos(angle + arrowhead_angle),
+                        end[1] - arrowhead_length * math.sin(angle + arrowhead_angle))
+        
+        # Draw the arrowhead
+        pygame.draw.polygon(self.screen, color, [end, arrow_point1, arrow_point2])
+
     def play(self):
         # Define the button
         button_color = (0, 0, 255)  # Blue
@@ -71,7 +94,8 @@ class AutoChessPlayer:
                     attacker_pos = self.positions[event['attacker']]
                     defender_pos = self.positions[event['defender']]
                     # Animate attack (for simplicity, we'll just draw a line here)
-                    pygame.draw.line(self.screen, (255, 255, 255), attacker_pos, defender_pos, 5)
+                    self.draw_arrow(attacker_pos, defender_pos, (255, 255, 255), 5)
+
                     
                     # Print the current event
                     print(f"Current event: {event}")  # Add this line to print the current event
