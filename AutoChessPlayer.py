@@ -16,16 +16,27 @@ class AutoChessPlayer:
         self.screen = pygame.display.set_mode((800, 800))
         self.clock = pygame.time.Clock()
 
+        # Load and scale the background texture to fit the screen
+        self.background = pygame.image.load('bg2.png')
+        self.background = pygame.transform.scale(self.background, (800, 800))
+
         self.playing = True
         self.current_event_index = 0
 
         self.positions = {}
         self.creature_properties = {}
-        creature_spacing = self.screen.get_width() / (len(self.header) / 2 + 1)
+
+        # Calculate the horizontal center and set fixed positions for y
+        center_x = self.screen.get_width() // 2
+        top_row_y = self.screen.get_height() * 0.3  # Adjust this value as needed for your texture
+        bottom_row_y = self.screen.get_height() * 0.7  # Adjust this value as needed for your texture
+
+        # Calculate positions for creatures, 3 per player, evenly spaced
+        spacing = 100  # Space between creatures
         for i, creature in enumerate(self.header):
-            y_position = 50 if creature["player"] == "Player 1" else self.screen.get_height() - 50
-            x_position = ((i % (len(self.header) // 2) + 1) * creature_spacing)
-            self.positions[creature['name']] = (int(x_position), y_position)
+            x_position = center_x + (i % 3 - 1) * spacing  # Positions: center, left and right of the center
+            y_position = top_row_y if creature["player"] == "Player 1" else bottom_row_y
+            self.positions[creature['name']] = (int(x_position), int(y_position))
             self.creature_properties[creature['name']] = {
                 'color': (255, 0, 0) if creature["player"] == "Player 1" else (0, 255, 0),
                 'size': 30,
@@ -59,7 +70,9 @@ class AutoChessPlayer:
                         self.current_event_index += 1
                     pygame.time.delay(500)
 
-            self.screen.fill((0, 0, 0))
+            # self.screen.fill((0, 0, 0))
+            self.screen.blit(self.background, (0, 0))
+
             pygame.draw.rect(self.screen, button_color, button_rect)
 
             for name, props in self.creature_properties.items():
