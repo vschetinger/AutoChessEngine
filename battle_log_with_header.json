@@ -2,39 +2,39 @@
     "header": {
         "creatures": [
             {
-                "name": "Creature 1P1",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 1 Player 1",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 1"
             },
             {
-                "name": "Creature 2P1",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 2 Player 1",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 1"
             },
             {
-                "name": "Creature 3P1",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 3 Player 1",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 1"
             },
             {
-                "name": "Creature 1P2",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 1 Player 2",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 2"
             },
             {
-                "name": "Creature 2P2",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 2 Player 2",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 2"
             },
             {
-                "name": "Creature 3P2",
-                "initial_health": 2,
-                "attack": 1,
+                "name": "Creature 3 Player 2",
+                "initial_health": 10,
+                "attack": 2,
                 "player": "Player 2"
             }
         ]
@@ -42,104 +42,649 @@
     "events": [
         {
             "turn": 1,
-            "attacker": "Creature 1P1",
-            "defender": "Creature 1P2",
-            "damage": 1,
-            "defender_remaining_health": 1
+            "movements": [
+                {
+                    "creature": "Creature 1 Player 1",
+                    "movement_path": [
+                        [
+                            750.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            250.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        250.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 2 Player 1",
+                    "movement_path": [
+                        [
+                            500.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            500.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        500.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 3 Player 1",
+                    "movement_path": [
+                        [
+                            250.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            750.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        750.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 1 Player 2",
+                    "movement_path": [
+                        [
+                            750.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            250.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        250.0,
+                        900.0
+                    ]
+                },
+                {
+                    "creature": "Creature 2 Player 2",
+                    "movement_path": [
+                        [
+                            500.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            500.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        500.0,
+                        900.0
+                    ]
+                },
+                {
+                    "creature": "Creature 3 Player 2",
+                    "movement_path": [
+                        [
+                            250.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            750.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        750.0,
+                        900.0
+                    ]
+                }
+            ]
         },
         {
             "turn": 2,
-            "attacker": "Creature 1P2",
-            "defender": "Creature 1P1",
-            "damage": 1,
-            "defender_remaining_health": 1
-        },
-        {
-            "turn": 3,
-            "attacker": "Creature 1P1",
-            "defender": "Creature 1P2",
-            "damage": 1,
-            "defender_remaining_health": 0
-        },
-        {
-            "turn": 3,
-            "detail": "Creature 1P2 died."
-        },
-        {
-            "turn": 4,
-            "attacker": "Creature 2P2",
-            "defender": "Creature 1P1",
-            "damage": 1,
-            "defender_remaining_health": 0
-        },
-        {
-            "turn": 4,
-            "detail": "Creature 1P1 died."
-        },
-        {
-            "turn": 5,
-            "attacker": "Creature 2P1",
-            "defender": "Creature 2P2",
-            "damage": 1,
-            "defender_remaining_health": 1
-        },
-        {
-            "turn": 6,
-            "attacker": "Creature 2P2",
-            "defender": "Creature 2P1",
-            "damage": 1,
-            "defender_remaining_health": 1
-        },
-        {
-            "turn": 7,
-            "attacker": "Creature 2P1",
-            "defender": "Creature 2P2",
-            "damage": 1,
-            "defender_remaining_health": 0
-        },
-        {
-            "turn": 7,
-            "detail": "Creature 2P2 died."
-        },
-        {
-            "turn": 8,
-            "attacker": "Creature 3P2",
-            "defender": "Creature 2P1",
-            "damage": 1,
-            "defender_remaining_health": 0
-        },
-        {
-            "turn": 8,
-            "detail": "Creature 2P1 died."
-        },
-        {
-            "turn": 9,
-            "attacker": "Creature 3P1",
-            "defender": "Creature 3P2",
-            "damage": 1,
-            "defender_remaining_health": 1
-        },
-        {
-            "turn": 10,
-            "attacker": "Creature 3P2",
-            "defender": "Creature 3P1",
-            "damage": 1,
-            "defender_remaining_health": 1
-        },
-        {
-            "turn": 11,
-            "attacker": "Creature 3P1",
-            "defender": "Creature 3P2",
-            "damage": 1,
-            "defender_remaining_health": 0
-        },
-        {
-            "turn": 11,
-            "detail": "Creature 3P2 died."
-        },
-        {
-            "winner": "Player 1",
-            "turn": 11
+            "movements": [
+                {
+                    "creature": "Creature 1 Player 1",
+                    "movement_path": [
+                        [
+                            750.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            250.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        250.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 2 Player 1",
+                    "movement_path": [
+                        [
+                            500.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            500.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        500.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 3 Player 1",
+                    "movement_path": [
+                        [
+                            250.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            750.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        750.0,
+                        100.0
+                    ]
+                },
+                {
+                    "creature": "Creature 1 Player 2",
+                    "movement_path": [
+                        [
+                            750.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            250.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        250.0,
+                        900.0
+                    ]
+                },
+                {
+                    "creature": "Creature 2 Player 2",
+                    "movement_path": [
+                        [
+                            500.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            500.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        500.0,
+                        900.0
+                    ]
+                },
+                {
+                    "creature": "Creature 3 Player 2",
+                    "movement_path": [
+                        [
+                            250.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            1000.0,
+                            0.0
+                        ],
+                        [
+                            -1000.0,
+                            0.0
+                        ],
+                        [
+                            750.0,
+                            0.0
+                        ]
+                    ],
+                    "final_position": [
+                        750.0,
+                        900.0
+                    ]
+                }
+            ]
         }
     ]
 }
