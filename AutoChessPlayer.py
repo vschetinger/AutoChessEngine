@@ -1,21 +1,32 @@
+# No need to import Creature directly if it's not used here
 import pygame
 import json
 import sys
-import math
-from AutoChessEngine import PlaybackCreature
+from AutoChessEngine import PlaybackCreature, Game, Arena
+
+
+class PlaybackGame(Game):
+    def __init__(self, arena, creatures):
+        super().__init__(arena)
+        self.creatures = creatures  # Here creatures are specifically set for playback
+    
+    def update_from_events(self, time_index):
+        for creature in self.creatures:
+            creature.move(time_index)
+
 
 class AutoChessPlayer:
     def __init__(self, battle_log_path):
         with open(battle_log_path, 'r') as f:
             self.battle_log = json.load(f)
-            # print("Loaded battle log:", self.battle_log)
-        # Assuming 'header' is the correct key based on your JSON structure
-            
-        # Prepare deltas for each creature
-        creature_deltas = {movement["id"]: movement["deltas"] for movement in self.battle_log["movements"]}
-        
 
-        self.creatures = [
+        # Arena setup based on JSON data
+        arena_dimensions = self.battle_log['header']['arena']
+        self.arena = Arena(arena_dimensions['width'], arena_dimensions['height'])
+
+        # Initialize creatures from JSON data
+        # Assuming 'battle_log' is already loaded from JSON
+        creatures = [
             PlaybackCreature(
                 id=info['id'],
                 health=info['health'],
@@ -23,30 +34,33 @@ class AutoChessPlayer:
                 speed=info['speed'],
                 name=info['name'],
                 angle=info['angle'],
-                events={int(k): v for k, v in self.battle_log['events'].items() if any(event['id'] == info['id'] for event in v)}
+                events={int(time): events for time, events in self.battle_log['events'].items() if any(e['id'] == info['id'] for e in events)}
             ) for info in self.battle_log['header']['creatures']
         ]
-        self.arena_width = self.battle_log['header']['arena']['width']
-        self.arena_height = self.battle_log['header']['arena']['height']
-        self.playing = False  # Start with replay paused
+
+
+        # Instantiate PlaybackGame with creatures
+        self.game = PlaybackGame(self.arena, creatures)
+
+        # Setup playback control
+        self.playing = False
         self.current_event_index = 0
 
-        # Assuming 'events' is the correct key based on your JSON structure
-        self.events = self.battle_log["movements"]
-        self.arena_rect = pygame.Rect(arena_rect)  # Define the arena area as a rectangle
-
-            
-
+        # Pygame and screen setup
         pygame.init()
         self.screen = pygame.display.set_mode((800, 800))
         self.background = pygame.image.load('bg2.png')
         self.background = pygame.transform.scale(self.background, (800, 800))
-        self.playing = False  # Start with replay paused
-        self.current_event_index = 0
+
+        # Define arena_rect here
+        self.arena_rect = pygame.Rect(100, 100, 600, 600)  # Example dimensions and position
+
+        # UI Controls
         self.button_color = (0, 200, 0)
         self.button_hover_color = (0, 255, 0)
         self.button_rect = pygame.Rect(650, 700, 120, 50)
         self.font = pygame.font.Font(None, 36)
+
 
 
     def virtual_to_screen(self, position):
@@ -56,26 +70,7 @@ class AutoChessPlayer:
         return int(screen_x), int(screen_y)
     
     def draw_arena(self):
-        pygame.draw.rect(self.screen, (255, 100, 100), self.arena_rect, 2)  # Draw the arena boundary
-
-
-    def draw_creature(self, position, angle, color):
-        # Calculate the points of the triangle for the creature
-        point = self.virtual_to_screen(position)
-        radians = math.radians(angle)
-        points = [
-            (point[0] + math.cos(radians) * 10, point[1] + math.sin(radians) * 10),
-            (point[0] + math.cos(radians + 2.0944) * 10, point[1] + math.sin(radians + 2.0944) * 10),
-            (point[0] + math.cos(radians - 2.0944) * 10, point[1] + math.sin(radians - 2.0944) * 10)
-        ]
-        pygame.draw.polygon(self.screen, color, points)
-
-    def update_creature_positions(self):
-        if not self.playing:
-            return
-        # Apply the next delta for each creature
-        for creature in self.creatures:
-            creature.apply_next_delta()
+        pygame.draw.rect(self.screen, (255, 100, 100), self.arena_rect, 2)  # Draw the arena boundar
 
 
     def play_pause(self):
@@ -100,19 +95,24 @@ class AutoChessPlayer:
 
     def run(self):
         clock = pygame.time.Clock()
-        convert_to_screen = lambda pos: self.virtual_to_screen(pos)  # Create a lambda that captures self.arena_rect
-
         while True:
             self.handle_events()
             self.screen.blit(self.background, (0, 0))
             self.draw_arena()
             self.draw_button()
+
             if self.playing:
-                self.update_creature_positions()
+                # Ensure current_event_index is within the range of recorded events before updating
+                if str(self.current_event_index) in self.battle_log['events']:
+                    self.game.update_from_events(self.current_event_index)
+                    self.current_event_index += 1
+                else:
+                    # Reset current_event_index to 0 if we've reached the end of the recorded events
+                    self.current_event_index = 0
 
             # Draw creatures whether playing or paused
-            for creature in self.creatures:
-                creature.draw(self.screen, convert_to_screen)
+            for creature in self.game.creatures:
+                creature.draw(self.screen, self.virtual_to_screen)
 
             pygame.display.flip()
             clock.tick(10)  # Adjust this to control the refresh rate of the simulation
@@ -120,8 +120,10 @@ class AutoChessPlayer:
 
 
 
+
+
 if __name__ == "__main__":
     arena_rect = (150, 150, 500, 500)  # Example coordinates and size (x, y, width, height)
 
-    player = AutoChessPlayer('simulation_record.json')
+    player = AutoChessPlayer('simulation_record3.json')
     player.run()

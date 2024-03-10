@@ -61,7 +61,7 @@ class PlaybackCreature(BaseCreature):
         super().__init__(id, health, position, speed, name, angle)
         self.events = events
 
-    def move(self, arena, time_index):
+    def move(self, time_index):
         # Use events to update position, angle, etc.
         if time_index in self.events:
             for event in self.events[time_index]:
@@ -70,9 +70,9 @@ class PlaybackCreature(BaseCreature):
 
 
 class Game:
-    def __init__(self, arena, creatures):
+    def __init__(self, arena,):
         self.arena = arena
-        self.creatures = creatures
+        self.creatures = []  # Initialized but can be populated by derived classes
 
 class SimulationGame(Game):
     def __init__(self, arena, creatures):
