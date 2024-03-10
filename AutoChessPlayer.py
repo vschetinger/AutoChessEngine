@@ -2,7 +2,7 @@ import pygame
 import json
 import sys
 import math
-from AutoChessEngine import Creature
+from AutoChessEngine import PlaybackCreature
 
 class AutoChessPlayer:
     def __init__(self, battle_log_path):
@@ -16,16 +16,15 @@ class AutoChessPlayer:
         
 
         self.creatures = [
-            Creature(
+            PlaybackCreature(
                 id=info['id'],
                 health=info['health'],
                 position=tuple(info['position']),
                 speed=info['speed'],
                 name=info['name'],
                 angle=info['angle'],
-                deltas=creature_deltas[info['id']]  # Get the corresponding deltas for this creature
-            )
-            for info in self.battle_log['header']['creatures']
+                events={int(k): v for k, v in self.battle_log['events'].items() if any(event['id'] == info['id'] for event in v)}
+            ) for info in self.battle_log['header']['creatures']
         ]
         self.arena_width = self.battle_log['header']['arena']['width']
         self.arena_height = self.battle_log['header']['arena']['height']

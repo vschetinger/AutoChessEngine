@@ -8,37 +8,35 @@ class Arena:
         self.width = width
         self.height = height
 
-class Creature:
+
+class BaseCreature:
     def __init__(self, id, health, position, speed, name, angle):
         self.id = id
         self.health = health
-        self.position = position  # (x, y) tuple
+        self.position = position
         self.initial_position = position
-        self.speed = speed  # Movement speed
+        self.speed = speed
         self.name = name
-        self.angle = angle  # Angle in degrees
-        self.events = {}
+        self.angle = angle
 
-    def move(self, arena):
+    def draw(self, screen, convert_to_screen):
+        point = convert_to_screen(self.position)
         radians = math.radians(self.angle)
-        dx = math.cos(radians) * self.speed
-        dy = math.sin(radians) * self.speed
-        new_x = self.position[0] + dx
-        new_y = self.position[1] + dy
+        points = [
+            (point[0] + math.cos(radians) * 10, point[1] + math.sin(radians) * 10),
+            (point[0] + math.cos(radians + 2.0944) * 10, point[1] + math.sin(radians + 2.0944) * 10),
+            (point[0] + math.cos(radians - 2.0944) * 10, point[1] + math.sin(radians - 2.0944) * 10),
+        ]
+        color = (255, 0, 0) if self.id % 2 == 0 else (0, 0, 255)
+        pygame.draw.polygon(screen, color, points)
 
-        # Check for boundary collisions and adjust angle if necessary
-        if new_x <= 0 or new_x >= arena.width or new_y <= 0 or new_y >= arena.height:
-            self.angle = (180 - self.angle) % 360  # Adjust angle upon collision
-            radians = math.radians(self.angle)  # Recalculate radians
-            dx = math.cos(radians) * self.speed
-            dy = math.sin(radians) * self.speed
-            self.events.append({"type": "angle", "id": self.id, "value": self.angle})  # Log angle change event
 
-        # Update position
-        self.position = (self.position[0] + dx, self.position[1] + dy)
-        self.events.append({"type": "delta", "id": self.id, "value": {"dx": dx, "dy": dy}})  # Log position change event
+class SimulationCreature(BaseCreature):
+    def __init__(self, id, health, position, speed, name, angle, events=None):
+        super().__init__(id, health, position, speed, name, angle)
+        self.events = events if events else {}
 
-    def move_and_record(self, arena, time_index):
+    def move(self, arena, time_index):
         radians = math.radians(self.angle)
         dx = math.cos(radians) * self.speed
         dy = math.sin(radians) * self.speed
@@ -58,39 +56,33 @@ class Creature:
 
         self.position = (max(0, min(arena.width, new_x)), max(0, min(arena.height, new_y)))
 
+class PlaybackCreature(BaseCreature):
+    def __init__(self, id, health, position, speed, name, angle, events):
+        super().__init__(id, health, position, speed, name, angle)
+        self.events = events
 
+    def move(self, arena, time_index):
+        # Use events to update position, angle, etc.
+        if time_index in self.events:
+            for event in self.events[time_index]:
+                if event["type"] == "delta":
+                    self.position = (self.position[0] + event["value"]["dx"], self.position[1] + event["value"]["dy"])
 
-    def draw(self, screen, convert_function):
-        point = convert_function(self.position)  # Use the passed function to convert the position
-        radians = math.radians(self.angle)
-        points = [
-            (point[0] + math.cos(radians) * 10, point[1] + math.sin(radians) * 10),
-            (point[0] + math.cos(radians + 2.0944) * 10, point[1] + math.sin(radians + 2.0944) * 10),
-            (point[0] + math.cos(radians - 2.0944) * 10, point[1] + math.sin(radians - 2.0944) * 10)
-        ]
-        color = (255, 0, 0) if self.id % 2 == 0 else (0, 0, 255)
-        pygame.draw.polygon(screen, color, points)
-
-    def virtual_to_screen(self, position):
-        # Assuming an arena size of 1000x1000 mapped to an 800x800 screen
-        virtual_x, virtual_y = position
-        screen_x = (virtual_x / 1000) * 800
-        screen_y = (virtual_y / 1000) * 800
-        return int(screen_x), int(screen_y)
-
-
-    def update(self, arena):
-        self.move(arena)
 
 class Game:
     def __init__(self, arena, creatures):
         self.arena = arena
         self.creatures = creatures
+
+class SimulationGame(Game):
+    def __init__(self, arena, creatures):
+        super().__init__(arena, creatures)
         self.turns_recorded = 0
+        self.events = {}
 
     def simulate_turn(self):
         for creature in self.creatures:
-            creature.move_and_record(self.arena, self.turns_recorded)
+            creature.move(self.arena, self.turns_recorded)
         self.turns_recorded += 1
 
     def record_game(self, filename):
