@@ -9,7 +9,7 @@ class Arena:
         self.height = height
 
 class Creature:
-    def __init__(self, id, health, position, speed, name, angle, deltas):
+    def __init__(self, id, health, position, speed, name, angle):
         self.id = id
         self.health = health
         self.position = position  # (x, y) tuple
@@ -17,22 +17,7 @@ class Creature:
         self.speed = speed  # Movement speed
         self.name = name
         self.angle = angle  # Angle in degrees
-        self.deltas = deltas  # List of movement deltas
-        self.current_delta_index = 0  # To keep track of the current delta
-
-    def apply_next_delta(self):
-        if self.current_delta_index < len(self.deltas):
-            dx, dy = self.deltas[self.current_delta_index]
-            self.position = (self.position[0] + dx, self.position[1] + dy)
-            print(len(self.deltas))
-        else:
-            # Reset to the beginning if we've reached the end of deltas
-            print("Deveria ter Resetado " + self.current_delta_index)
-            self.current_delta_index = 0
-            self.position = self.initial_position
-        
-        # Always increment the index
-        self.current_delta_index = (self.current_delta_index + 1) % len(self.deltas)
+        self.events = {}
 
     def move(self, arena):
         radians = math.radians(self.angle)
@@ -42,20 +27,38 @@ class Creature:
         new_y = self.position[1] + dy
 
         # Check for boundary collisions and adjust angle if necessary
-        if new_x <= 0 or new_x >= arena.width:
-            self.angle = (180 - self.angle) % 360
-        if new_y <= 0 or new_y >= arena.height:
-            self.angle = (-self.angle) % 360
+        if new_x <= 0 or new_x >= arena.width or new_y <= 0 or new_y >= arena.height:
+            self.angle = (180 - self.angle) % 360  # Adjust angle upon collision
+            radians = math.radians(self.angle)  # Recalculate radians
+            dx = math.cos(radians) * self.speed
+            dy = math.sin(radians) * self.speed
+            self.events.append({"type": "angle", "id": self.id, "value": self.angle})  # Log angle change event
 
-        # Recalculate movement after adjusting the angle
+        # Update position
+        self.position = (self.position[0] + dx, self.position[1] + dy)
+        self.events.append({"type": "delta", "id": self.id, "value": {"dx": dx, "dy": dy}})  # Log position change event
+
+    def move_and_record(self, arena, time_index):
         radians = math.radians(self.angle)
         dx = math.cos(radians) * self.speed
         dy = math.sin(radians) * self.speed
-        self.position = (max(0, min(arena.width, self.position[0] + dx)),
-                         max(0, min(arena.height, self.position[1] + dy)))
-        self.delta.append((dx, dy))  # Record the adjusted delta
+        new_x, new_y = self.position[0] + dx, self.position[1] + dy
 
-        print(f"Creature {self.id} moving. New angle: {self.angle}, Delta: {self.delta[-1]}")
+        angle_changed = False
+        if new_x <= 0 or new_x >= arena.width or new_y <= 0 or new_y >= arena.height:
+            self.angle = (180 - self.angle) % 360 if new_x <= 0 or new_x >= arena.width else (-self.angle) % 360
+            angle_changed = True
+
+        # Record events
+        if time_index not in self.events:
+            self.events[time_index] = []
+        self.events[time_index].append({"type": "delta", "id": self.id, "value": {"dx": dx, "dy": dy}})
+        if angle_changed:
+            self.events[time_index].append({"type": "angle", "id": self.id, "value": self.angle})
+
+        self.position = (max(0, min(arena.width, new_x)), max(0, min(arena.height, new_y)))
+
+
 
     def draw(self, screen, convert_function):
         point = convert_function(self.position)  # Use the passed function to convert the position
@@ -82,33 +85,33 @@ class Creature:
 class Game:
     def __init__(self, arena, creatures):
         self.arena = arena
-        self.creatures = creatures  # List of Creature objects
+        self.creatures = creatures
         self.turns_recorded = 0
 
     def simulate_turn(self):
         for creature in self.creatures:
-            creature.update(self.arena)
-        print(f"Turn {self.turns_recorded} updated.")    
+            creature.move_and_record(self.arena, self.turns_recorded)
         self.turns_recorded += 1
 
-    def is_game_over(self):
-        # Placeholder for game over logic
-        return self.turns_recorded >= 10  # Example condition
-
     def record_game(self, filename):
-        # Record the game into a JSON file
         header = {
             "arena": {"width": self.arena.width, "height": self.arena.height},
-            "creatures": [{
-                "id": creature.id,
-                "health": creature.health,
-                "position": creature.position,
-                "speed": creature.speed,
-                "name": creature.name,
-                "angle": creature.angle
-            } for creature in self.creatures]
+            "creatures": [
+                {"id": creature.id, "health": creature.health, "position": creature.initial_position, "speed": creature.speed, "name": creature.name, "angle": creature.angle} for creature in self.creatures
+            ],
+            "metadata": {
+                "playerNames": ["Player 1", "Player 2"],
+            }
         }
-        movements = [{"id": creature.id, "deltas": creature.delta} for creature in self.creatures]
-        game_record = {"header": header, "movements": movements}
+        # Collect events from all turns; each creature manages its own events
+        events = {}
+        for creature in self.creatures:
+            for time_index, event_list in creature.events.items():
+                if time_index not in events:
+                    events[time_index] = []
+                events[time_index].extend(event_list)
+
+        game_record = {"header": header, "events": events}
         with open(filename, 'w') as f:
             json.dump(game_record, f, indent=4)
+

@@ -1,0 +1,103 @@
+{
+    "header": {
+        "arena": {
+            "width": 1000,
+            "height": 1000
+        },
+        "creatures": [
+            {
+                "id": 0,
+                "health": 100,
+                "position": [
+                    193,
+                    734
+                ],
+                "speed": 12,
+                "name": "Creature 0",
+                "angle": 86
+            },
+            {
+                "id": 1,
+                "health": 100,
+                "position": [
+                    616,
+                    433
+                ],
+                "speed": 15,
+                "name": "Creature 1",
+                "angle": 221
+            },
+            {
+                "id": 2,
+                "health": 100,
+                "position": [
+                    876,
+                    346
+                ],
+                "speed": 8,
+                "name": "Creature 2",
+                "angle": 212
+            }
+        ],
+        "metadata": {
+            "playerNames": [
+                "Player 1",
+                "Player 2"
+            ]
+        }
+    },
+    "events": {
+        "0": [
+            {
+                "type": "delta",
+                "id": 0,
+                "value": {
+                    "dx": 0.8370776849295027,
+                    "dy": 11.97076860311789
+                }
+            },
+            {
+                "type": "delta",
+                "id": 1,
+                "value": {
+                    "dx": -11.320643703341581,
+                    "dy": -9.840885434857606
+                }
+            },
+            {
+                "type": "delta",
+                "id": 2,
+                "value": {
+                    "dx": -6.7843847692514085,
+                    "dy": -4.239354113865638
+                }
+            }
+        ],
+        "1": [
+            {
+                "type": "delta",
+                "id": 0,
+                "value": {
+                    "dx": 0.8370776849295027,
+                    "dy": 11.97076860311789
+                }
+            },
+            {
+                "type": "delta",
+                "id": 1,
+                "value": {
+                    "dx": -11.320643703341581,
+                    "dy": -9.840885434857606
+                }
+            },
+            {
+                "type": "delta",
+                "id": 2,
+                "value": {
+                    "dx": -6.7843847692514085,
+                    "dy": -4.239354113865638
+                }
+            }
+        ]
+    }
+}
