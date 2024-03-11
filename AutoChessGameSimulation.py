@@ -1,16 +1,19 @@
 from AutoChessEngine import Arena, SimulationCreature, SimulationGame
 import random
 def initialize_game():
-    arena = Arena(width=1000, height=1000)
+    arena = Arena(width=2000, height=2000)
+
     # Create a list of Creature objects
     creatures = [SimulationCreature(
-                    id=i, 
-                    health=100, 
-                    position=(random.randint(100, 900), random.randint(100, 900)), 
-                    speed=random.randint(5, 12), 
-                    name=f"Creature {i}", 
-                    angle=random.randint(0, 360)  # Add a random starting angle for each creature
-                 ) for i in range(3)]  # Adjust the range as needed for the number of creatures
+                id=i, 
+                health=100, 
+                position=(random.randint(100, 900), random.randint(100, 900)), 
+                speed=random.randint(5, 50), 
+                name=f"Creature {i}", 
+                angle=random.randint(0, 360),  # Random starting angle
+                max_turn_rate=random.randint(2, 10)  # Random max turn rate
+             ) for i in range(5)]  # Adjust the range as needed
+
     return SimulationGame(arena, creatures)
 
 def main():
