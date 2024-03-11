@@ -1,24 +1,28 @@
 from AutoChessEngine import Arena, SimulationCreature, SimulationGame
 import random
+
 def initialize_game():
     arena = Arena(width=2000, height=2000)
-
-    # Create a list of Creature objects
+    game = SimulationGame(arena, [])
     creatures = [SimulationCreature(
-                id=i, 
-                health=100, 
-                position=(random.randint(100, 900), random.randint(100, 900)), 
-                speed=random.randint(5, 50), 
-                name=f"Creature {i}", 
-                angle=random.randint(0, 360),  # Random starting angle
-                max_turn_rate=random.randint(2, 10)  # Random max turn rate
-             ) for i in range(5)]  # Adjust the range as needed
+        position=(random.randint(100, 900), random.randint(100, 900)), 
+        angle=random.randint(0, 360),
+        health=100, 
+        speed=random.randint(5, 50), 
+        name=f"Creature {i}", 
+        max_turn_rate=random.randint(2, 10),
+        shoot_cooldown=random.randint(5, 20),
+    ) for i in range(1)]
 
-    return SimulationGame(arena, creatures)
+    for creature in creatures:
+        creature.set_game(game)  # Associate each creature with the game
+        game.add_creature(creature)  # Assuming a method to add creatures to the game
+
+    return game
 
 def main():
     game = initialize_game()
-    for _ in range(200):  
+    for _ in range(50):  
         game.simulate_turn()
     game.record_game("simulation_record5.json")
 

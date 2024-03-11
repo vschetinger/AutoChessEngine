@@ -2,7 +2,7 @@
 import pygame
 import json
 import sys
-from AutoChessEngine import PlaybackCreature, Game, Arena
+from AutoChessEngine import PlaybackCreature, Game, Arena, RectCollider
 
 
 class PlaybackGame(Game):
@@ -22,41 +22,33 @@ class PlaybackGame(Game):
 
 
 class AutoChessPlayer:
-    def __init__(self, battle_log_path):
+    def __init__(self, battle_log_path, screen_size=(800, 800), offset=(190, 185), canvas_dimensions=(425, 425)):
         with open(battle_log_path, 'r') as f:
             self.battle_log = json.load(f)
 
-        # Arena setup based on JSON data
-        arena_dimensions = self.battle_log['header']['arena']
-        self.arena = Arena(arena_dimensions['width'], arena_dimensions['height'])
+        # Original arena dimensions from the JSON file
+        original_arena_dimensions = self.battle_log['header']['arena']
+        # For clarity, storing original dimensions separately
+        self.original_arena_width = original_arena_dimensions['width']
+        self.original_arena_height = original_arena_dimensions['height']
 
-        # Initialize creatures from JSON data
-        # Assuming 'battle_log' is already loaded from JSON
-        creatures = [
-            PlaybackCreature(
-                id=info['id'],
-                health=info['health'],
-                position=tuple(info['position']),
-                speed=info['speed'],
-                name=info['name'],
-                angle=info['angle'],
-                events={int(time): [event for event in events if event['id'] == info['id']]
-                        for time, events in self.battle_log['events'].items()}
-            ) for info in self.battle_log['header']['creatures']
-        ]
+        # Setting the canvas dimensions based on the input parameter
+        self.canvas_dimensions = canvas_dimensions
+        self.screen_size = screen_size
+        self.offset = offset
+        self.scale_ratio = self.calculate_scale_ratio()
 
-
-
-        # Instantiate PlaybackGame with creatures
-        self.game = PlaybackGame(self.arena, creatures)
+        creatures = self.initialize_creatures_for_playback()
+        self.game = PlaybackGame(Arena(*canvas_dimensions), creatures)
 
         # Setup playback control
-        self.playing = False
-        self.current_event_index = 0
+        self.playing = True
+
+        
 
         # Pygame and screen setup
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 800))
+        self.screen = pygame.display.set_mode(self.screen_size)
 
         # self.background = pygame.image.load('assets/bg5.png')
         self.background = pygame.Surface(self.screen.get_size())
@@ -73,6 +65,39 @@ class AutoChessPlayer:
         self.button_rect = pygame.Rect(650, 700, 120, 50)
         self.font = pygame.font.Font(None, 36)
 
+    def calculate_scale_ratio(self):
+        # Calculate scale ratio based on original arena dimensions and canvas dimensions
+        scale_width = self.canvas_dimensions[0] / self.original_arena_width
+        scale_height = self.canvas_dimensions[1] / self.original_arena_height
+        return min(scale_width, scale_height)
+
+    def initialize_creatures_for_playback(self):
+        creatures = []
+        for info in self.battle_log['header']['creatures']:
+            position = tuple(info['position'])
+            # Calculate scaled position and size for RectCollider
+            scaled_position = self.scale_position(position)
+            # Assume a fixed size for simplicity, or calculate based on creature data
+            scaled_size = (20 * self.scale_ratio, 20 * self.scale_ratio)  # Example fixed size scaled
+            rect = pygame.Rect(scaled_position[0], scaled_position[1], *scaled_size)
+            collider = RectCollider(rect)
+            creature = PlaybackCreature(
+                playback_id=info['id'],
+                health=info['health'],
+                position=scaled_position,
+                speed=info['speed'],
+                name=info['name'],
+                angle=info['angle'],
+                events=self.battle_log['events'].get(str(info['id']), {}),
+                collider=collider  # Pass the scaled collider
+            )
+            creatures.append(creature)
+        return creatures
+
+    def scale_position(self, position):
+        """Scales the position from arena to screen coordinates based on the calculated scale ratio."""
+        x, y = position
+        return x * self.scale_ratio, y * self.scale_ratio
 
 
     def virtual_to_screen(self, position):
@@ -106,7 +131,7 @@ class AutoChessPlayer:
         self.screen.blit(text_surface, text_rect)
 
         # Display current event_index at the top-right of the screen
-        event_index_text = f'Event Index: {self.current_event_index}'
+        event_index_text = f'Event Index: {self.game.time}'
         event_index_surface = self.font.render(event_index_text, True, (255, 255, 255))
         event_index_rect = event_index_surface.get_rect(topright=(self.screen.get_width() - 10, 10))
         self.screen.blit(event_index_surface, event_index_rect)
@@ -120,21 +145,22 @@ class AutoChessPlayer:
             self.draw_button()
 
             if self.playing:
-                if str(self.current_event_index) in self.battle_log['events']:
-                    self.game.update_from_events(self.current_event_index)
-                    self.current_event_index += 1
+                if str(self.game.time) in self.battle_log['events']:
+                    self.game.update_from_events(self.game.time)
+                    self.game.time += 1
                 else:
-                    # Reset current_event_index and creatures' states to loop the playback
-                    self.current_event_index = 0
+                    # Reset time and creatures' states to loop the playback
+                    self.game.time = 0
                     self.game.reset_creatures()
 
             # Draw creatures
             for creature in self.game.creatures:
+                screen_position = self.virtual_to_screen(creature.position)  # Correctly call virtual_to_screen here
                 creature.draw(self.screen, self.virtual_to_screen)
-
                 
             pygame.display.flip()
             clock.tick(10)  # Control playback speed
+
 
 
 if __name__ == "__main__":
