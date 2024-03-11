@@ -7,7 +7,7 @@ def initialize_game():
                     id=i, 
                     health=100, 
                     position=(random.randint(100, 900), random.randint(100, 900)), 
-                    speed=random.randint(5, 15), 
+                    speed=random.randint(5, 12), 
                     name=f"Creature {i}", 
                     angle=random.randint(0, 360)  # Add a random starting angle for each creature
                  ) for i in range(3)]  # Adjust the range as needed for the number of creatures
@@ -15,9 +15,9 @@ def initialize_game():
 
 def main():
     game = initialize_game()
-    for _ in range(2):  # Replace 10 with the desired number of iterations
+    for _ in range(150):  # Replace 10 with the desired number of iterations
         game.simulate_turn()
-    game.record_game("simulation_record3.json")
+    game.record_game("simulation_record5.json")
 
 if __name__ == "__main__":
     main()

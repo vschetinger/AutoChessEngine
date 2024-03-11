@@ -14,6 +14,11 @@ class PlaybackGame(Game):
         for creature in self.creatures:
             creature.move(time_index)
 
+    def reset_creatures(self):
+        # Reset each creature to its initial state at the start of the playback loop
+        for creature in self.creatures:
+            creature.reset_to_initial_state()
+
 
 class AutoChessPlayer:
     def __init__(self, battle_log_path):
@@ -34,9 +39,11 @@ class AutoChessPlayer:
                 speed=info['speed'],
                 name=info['name'],
                 angle=info['angle'],
-                events={int(time): events for time, events in self.battle_log['events'].items() if any(e['id'] == info['id'] for e in events)}
+                events={int(time): [event for event in events if event['id'] == info['id']]
+                        for time, events in self.battle_log['events'].items()}
             ) for info in self.battle_log['header']['creatures']
         ]
+
 
 
         # Instantiate PlaybackGame with creatures
@@ -93,6 +100,12 @@ class AutoChessPlayer:
         text_rect = text_surface.get_rect(center=self.button_rect.center)
         self.screen.blit(text_surface, text_rect)
 
+        # Display current event_index at the top-right of the screen
+        event_index_text = f'Event Index: {self.current_event_index}'
+        event_index_surface = self.font.render(event_index_text, True, (255, 255, 255))
+        event_index_rect = event_index_surface.get_rect(topright=(self.screen.get_width() - 10, 10))
+        self.screen.blit(event_index_surface, event_index_rect)
+
     def run(self):
         clock = pygame.time.Clock()
         while True:
@@ -102,28 +115,25 @@ class AutoChessPlayer:
             self.draw_button()
 
             if self.playing:
-                # Ensure current_event_index is within the range of recorded events before updating
                 if str(self.current_event_index) in self.battle_log['events']:
                     self.game.update_from_events(self.current_event_index)
                     self.current_event_index += 1
                 else:
-                    # Reset current_event_index to 0 if we've reached the end of the recorded events
+                    # Reset current_event_index and creatures' states to loop the playback
                     self.current_event_index = 0
+                    self.game.reset_creatures()
 
-            # Draw creatures whether playing or paused
+            # Draw creatures
             for creature in self.game.creatures:
                 creature.draw(self.screen, self.virtual_to_screen)
 
+                
             pygame.display.flip()
-            clock.tick(10)  # Adjust this to control the refresh rate of the simulation
-
-
-
-
+            clock.tick(10)  # Control playback speed
 
 
 if __name__ == "__main__":
     arena_rect = (150, 150, 500, 500)  # Example coordinates and size (x, y, width, height)
 
-    player = AutoChessPlayer('simulation_record3.json')
+    player = AutoChessPlayer('simulation_record5.json')
     player.run()
