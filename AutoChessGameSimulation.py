@@ -15,7 +15,7 @@ def initialize_game():
 
 def main():
     game = initialize_game()
-    for _ in range(150):  # Replace 10 with the desired number of iterations
+    for _ in range(200):  
         game.simulate_turn()
     game.record_game("simulation_record5.json")
 

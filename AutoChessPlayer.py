@@ -9,6 +9,7 @@ class PlaybackGame(Game):
     def __init__(self, arena, creatures):
         super().__init__(arena)
         self.creatures = creatures  # Here creatures are specifically set for playback
+        self.set_game_for_creatures()
     
     def update_from_events(self, time_index):
         for creature in self.creatures:
@@ -56,11 +57,15 @@ class AutoChessPlayer:
         # Pygame and screen setup
         pygame.init()
         self.screen = pygame.display.set_mode((800, 800))
-        self.background = pygame.image.load('bg2.png')
+
+        # self.background = pygame.image.load('assets/bg5.png')
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background.fill((130, 130, 124))
+
         self.background = pygame.transform.scale(self.background, (800, 800))
 
         # Define arena_rect here
-        self.arena_rect = pygame.Rect(100, 100, 600, 600)  # Example dimensions and position
+        self.arena_rect = pygame.Rect(190, 185, 425, 425)  # Example dimensions and position
 
         # UI Controls
         self.button_color = (0, 200, 0)
