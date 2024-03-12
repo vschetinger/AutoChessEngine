@@ -316,6 +316,10 @@ class BaseCreature:
         self.name = name
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
+    @recordable
+    def set_target(self, target):
+        self.target = target
+
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
     def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, events=None, **kwargs):
@@ -329,11 +333,33 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         self.shoot_timer = 0
         self.events = events or {}
 
+        self.target = None
 
 
-    def think(self, target):
+
+    def find_nearest_creature(self):
+        nearest_distance = float('inf')
+        nearest_creature = None
+        for game_object in self.game.game_objects:
+            if isinstance(game_object, SimulationCreature) and game_object != self:
+                distance = math.hypot(game_object.position[0] - self.position[0], game_object.position[1] - self.position[1])
+                if distance < nearest_distance:
+                    nearest_creature = game_object
+                    nearest_distance = distance
+        return nearest_creature
+    
+
+
+
+    def think(self):
+        self.set_target(self.find_nearest_creature().position)
+        if ('blocked', None) in self.action_plan:
+            self.action_plan.remove(('blocked', None))
+            self.action_plan.append(('reverse', None))
+            return
         # Example logic to add 'turn' action every turn and 'shoot' action if cooldown allows
-        self.action_plan.append(('turn', self.calculate_turn(target)))
+        if self.target is not None:
+            self.action_plan.append(('turn', self.calculate_turn(self.target)))
         if self.shoot_timer <= 0:  # Can shoot if shoot_timer is 0 or less
             self.action_plan.append(('shoot', None))
             self.shoot_timer = self.shoot_cooldown  # Reset shoot cooldown timer
@@ -359,8 +385,13 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         self.game.add_game_object(projectile)
 
     def move(self):
+        
+
         if self.action_plan:
             action, value = self.action_plan[0]  # Peek at the first action
+            if action == 'reverse':
+                self.angle += 180
+                self.action_plan.popleft()
             if action == 'turn':
                 self.angle += value
 
@@ -399,6 +430,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             # Handle collision (e.g., stop movement, bounce back, etc.)
             # For now, we just clear the action plan to simulate stopping
             self.action_plan.clear()
+            self.action_plan.append(('blocked', None))
 
         # Decrement the shoot timer if it's greater than 0
         if self.shoot_timer > 0:
@@ -539,9 +571,9 @@ class SimulationGame(Game):
         if self.time == -1:
             self.time = 0  # Start the game
         arena_center = (self.arena.width / 2, self.arena.height / 2)
-        for creature in self.game_objects:
-            creature.think(arena_center)  # Let each creature decide its move
-            creature.move()
+        for game_object in self.game_objects:
+            game_object.think()  # Let each creature decide its move
+            game_object.move()
         self.time += 1
 
 

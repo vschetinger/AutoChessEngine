@@ -8,9 +8,9 @@ def initialize_game():
         position=(random.randint(100, 900), random.randint(100, 900)), 
         angle=random.randint(0, 360),
         health=100, 
-        speed=random.randint(20, 100), 
+        speed=random.randint(1, 120), 
         name=f"Creature {i}", 
-        max_turn_rate=random.randint(2, 10),
+        max_turn_rate=random.randint(30, 80),
         shoot_cooldown=random.randint(5, 20),
         bounding_box_size = (50, 100)
     ) for i in range(10)]
