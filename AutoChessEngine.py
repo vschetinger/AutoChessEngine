@@ -319,9 +319,6 @@ class BaseCreature:
 class SimulationCreature(SimulationGameObject, BaseCreature):
     def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, events=None, **kwargs):
         # Adjust bounding_rect initialization as needed to fit the game's logic
-        bounding_rect = pygame.Rect(position[0] - bounding_box_size[0] / 2,
-                                    position[1] - bounding_box_size[1] / 2,
-                                    *bounding_box_size)
         collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
         super().__init__(position, angle, collider=collider, **kwargs)
         BaseCreature.__init__(self, health, speed, name, **kwargs)
@@ -374,7 +371,14 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             if other is not self:  # Don't check collision with self
                 old_pos = self.collider.center 
                 self.collider.center = (new_x, new_y)  # Temporarily update position for collision check
-                
+                print(f"Checking collision between {self.playback_id} and {other.playback_id}")
+                print(f"{self.playback_id} rectangle: {self.collider.rect}")
+                print(f"{other.playback_id} rectangle: {other.collider.rect}")
+                if self.collider.check_collision(other):
+                    will_collide = True
+                    
+                    break  # Stop checking if any collision is found
+                self.collider.center = old_pos  # Revert position after check
                 if self.collider.check_collision(other):
                     will_collide = True
                     break  # Stop checking if any collision is found
@@ -442,6 +446,7 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         rotated_image = pygame.transform.rotate(self.image, -self.angle + 90)
         new_rect = rotated_image.get_rect(center=screen_center)
         screen.blit(rotated_image, new_rect.topleft)
+        
 
         # Draw the triangle pointer
         radians = math.radians(self.angle)
@@ -455,29 +460,17 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         pygame.draw.polygon(screen, (255, 255, 255), triangle_points)
 
         if self.game.show_bounding_boxes:
-            # Scale size and scale position
-            scaled_size = self.scale_size(self.collider.size)
+            # Create a surface for the bounding box with the same size as the collider
+            bbox_surface = pygame.Surface(self.collider.size, pygame.SRCALPHA)
+            bbox_surface.fill((0, 0, 0, 0))  # Fill with transparent color
+            pygame.draw.rect(bbox_surface, self.color, bbox_surface.get_rect(), 1)
+            # Apply the same transformations as the sprite: scale and rotate
+            #scaled_bbox_surface = pygame.transform.scale(bbox_surface, self.scale_size(self.collider.size))
+            rotated_bbox_surface = pygame.transform.rotate(bbox_surface, -self.angle + 90)
 
-            # Calculate the corners of the bounding box relative to its center
-            corners = [
-                (-scaled_size[0]/2, -scaled_size[1]/2),
-                (scaled_size[0]/2, -scaled_size[1]/2),
-                (scaled_size[0]/2, scaled_size[1]/2),
-                (-scaled_size[0]/2, scaled_size[1]/2),
-            ]
-            
-            # Rotate and translate corners
-            rotated_corners = []
-            for (x, y) in corners:
-                # Rotate
-                rotated_x = x * math.cos(math.radians(-self.angle)) - y * math.sin(math.radians(-self.angle))
-                rotated_y = x * math.sin(math.radians(-self.angle)) + y * math.cos(math.radians(-self.angle))
-                # Translate
-                screen_x, screen_y = convert_to_screen((rotated_x + self.collider.center[0], rotated_y + self.collider.center[1]))
-                rotated_corners.append((screen_x, screen_y))
-
-            # Draw the bounding box
-            pygame.draw.polygon(screen, self.color, rotated_corners, 1)
+            # Use the same center as the sprite for positioning
+            bbox_rect = rotated_bbox_surface.get_rect(center=screen_center)
+            screen.blit(rotated_bbox_surface, bbox_rect.topleft)
 
 
 

@@ -6,83 +6,43 @@
         },
         "creatures": [
             {
-                "id": 4368491104,
+                "id": 4362445360,
                 "health": 100,
                 "position": [
-                    214,
-                    419
+                    410,
+                    680
                 ],
-                "speed": 78,
+                "speed": 68,
                 "name": "Creature 0",
-                "angle": 67,
+                "angle": 323,
                 "color": [
-                    181,
-                    220,
-                    168
+                    214,
+                    152,
+                    181
                 ],
                 "size": [
-                    100,
-                    180
+                    400,
+                    600
                 ]
             },
             {
-                "id": 4368801872,
+                "id": 4362756128,
                 "health": 100,
                 "position": [
-                    374,
-                    386
+                    419,
+                    487
                 ],
-                "speed": 90,
+                "speed": 40,
                 "name": "Creature 1",
-                "angle": 308,
+                "angle": 14,
                 "color": [
-                    66,
-                    47,
-                    138
+                    29,
+                    11,
+                    252
                 ],
                 "size": [
-                    100,
-                    180
-                ]
-            },
-            {
-                "id": 4368800480,
-                "health": 100,
-                "position": [
-                    513,
-                    848
-                ],
-                "speed": 93,
-                "name": "Creature 2",
-                "angle": 193,
-                "color": [
-                    120,
-                    170,
-                    13
-                ],
-                "size": [
-                    100,
-                    180
-                ]
-            },
-            {
-                "id": 4368800096,
-                "health": 100,
-                "position": [
-                    523,
-                    581
-                ],
-                "speed": 54,
-                "name": "Creature 3",
-                "angle": 159.65075810944109,
-                "color": [
-                    75,
-                    179,
-                    48
-                ],
-                "size": [
-                    100,
-                    180
+                    400,
+                    600
                 ]
             }
         ]
@@ -91,4919 +51,3026 @@
         "0": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 167
+                "value": 80
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    137.99913494675167,
-                    436.5461822388215
+                    421.80807608135126,
+                    746.9669272048302
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 29
+                "value": 109
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    452.7157736425456,
-                    429.63286582217034
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 268
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    509.75434680666746,
-                    755.056653087224
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 202
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    472.9320718533935,
-                    560.7712439555407
+                    405.9772738217137,
+                    524.8207430239727
                 ]
             }
         ],
         "1": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    61.99826989350332,
-                    454.09236447764295
+                    433.6161521627025,
+                    813.9338544096604
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    531.4315472850913,
-                    473.2657316443407
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    506.5086936133349,
-                    662.1133061744481
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    422.864143706787,
-                    540.5424879110815
+                    392.9545476434274,
+                    562.6414860479454
                 ]
             }
         ],
         "2": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 162
+                "value": 71
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 32
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    607.7558759391696,
-                    520.9584654253291
+                    455.7547866657892,
+                    878.2291175504139
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 271
+                "value": 104
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    508.13176741200226,
-                    569.1274705249037
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 193
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    370.24816020838426,
-                    528.3951309765127
+                    383.2776718194407,
+                    601.4533150989852
                 ]
             }
         ],
         "3": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 157
+                "value": 62
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 35
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    681.4795599251789,
-                    572.5803446969232
+                    487.67885293522977,
+                    938.2695538648209
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 274
+                "value": 99
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    514.6191194702059,
-                    476.3540138507401
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 184
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    316.37970149435375,
-                    524.62828139433
+                    377.02029321783147,
+                    640.9608487227907
                 ]
             }
         ],
         "4": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 152
+                "value": 53
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 38
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    752.4005277497839,
-                    627.9898774762326
+                    528.602274509569,
+                    992.5767685480367
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 277
+                "value": 94
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    525.9529684068846,
-                    384.0472217480972
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 175
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    262.5851877973995,
-                    529.3346915027035
+                    374.23003426806645,
+                    680.8634107331837
                 ]
             }
         ],
         "5": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 147
+                "value": 44
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 41
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    820.3243899698334,
-                    687.0351900853782
+                    577.5173809325973,
+                    1039.8135377392487
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 280
+                "value": 89
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    542.102248929909,
-                    292.46010071796184
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 166
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    210.18921857849568,
-                    542.3984738650856
+                    374.9281305255578,
+                    720.8573185394393
                 ]
             }
         ],
         "6": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 142
+                "value": 35
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 44
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    885.0649720003121,
-                    749.554443426688
+                    633.2197199442488,
+                    1078.8167354111197
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 283
+                "value": 84
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    563.0226969838884,
-                    201.84368469293497
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 157
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    160.4819564920639,
-                    563.4979548035064
+                    379.10926905626394,
+                    760.6381943541703
                 ]
             }
         ],
         "7": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 137
+                "value": 26
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 47
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    946.444824405937,
-                    815.3762765724133
+                    694.3377150925921,
+                    1108.625973392777
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 286
+                "value": 79
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    588.6569710748694,
-                    112.44634697067133
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 148
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    114.68735929961689,
-                    592.1135950720995
+                    386.74162887132576,
+                    799.9032816920769
                 ]
             }
         ],
         "8": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 132
+                "value": 17
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 50
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1004.2957092777256,
-                    884.3202764531213
+                    759.3664384980785,
+                    1128.5072493139232
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 289
+                "value": 74
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 139
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    73.9330419675872,
-                    627.540782637587
+                    397.76712310400575,
+                    838.3537495296097
                 ]
             }
         ],
         "9": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 127
+                "value": 8
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 53
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1058.45906136141,
-                    956.1974723573777
+                    826.7046671725053,
+                    1137.9710201792077
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 292
+                "value": 69
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 130
+                "id": 4362756128,
+                "attribute": "position",
+                "value": [
+                    412.10184108581774,
+                    875.6969665894977
+                ]
             }
         ],
         "10": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 122
+                "value": -1
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 56
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1108.7864226737772,
-                    1030.8108538873314
+                    894.6943104431399,
+                    1136.7842565414724
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 295
+                "value": 64
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 121
+                "id": 4362756128,
+                "attribute": "position",
+                "value": [
+                    429.63668695738085,
+                    911.6487284414644
+                ]
             }
         ],
         "11": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 117
+                "value": 350
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1159.1137839861444,
-                    1105.4242354172852
+                    961.66123764797,
+                    1124.976180460121
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 298
+                "value": 59
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 112
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    53.70428592312795,
-                    677.6087107841935
+                    450.238209953783,
+                    945.935420469549
                 ]
             }
         ],
         "12": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 112
+                "value": 341
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 59
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1205.4672107280494,
-                    1182.5692924804753
+                    1025.9565007887236,
+                    1102.8375459570343
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 301
+                "value": 54
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 103
+                "id": 4362756128,
+                "attribute": "position",
+                "value": [
+                    473.7496200454819,
+                    978.2961002445469
+                ]
             }
         ],
         "13": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 107
+                "value": 332
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 62
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1247.7196513787796,
-                    1262.0345758377787
+                    1085.9969371031307,
+                    1070.9134796875937
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 304
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 94
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    49.93743634094518,
-                    731.4771694982239
+                    497.2610301371808,
+                    1010.6567800195448
                 ]
             }
         ],
         "14": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 102
+                "value": 323
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 65
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1285.7552949354426,
-                    1343.602276671077
+                    1140.3041517863467,
+                    1029.9900581132545
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 307
+                "value": 49
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 85
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    54.64384644931872,
-                    785.2716831951782
+                    523.503391296801,
+                    1040.8451632284557
                 ]
             }
         ],
         "15": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 97
+                "value": 314
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    52.492461107901825,
-                    531.5109643056661
+                    1187.5409209775585,
+                    981.0749516902262
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 68
+                "value": 44
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1319.4698883428748,
-                    1427.048823582088
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 310
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 76
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    67.70762881170077,
-                    837.667652414082
+                    552.2769833103471,
+                    1068.6314980468155
                 ]
             }
         ],
         "16": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
-                "attribute": "angle",
-                "value": 92
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    49.77030036510675,
-                    609.4634488131555
+                    1234.7776901687703,
+                    932.1598452671979
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 71
+                "value": 39
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1348.771022244019,
-                    1512.1454953860266
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 313
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 67
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    88.80710975012155,
-                    887.3749145005138
+                    583.362821768626,
+                    1093.804313688809
                 ]
             }
         ],
         "17": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 87
+                "value": 305
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    53.85250495205638,
-                    687.3565525240123
+                    1273.7808878406413,
+                    876.4575062555464
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 74
+                "value": 34
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1373.578384267549,
-                    1598.6590480204752
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 316
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 58
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    117.42275001871462,
-                    933.1695116929608
+                    616.5243246708276,
+                    1116.1720298276389
                 ]
             }
         ],
         "18": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 82
+                "value": 296
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    64.70800682694149,
-                    764.5974618858547
+                    1303.5901258222987,
+                    815.3395111072031
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 77
+                "value": 29
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1393.8239791584967,
-                    1686.3523538511463
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 319
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 49
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    152.84993758420202,
-                    973.9238290249905
+                    651.5091129564034,
+                    1135.5644146374923
                 ]
             }
         ],
         "19": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 77
+                "value": 287
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    82.25418906576294,
-                    840.5983269391031
+                    1323.4714017434449,
+                    750.3107877017167
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 80
+                "value": 24
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1409.4523151485205,
-                    1774.985051622245
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 322
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    188.27712514968943,
-                    1014.6781463570202
+                    688.0509312621075,
+                    1151.8338803605243
                 ]
             }
         ],
         "20": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 72
+                "value": 278
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    106.35751462700884,
-                    914.780735210125
+                    1332.9351726087293,
+                    682.9725590272899
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 83
+                "value": 19
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1420.4205560549838,
-                    1864.314205269964
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 325
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 40
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    229.64352507811424,
-                    1049.3886772800934
+                    725.8716742860802,
+                    1164.8566065388106
                 ]
             }
         ],
         "21": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
+                "attribute": "angle",
+                "value": 269
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    130.46084018825474,
-                    988.963143481147
+                    1331.748408970994,
+                    614.9829157566553
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 328
+                "value": 14
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 31
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    275.9305593160283,
-                    1077.2007333252363
+                    764.68350333712,
+                    1174.5334823627973
                 ]
             }
         ],
         "22": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 67
+                "value": 260
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    160.9378682104181,
-                    1060.7625220504374
+                    1319.9403328896426,
+                    548.0159885518251
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 86
+                "value": 9
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 331
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 22
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    325.9984874626348,
-                    1097.4294893696956
+                    804.1910369609255,
+                    1180.7908609644064
                 ]
             }
         ],
         "23": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 62
+                "value": 251
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    197.5566501077176,
-                    1129.6324342934336
+                    1297.801698386556,
+                    483.72072541107156
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 89
+                "value": 4
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 334
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 13
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    378.6144709610375,
-                    1109.5768463042643
+                    844.0935989713186,
+                    1183.5811199141715
                 ]
             }
         ],
         "24": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 57
+                "value": 242
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    240.0384948388897,
-                    1195.0487385931767
+                    1265.8776321171154,
+                    423.6802890966645
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 92
+                "value": -1
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 337
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 4
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    432.482929675068,
-                    1113.343695886447
+                    884.0875067775742,
+                    1182.88302365668
                 ]
             }
         ],
         "25": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 52
+                "value": 233
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    288.06008991429104,
-                    1256.513577374501
+                    1224.954210542776,
+                    369.3730744134486
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 95
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 340
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": -5
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    486.2774433720223,
-                    1108.6372857780734
+                    924.0814145838298,
+                    1182.1849273991886
                 ]
             }
         ],
         "26": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 47
+                "value": 224
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    341.25596199916595,
-                    1313.5591661007963
+                    1176.039104119748,
+                    322.1363052222368
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 98
+                "value": 354
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 343
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 346
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    538.6734125909261,
-                    1095.5735034156914
+                    963.8622903985607,
+                    1178.0037888684824
                 ]
             }
         ],
         "27": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 42
+                "value": 215
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362756128,
+                "attribute": "angle",
+                "value": 349
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    399.2212583864027,
-                    1365.7513533967872
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 101
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 346
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    678.8944736185371,
-                    89.94761067990221
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 339.0595371922453
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    589.1068373157619,
-                    1076.2740300932323
+                    1003.1273777364673,
+                    1170.3714290534206
                 ]
             }
         ],
         "28": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 37
+                "value": 206
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362756128,
+                "attribute": "angle",
+                "value": 344
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    461.51482817009156,
-                    1412.6929252026468
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 104
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 349
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 341.35508804991844
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    640.2728146601911,
-                    1059.0101150566782
+                    1041.577845574,
+                    1159.3459348207407
                 ]
             }
         ],
         "29": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 32
+                "value": 197
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    527.6625796702928,
-                    1454.0266278128368
+                    1111.0103807142614,
+                    302.2550293010907
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 107
+                "value": 339
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 352
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 350.35508804991844
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    693.5095252316821,
-                    1049.9628697561848
+                    1078.9210626338881,
+                    1145.0112168389287
                 ]
             }
         ],
         "30": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 27
+                "value": 188
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362756128,
+                "attribute": "angle",
+                "value": 334
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    597.1610885569854,
-                    1489.4378867925213
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 110
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 355
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 359.35508804991844
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    747.5061045334521,
-                    1049.3550673971363
+                    1114.8728244858548,
+                    1127.4763709673655
                 ]
             }
         ],
         "31": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 22
+                "value": 179
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    669.4814292131948,
-                    1518.6572010789625
+                    1043.0207374436268,
+                    303.441792938826
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 113
+                "value": 329
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 358
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 359.7413087226303
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    801.505554129768,
-                    1049.1112574405374
+                    1149.1595165139393,
+                    1106.8748479709634
                 ]
             }
         ],
         "32": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
+                "attribute": "angle",
+                "value": 170
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    741.8017698694042,
-                    1547.8765153654037
+                    976.0538102387966,
+                    315.24986902017724
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 116
+                "value": 324
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 361
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    771.8803092680814,
-                    91.57068447856958
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 350.7413087226303
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    854.802040614472,
-                    1040.423074179017
+                    1181.520196288937,
+                    1083.3634378792644
                 ]
             }
         ],
         "33": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 17
+                "value": 161
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    816.393540834521,
-                    1570.6815083337772
+                    911.758547098043,
+                    337.3885035232639
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 119
+                "value": 319
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 4
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    864.6537659422451,
-                    98.05803653677323
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 341.7413087226303
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    906.0832276094131,
-                    1023.504449518901
+                    1211.708579497848,
+                    1057.1210767196442
                 ]
             }
         ],
         "34": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 12
+                "value": 152
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    892.6890536917579,
-                    1586.8986202175624
+                    851.7181107836359,
+                    369.3125697927045
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 122
+                "value": 314
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 7
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    956.960558044888,
-                    109.39188547345195
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 335.44281119668915
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    955.1987601385517,
-                    1001.0619794146737
+                    1239.4949143162078,
+                    1028.3474847060982
                 ]
             }
         ],
         "35": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 7
+                "value": 143
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    970.107653519781,
-                    1596.4044290031638
+                    797.41089610042,
+                    410.23599136704377
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 125
+                "value": 309
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 10
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1048.5476790750233,
-                    125.54116599647648
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 339.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1005.8286428339339,
-                    982.2839343020472
+                    1264.6677299582013,
+                    997.2616462478193
                 ]
             }
         ],
         "36": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 2
+                "value": 134
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1048.0601380272706,
-                    1599.1265897459589
+                    750.1741269092082,
+                    459.1510977900721
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 128
+                "value": 304
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 13
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1139.1640951000502,
-                    146.46161405045592
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 348.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1058.7727210995574,
-                    971.6573366996383
+                    1287.0354460970311,
+                    964.1001433456177
                 ]
             }
         ],
         "37": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": -3
+                "value": 125
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1125.9532417381274,
-                    1595.0443851590092
+                    711.1709292373371,
+                    514.8534368017235
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 131
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 16
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1228.561432822314,
-                    172.09588814143683
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 357.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1112.727336017201,
-                    969.4438487080738
+                    1309.403162235861,
+                    930.938640443416
                 ]
             }
         ],
         "38": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 352
+                "value": 116
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1203.19415109997,
-                    1584.188883284124
+                    681.3616912556798,
+                    575.9714319500669
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 134
+                "value": 299
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 19
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1316.4946603530504,
-                    202.3737265059524
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1166.6819509348445,
-                    967.2303607165093
+                    1328.7955470457143,
+                    895.9538521578402
                 ]
             }
         ],
         "39": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 347
+                "value": 107
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1279.1950161532184,
-                    1566.6427010453024
+                    661.4804153345337,
+                    641.0001553555533
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 137
+                "value": 294
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 22
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1402.7227588277617,
-                    237.2121396936322
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 366.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1220.318560820135,
-                    973.4844857562869
+                    1345.0650127687463,
+                    859.4120338521361
                 ]
             }
         ],
         "40": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 342
+                "value": 98
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1353.3774244242404,
-                    1542.5393754840566
+                    652.0166444692493,
+                    708.33838402998
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 140
+                "value": 289
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 25
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1487.0093830221701,
-                    276.5156380355172
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 15.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1272.3164543279938,
-                    988.0522265126762
+                    1358.0877389470327,
+                    821.5912908281634
                 ]
             }
         ],
         "41": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 337
+                "value": 89
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1425.1768029935308,
-                    1512.0623474618933
+                    653.2034081069846,
+                    776.3280273006146
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 143
+                "value": 284
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 28
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1569.1235091580504,
-                    320.17649337460506
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 24.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1321.395270749143,
-                    1010.5748768606953
+                    1367.7646147710193,
+                    782.7794617771235
                 ]
             }
         ],
         "42": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 332
+                "value": 80
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1494.0467152365272,
-                    1475.4435655645939
+                    665.0114841883359,
+                    843.2949545054448
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 146
+                "value": 279
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 31
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1648.8400681233468,
-                    368.0750343412401
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 33.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1366.3465267400409,
-                    1040.497854400385
+                    1374.0219933726285,
+                    743.271928153318
                 ]
             }
         ],
         "43": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1562.9166274795236,
-                    1438.8247836672945
+                    676.8195602696871,
+                    910.261881710275
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 149
+                "value": 274
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1728.5566270886432,
-                    415.97357530787514
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 42.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1406.0633731935256,
-                    1077.0843561160493
+                    1376.8122523223935,
+                    703.369366142925
                 ]
             }
         ],
         "44": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 327
+                "value": 71
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1628.3329317792668,
-                    1396.3429389361224
+                    698.9581947727738,
+                    974.5571448510285
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 152
+                "value": 269
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1340.9552726976804,
-                    1906.5666459206943
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 34
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1805.657121336262,
-                    467.9785153306546
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 51.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1439.5678495372565,
-                    1119.4335009118108
+                    1376.114156064902,
+                    663.3754583366693
                 ]
             }
         ],
         "45": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 322
+                "value": 62
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1689.797770560591,
-                    1348.321343860721
+                    730.8822610422144,
+                    1034.5975811654355
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 155
+                "value": 264
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 37
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1879.9302237706602,
-                    523.947312483795
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 60.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1466.0349643686689,
-                    1166.5025122940444
+                    1371.9330175341959,
+                    623.5945825219384
                 ]
             }
         ],
         "46": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 317
+                "value": 53
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1746.8433592868864,
-                    1295.125471775846
+                    771.8056826165537,
+                    1088.9047958486515
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 158
+                "value": 259
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 40
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 69.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1484.8130094812952,
-                    1217.1323949894268
+                    1364.300657719134,
+                    584.3294951840318
                 ]
             }
         ],
         "47": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 312
+                "value": 44
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1799.0355465828773,
-                    1237.1601753886093
+                    820.720789039582,
+                    1136.1415650398633
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 161
+                "value": 254
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 43
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1947.946118021243,
-                    587.3731599696074
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 78.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1495.4396070837042,
-                    1270.0764732550504
+                    1353.2751634864542,
+                    545.879027346499
                 ]
             }
         ],
         "48": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 307
+                "value": 35
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1845.977118388737,
-                    1174.8666056049206
+                    876.4231280512334,
+                    1175.1447627117345
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 164
+                "value": 249
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 46
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 87.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1497.6530950752688,
-                    1324.031088172694
+                    1338.9404455046422,
+                    508.53581028661097
                 ]
             }
         ],
         "49": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 302
+                "value": 26
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1887.3108209989268,
-                    1108.7188541047194
+                    937.5411231995768,
+                    1204.954000693392
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 167
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 49
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 96.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1491.3989700354912,
-                    1377.6676980579844
+                    1324.6057275228302,
+                    471.1925932267229
                 ]
             }
         ],
         "50": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 297
+                "value": 17
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1922.7220799786114,
-                    1039.2203452180268
+                    1002.5698466050632,
+                    1224.835276614538
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 170
+                "value": 244
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 52
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 105.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1476.8312292791018,
-                    1429.6655915658432
+                    1307.070881651267,
+                    435.2408313747562
                 ]
             }
         ],
         "51": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 292
+                "value": 8
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 173
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 55
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 114.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1454.3085789310826,
-                    1478.7444079869924
+                    1069.90807527949,
+                    1234.2990474798225
+                ]
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362756128,
+                "attribute": "angle",
+                "value": 239
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362756128,
+                "attribute": "position",
+                "value": [
+                    1286.469358654865,
+                    400.95413934667175
                 ]
             }
         ],
         "52": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 287
+                "value": -1
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1945.5270729469848,
-                    964.62857425291
+                    1137.8977185501246,
+                    1233.1122838420872
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 176
+                "value": 234
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 58
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 123.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1424.3856013913928,
-                    1523.6956639778903
+                    1262.957948563166,
+                    368.59345957167386
                 ]
             }
         ],
         "53": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 282
+                "value": 350
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 179
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1250.968980133605,
-                    1908.13736250005
+                    1204.8646457549548,
+                    1221.3042077607358
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 61
+                "value": 229
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 132.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1387.7990996757285,
-                    1563.412510431375
+                    1236.7155874035457,
+                    338.405076362763
                 ]
             }
         ],
         "54": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 277
+                "value": 341
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 182
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1161.0238057018864,
-                    1904.9964077968248
+                    1269.1599088957084,
+                    1199.1655732576492
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 64
+                "value": 224
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 141.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1345.449954879967,
-                    1596.916986775106
+                    1207.9419953899996,
+                    310.6187415444031
                 ]
             }
         ],
         "55": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 272
+                "value": 332
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1948.2492336897799,
-                    886.6760897454205
+                    1329.2003452101155,
+                    1167.2415069882086
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    1071.0786312701678,
-                    1901.8554530935996
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 67
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 150.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1298.3809434977334,
-                    1623.3841016065182
-                ]
+                "value": 219
             }
         ],
         "56": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 267
+                "value": 323
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1944.1670291028302,
-                    808.7829860345638
+                    1383.5075598933315,
+                    1126.3180854138693
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 185
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    981.4211084419106,
-                    1894.0114362463105
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 70
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 159.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1247.751060802351,
-                    1642.1621467191446
-                ]
+                "value": 214
             }
         ],
         "57": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 262
+                "value": 314
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1933.3115272279451,
-                    731.5420766727214
+                    1430.7443290845433,
+                    1077.4029789908411
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 188
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    892.2969822551693,
-                    1881.4858571599045
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 73
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1197.1211781069687,
-                    1660.940191831771
-                ]
+                "value": 209
             }
         ],
         "58": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
-                "attribute": "angle",
-                "value": 257
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1915.7653449891236,
-                    655.541211619473
+                    1477.9810982757551,
+                    1028.487872567813
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 191
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    803.9505357448795,
-                    1864.3130475760156
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 76
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 168.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1144.1770998413451,
-                    1671.56678943418
-                ]
+                "value": 204
             }
         ],
         "59": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 252
+                "value": 305
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1891.6620194278778,
-                    581.358803348451
+                    1516.9842959476264,
+                    972.7855335561615
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 194
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    716.6239203800399,
-                    1842.5400769720454
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 79
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 177.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1090.2224849237016,
-                    1673.7802774257445
-                ]
+                "value": 199
             }
         ],
         "60": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 247
+                "value": 296
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1861.1849914057145,
-                    509.5594247791607
+                    1546.7935339292837,
+                    911.6675384078181
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 197
+                "value": 194
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    630.5564923433667,
-                    1816.226623546999
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 82
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 186.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1036.5858750384111,
-                    1667.526152385967
+                    1169.1301663389597,
+                    300.94186572041644
                 ]
             }
         ],
         "61": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
+                "attribute": "angle",
+                "value": 287
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1830.7079633835513,
-                    437.7600462098703
+                    1566.67480985043,
+                    846.6388150023317
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 200
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    545.9841564726349,
-                    1785.4448106476889
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 85
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 195.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    984.5879815305523,
-                    1652.9584116295775
-                ]
+                "value": 189
             }
         ],
         "62": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 242
+                "value": 278
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1794.0891814862518,
-                    368.89013396687403
+                    1576.1385807157144,
+                    779.300586327905
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 203
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    463.1387196619153,
-                    1750.2790090836543
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 88
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 204.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    935.5091651094029,
-                    1630.4357612815584
-                ]
+                "value": 184
             }
         ],
         "63": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 237
+                "value": 269
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1751.6073367550798,
-                    303.47382966713093
+                    1574.951817077979,
+                    711.3109430572704
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 206
+                "value": 179
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    382.24725549499027,
-                    1710.8256058726372
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 91
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1946.3230442225756,
-                    680.3589956191518
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 213.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    890.5579091185051,
-                    1600.5127837418686
+                    1129.136258532704,
+                    301.6399619779078
                 ]
             }
         ],
         "64": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 232
+                "value": 260
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1703.5857416796784,
-                    242.0089908858066
+                    1563.1437409966277,
+                    644.3440158524402
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 209
+                "value": 174
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    303.53148185244464,
-                    1667.192740050467
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 94
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1939.835692164372,
-                    773.1324522933154
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 222.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    850.8410626650202,
-                    1563.9262820262043
+                    1089.355382717973,
+                    305.82110050861394
                 ]
             }
         ],
         "65": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 227
+                "value": 251
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1650.3898695948035,
-                    184.96340215951133
+                    1541.005106493541,
+                    580.0487527116866
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "position",
-                "value": [
-                    224.81570820989901,
-                    1623.5598742282966
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 97
+                "value": 169
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1928.5018432276931,
-                    865.4392443959583
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 231.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    817.3365863212892,
-                    1521.5771372304428
+                    1050.0902953800664,
+                    313.45346032367576
                 ]
             }
         ],
         "66": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 222
+                "value": 242
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1592.4245732075667,
-                    132.77121486352038
+                    1509.0810402241004,
+                    520.0083163972795
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 212
+                "value": 164
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    148.49137955582069,
-                    1575.8671404473082
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 100
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1912.3525627046686,
-                    957.0263654260937
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 240.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    790.8694714898768,
-                    1474.5081258482091
+                    1011.6398275425337,
+                    324.47895455635575
                 ]
             }
         ],
         "67": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 217
+                "value": 233
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 215
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    74.76769556981142,
-                    1524.245261175714
+                    1468.1576186497612,
+                    465.70110171406355
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 103
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1891.432114650689,
-                    1047.6427814511205
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 249.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    772.0914263772503,
-                    1423.8782431528268
+                    973.1893597050009,
+                    335.50444878903573
                 ]
             }
         ],
         "68": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 212
+                "value": 224
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1526.2768217073656,
-                    91.43751225333041
+                    1419.242512226733,
+                    418.46433252285175
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 218
+                "value": 159
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 106
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1865.7978405597082,
-                    1137.0401191733843
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 258.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    761.4648287748414,
-                    1370.9341648872032
+                    935.8461426451129,
+                    349.8391667708477
                 ]
             }
         ],
         "69": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 207
+                "value": 215
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 221
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1835.5200021951925,
-                    1224.9733467041208
+                    1363.5401732150815,
+                    379.4611348509806
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 267.6507581094411
+                "value": 154
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    759.2513407832769,
-                    1316.9795499695597
+                    899.8943807931462,
+                    367.37401264241083
                 ]
             }
         ],
         "70": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 202
+                "value": 206
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 224
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 112
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1800.6815890075127,
-                    1311.201445178832
+                    1302.422178066738,
+                    349.65189686932337
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 276.6507581094411
+                "value": 149
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    765.5054658230545,
-                    1263.3429400842692
+                    865.6076887650617,
+                    387.975535638813
                 ]
             }
         ],
         "71": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
                 "value": 197
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 227
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1765.8431758198328,
-                    1397.4295436535433
+                    1237.3934546612518,
+                    329.7706209481773
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 285.6507581094411
+                "value": 144
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    780.0732065794438,
-                    1211.3450465764104
+                    833.2470089900637,
+                    411.48694573051193
                 ]
             }
         ],
         "72": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 192
+                "value": 188
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 230
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 115
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1726.5396774779479,
-                    1481.7161678479517
+                    1170.055225986825,
+                    320.3068500828928
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 294.6507581094411
+                "value": 139
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    802.5958569274629,
-                    1162.2662301552612
+                    803.0586257811528,
+                    437.72930689013225
                 ]
             }
         ],
         "73": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
-                "attribute": "angle",
-                "value": 187
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 233
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 118
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1682.87882213886,
-                    1563.830293983832
+                    1102.7169973123982,
+                    310.84307921760836
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 303.6507581094411
+                "value": 134
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    832.5188344671526,
-                    1117.3149741643633
+                    775.2722909627929,
+                    466.5028989036783
                 ]
             }
         ],
         "74": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 182
+                "value": 179
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 236
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 121
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1634.980281172225,
-                    1643.5468529491284
+                    1034.7273540417636,
+                    312.02984285534365
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 312.6507581094411
+                "value": 129
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    869.1053361828169,
-                    1077.5981277108785
+                    750.0994753207995,
+                    497.5887373619571
                 ]
             }
         ],
         "75": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 177
+                "value": 170
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1448.3837179965087,
-                    95.51971684028003
+                    967.7604268369334,
+                    323.8379189366949
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 239
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "angle",
                 "value": 124
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1582.9753411494455,
-                    1720.6473471967472
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 321.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    911.4544809785784,
-                    1044.0936513671477
+                    727.7317591819696,
+                    530.7502402641587
                 ]
             }
         ],
         "76": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 172
+                "value": 161
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1371.1428086346662,
-                    106.37521871516512
+                    903.4651636961798,
+                    345.9765534397816
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 242
+                "value": 119
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 127
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1527.006543996305,
-                    1794.9204496311454
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    953.8036257743399,
-                    1010.5891750234167
+                    708.339374372116,
+                    565.7350285497346
                 ]
             }
         ],
         "77": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 167
+                "value": 152
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1295.1419435814178,
-                    123.9214009539866
+                    843.4247273817728,
+                    377.90061970922216
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 245
+                "value": 114
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 130
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1467.2272962954569,
-                    1866.1625828412105
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 330.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1000.8726371565734,
-                    984.1220601920043
+                    692.069908649084,
+                    602.2768468554386
                 ]
             }
         ],
         "78": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 162
+                "value": 143
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1220.9595353103957,
-                    148.02472651523252
+                    789.1175126985569,
+                    418.8240412835614
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 248
+                "value": 109
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 133
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 339.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1051.5025198519556,
-                    965.3440150793778
+                    679.0471824707978,
+                    640.0975898794113
                 ]
             }
         ],
         "79": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 157
+                "value": 134
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1149.1601567411053,
-                    178.50175453739587
+                    741.8807435073451,
+                    467.73914770658973
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
-                "attribute": "angle",
-                "value": 251
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 136
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 348.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1104.4465981175792,
-                    954.7174174769689
+                    666.0244562925116,
+                    677.918332903384
                 ]
             }
         ],
         "80": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 152
+                "value": 125
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1080.290244498109,
-                    215.12053643469534
+                    702.8775458354739,
+                    523.4414867182412
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 254
+                "value": 104
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    49.96033354628152,
-                    1437.7317085412653
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 139
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 357.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1158.4012130352228,
-                    952.5039294854043
+                    656.3475804685248,
+                    716.7301619544238
                 ]
             }
         ],
         "81": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
+                "attribute": "angle",
+                "value": 116
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    1011.4203322551126,
-                    251.7393183319948
+                    673.0683078538167,
+                    584.5594818665845
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 257
+                "value": 99
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 142
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 366.6507581094411
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1212.0378229205132,
-                    958.7580545251819
+                    650.0902018669155,
+                    756.2376955782294
                 ]
             }
         ],
         "82": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 147
+                "value": 107
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    946.0040279553696,
-                    294.22116306316695
+                    653.1870319326706,
+                    649.5882052720709
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 260
+                "value": 94
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 145
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 15.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1264.035716428372,
-                    973.3257952815712
+                    647.2999429171506,
+                    796.1402575886224
                 ]
             }
         ],
         "83": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 142
+                "value": 98
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    884.5391891740453,
-                    342.2427581385683
+                    643.7232610673861,
+                    716.9264339464977
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 263
+                "value": 89
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 148
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 24.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1313.1145328495213,
-                    995.8484456295904
+                    647.9980391746419,
+                    836.134165394878
                 ]
             }
         ],
         "84": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 137
+                "value": 89
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    827.49360044775,
-                    395.4386302234432
+                    644.9100247051215,
+                    784.9160772171323
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 266
+                "value": 84
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 151
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 33.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1358.0657888404191,
-                    1025.77142316928
+                    652.179177705348,
+                    875.915041209609
                 ]
             }
         ],
         "85": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 132
+                "value": 80
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    775.3014131517591,
-                    453.40392661067995
+                    656.7181007864727,
+                    851.8830044219624
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 269
+                "value": 79
             },
             {
                 "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 154
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    1383.6394499896344,
-                    1906.9310994925947
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 42.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1397.782635293904,
-                    1062.3579248849444
+                    659.8115375204098,
+                    915.1801285475156
                 ]
             }
         ],
         "86": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 127
+                "value": 71
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    728.3598413458993,
-                    515.6974963943687
+                    678.8567352895594,
+                    916.1782675627159
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 272
+                "value": 74
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    53.10128824950663,
-                    1347.7865341095467
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 157
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 51.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1431.2871116376348,
-                    1104.707069680706
+                    670.8370317530898,
+                    953.6305963850483
                 ]
             }
         ],
         "87": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 122
+                "value": 62
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    687.0261387357093,
-                    581.84524789457
+                    710.780801559,
+                    976.2187038771228
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 275
+                "value": 69
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    60.94530509679584,
-                    1258.1290112812896
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 160
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 60.650758109441085
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1457.7542264690471,
-                    1151.7760810629395
+                    685.1717497349018,
+                    990.9738134449364
                 ]
             }
         ],
         "88": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
-                "attribute": "angle",
-                "value": 117
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    651.6148797560247,
-                    651.3437567812626
+                    742.7048678284406,
+                    1036.25914019153
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 278
+                "value": 64
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    73.47088418320173,
-                    1169.0048850945484
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 163
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 69.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1476.5322715816735,
-                    1202.4059637583218
+                    702.7065956064649,
+                    1026.925575296903
                 ]
             }
         ],
         "89": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 112
+                "value": 53
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    622.3955654695836,
-                    723.664097437472
+                    783.6282894027798,
+                    1090.566354874746
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 281
+                "value": 59
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    90.6436937670908,
-                    1080.6584385842586
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 166
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 78.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1487.1588691840825,
-                    1255.3500420239454
+                    723.3081186028671,
+                    1061.2122673249874
                 ]
             }
         ],
         "90": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 107
+                "value": 44
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    599.5905725012102,
-                    798.2558684025888
+                    832.5433958258081,
+                    1137.8031240659577
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 284
+                "value": 54
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    112.41666437106086,
-                    993.331823219419
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 169
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 87.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1489.372357175647,
-                    1309.304656941589
+                    746.8195286945661,
+                    1093.5729470999852
                 ]
             }
         ],
         "91": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 102
+                "value": 35
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    583.3734606174249,
-                    874.5513812598257
+                    888.2457348374596,
+                    1176.806321737829
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    134.18963497503094,
-                    906.0052078545793
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 172
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 96.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1483.1182321358694,
-                    1362.9412668268794
+                    770.330938786265,
+                    1125.933626874983
                 ]
             }
         ],
         "92": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
+                "attribute": "angle",
+                "value": 26
+            },
+            {
+                "type": "deltaSetter",
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    567.1563487336397,
-                    950.8468941170626
+                    949.3637299858029,
+                    1206.6155597194863
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 287
+                "value": 49
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    160.50308840007725,
-                    819.9377798179062
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 175
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 105.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1468.55049137948,
-                    1414.9391603347383
+                    796.5732999458853,
+                    1156.1220100838939
                 ]
             }
         ],
         "93": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 97
+                "value": 17
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    557.6505399480382,
-                    1028.2654939450856
+                    1014.3924533912893,
+                    1226.4968356406325
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 290
+                "value": 44
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    191.28490129938746,
-                    735.3654439471744
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 178
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1290.6961030768584,
-                    1910.1767526859273
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 114.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1446.0278410314609,
-                    1464.0179767558875
+                    825.3468919594313,
+                    1183.9083449022537
                 ]
             }
         ],
         "94": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 92
+                "value": 8
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    554.9283792052431,
-                    1106.2179784525752
+                    1081.730682065716,
+                    1235.960606505917
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 293
+                "value": 39
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    226.45070286342207,
-                    652.5200071364548
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 181
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1197.710267427314,
-                    1908.55367888726
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 123.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1416.104863491771,
-                    1508.9692327467853
+                    856.4327304177102,
+                    1209.0811605442473
                 ]
             }
         ],
         "95": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 87
+                "value": -1
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    559.0105837921927,
-                    1184.111082163432
+                    1149.7203253363507,
+                    1234.7738428681816
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 296
+                "value": 34
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    265.904106074439,
-                    571.6285429695297
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 184
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1104.9368107531502,
-                    1902.0663268290564
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1386.1818859520813,
-                    1553.9204887376832
+                    889.5942333199118,
+                    1231.448876683077
                 ]
             }
         ],
         "96": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 82
+                "value": 350
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    569.8660856670779,
-                    1261.3519915252746
+                    1216.687252541181,
+                    1222.9657667868303
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 299
+                "value": 29
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    309.5369718966094,
-                    492.91276932698406
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 187
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    1012.6300186505073,
-                    1890.7324778923776
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 132.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1349.595384236417,
-                    1593.637335191168
+                    924.5790216054877,
+                    1250.8412614929305
                 ]
             }
         ],
         "97": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 77
+                "value": 341
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    587.4122679058993,
-                    1337.352856578523
+                    1280.9825156819345,
+                    1200.8271322837436
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 302
+                "value": 24
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    357.2297056775978,
-                    416.5884406729057
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 190
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    921.042897620372,
-                    1874.583197369353
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 141.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1307.2462394406555,
-                    1627.1418115348988
+                    961.1208399111918,
+                    1267.1107272159625
                 ]
             }
         ],
         "98": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 72
+                "value": 332
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    611.5155934671452,
-                    1411.535264849545
+                    1341.0229519963416,
+                    1168.903066014303
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 305
+                "value": 19
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    408.85158494919193,
-                    342.8647566868964
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "angle",
-                "value": 193
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    830.4264815953451,
-                    1853.6627493153735
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 150.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1260.1772280584219,
-                    1653.6089263663112
+                    998.9415829351644,
+                    1280.1334533942488
                 ]
             }
         ],
         "99": [
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "angle",
-                "value": 67
+                "value": 323
             },
             {
                 "type": "deltaSetter",
-                "id": 4368491104,
+                "id": 4362445360,
                 "attribute": "position",
                 "value": [
-                    641.9926214893086,
-                    1483.3346434188354
+                    1395.3301666795576,
+                    1127.9796444399637
                 ]
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "angle",
-                "value": 308
+                "value": 14
             },
             {
                 "type": "deltaSetter",
-                "id": 4368801872,
+                "id": 4362756128,
                 "attribute": "position",
                 "value": [
-                    464.2611177285012,
-                    271.9437888622914
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800480,
-                "attribute": "position",
-                "value": [
-                    739.8100655703182,
-                    1832.742301261394
-                ]
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "angle",
-                "value": 159.65075810944109
-            },
-            {
-                "type": "deltaSetter",
-                "id": 4368800096,
-                "attribute": "position",
-                "value": [
-                    1209.5473453630395,
-                    1672.3869714789375
+                    1037.7534119862044,
+                    1289.8103292182354
                 ]
             }
         ]
