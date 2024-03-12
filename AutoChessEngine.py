@@ -3,6 +3,7 @@ import math
 import random
 import pygame
 from collections import deque
+import copy
 
 class Arena:
     def __init__(self, width, height):
@@ -351,12 +352,17 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
 
         return max(-self.max_turn_rate, min(angle_diff, self.max_turn_rate))
 
+    def shoot(self):
+        # Create a new projectile and add it to the game
+        projectile_speed = random.randint(50, 100)
+        projectile = SimulationProjectile(self.position, self.angle, projectile_speed)
+        self.game.add_game_object(projectile)
 
     def move(self):
         if self.action_plan:
             action, value = self.action_plan[0]  # Peek at the first action
             if action == 'turn':
-                self.angle = self.angle + value
+                self.angle += value
 
         # Calculate the potential new position
         radians = math.radians(self.angle)
@@ -364,39 +370,31 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         dy = math.sin(radians) * self.speed
         new_x = self.position[0] + dx
         new_y = self.position[1] + dy
+        new_position = (new_x, new_y)
 
-        # Check for collisions
+        # Create a copy of the collider for collision checking
+        temp_collider = copy.deepcopy(self.collider)
+        temp_collider.center = new_position
+
+        # Check for collisions with other creatures
         will_collide = False
         for other in self.game.game_objects:
-            if other is not self:  # Don't check collision with self
-                old_pos = self.collider.center 
-                self.collider.center = (new_x, new_y)  # Temporarily update position for collision check
-                print(f"Checking collision between {self.playback_id} and {other.playback_id}")
-                print(f"{self.playback_id} rectangle: {self.collider.rect}")
-                print(f"{other.playback_id} rectangle: {other.collider.rect}")
-                if self.collider.check_collision(other):
-                    will_collide = True
-                    
-                    break  # Stop checking if any collision is found
-                self.collider.center = old_pos  # Revert position after check
-                if self.collider.check_collision(other):
-                    will_collide = True
-                    break  # Stop checking if any collision is found
-                self.collider.center = old_pos  # Revert position after check
+            if other is not self and temp_collider.check_collision(other.collider):
+                will_collide = True
+                #print(f"====T: {self.game.time}====")
+                #print(f"Collision detected between {self.id} and {other.id}")
+                break
 
         # Check for collisions with arena walls
         arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
-        creature_bounds = self.collider.rect.copy()
-        creature_bounds.center = (new_x, new_y)
-        if not arena_bounds.contains(creature_bounds):
+        if not arena_bounds.contains(temp_collider.rect):
             will_collide = True  # Set collision flag for arena boundary collision
 
-
+        # If no collision is detected, update the actual position and collider
         if not will_collide:
-            # Move only if there's no collision
             if self.action_plan:
                 self.action_plan.popleft()  # Remove the action after processing
-            self.position = (new_x, new_y)  # Update position if no collision
+            self.position = new_position  # Update position if no collision
         else:
             # Handle collision (e.g., stop movement, bounce back, etc.)
             # For now, we just clear the action plan to simulate stopping
@@ -473,6 +471,30 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
             screen.blit(rotated_bbox_surface, bbox_rect.topleft)
 
 
+class BaseProjectile:
+    def __init__(self, position, angle, speed):
+        self.position = position
+        self.angle = angle
+        self.speed = speed
+        self.collider = RectCollider(center=self.position, size=(10, 10))  # Example size
+
+    def move(self):
+        # Logic to move the projectile forward
+        pass
+
+    def think(self):
+        # Additional logic if needed
+        pass
+
+    def die(self):
+        # Logic to remove the projectile from the game
+        pass
+
+class SimulationProjectile(BaseProjectile):
+    pass
+
+class PlaybackProjectile(BaseProjectile):
+    pass
 
 
 
@@ -483,7 +505,7 @@ class Game:
         self.game_objects = []  # Initialized but can be populated by derived classes
         self.time = -1
 
-    def add_creature(self, creature):
+    def add_game_object(self, creature):
         self.game_objects.append(creature)  # Add the creature to the game's list of creatures
         creature.set_game(self)  # Set this game instance as the creature's game
 

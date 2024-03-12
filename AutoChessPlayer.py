@@ -26,7 +26,7 @@ class PlaybackGame(Game):
 
 
 class AutoChessPlayer:
-    def __init__(self, battle_log_path, screen_size=(800, 800), offset=(190, 185), canvas_dimensions=(425, 425)):
+    def __init__(self, battle_log_path, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670)):
         with open(battle_log_path, 'r') as f:
             self.battle_log = json.load(f)
 
@@ -64,7 +64,7 @@ class AutoChessPlayer:
         self.background = pygame.transform.scale(self.background, (800, 800))
 
         # Define arena_rect here
-        self.arena_rect = pygame.Rect(190, 185, 425, 425)  # Example dimensions and position
+        self.arena_rect = pygame.Rect(self.offset[0], self.offset[1], self.canvas_dimensions[0], self.canvas_dimensions[1])
 
         # UI Controls
         self.button_color = (0, 200, 0)
@@ -104,7 +104,7 @@ class AutoChessPlayer:
                 scale_size=self.scale_size,
                 scale_position=self.scale_position
             )
-            self.game.add_creature(creature)  # This method should set the game for the creature
+            self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)
         self.game.creatures = creatures
 
@@ -152,13 +152,13 @@ class AutoChessPlayer:
                     self.game.toggle_bounding_boxes()  # Toggle the bounding boxes
 
 
-    def draw_button(self):
-        mouse_pos = pygame.mouse.get_pos()
-        button_color = self.button_hover_color if self.button_rect.collidepoint(mouse_pos) else self.button_color
-        pygame.draw.rect(self.screen, button_color, self.button_rect)
-        text_surface = self.font.render('Play/Pause', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.button_rect.center)
-        self.screen.blit(text_surface, text_rect)
+    def draw_GUI(self):
+        # mouse_pos = pygame.mouse.get_pos()
+        # button_color = self.button_hover_color if self.button_rect.collidepoint(mouse_pos) else self.button_color
+        # pygame.draw.rect(self.screen, button_color, self.button_rect)
+        # text_surface = self.font.render('Play/Pause', True, (255, 255, 255))
+        # text_rect = text_surface.get_rect(center=self.button_rect.center)
+        # self.screen.blit(text_surface, text_rect)
 
         # Display current event_index at the top-right of the screen
         event_index_text = f'Event Index: {self.game.time}'
@@ -172,7 +172,7 @@ class AutoChessPlayer:
             self.handle_events()
             self.screen.blit(self.background, (0, 0))
             self.draw_arena()
-            self.draw_button()
+            self.draw_GUI()
 
             if self.playing:
                 if str(self.game.time) in self.battle_log['events']:
@@ -194,7 +194,7 @@ class AutoChessPlayer:
 
 
 if __name__ == "__main__":
-    arena_rect = (150, 150, 500, 500)  # Example coordinates and size (x, y, width, height)
+    # arena_rect = (50, 50, 700, 700)  # Example coordinates and size (x, y, width, height)
 
     player = AutoChessPlayer('simulation_record5.json')
     player.run()

@@ -12,12 +12,12 @@ def initialize_game():
         name=f"Creature {i}", 
         max_turn_rate=random.randint(2, 10),
         shoot_cooldown=random.randint(5, 20),
-        bounding_box_size = (400, 600)
-    ) for i in range(2)]
+        bounding_box_size = (50, 100)
+    ) for i in range(10)]
 
     for creature in creatures:
         creature.set_game(game)  # Associate each creature with the game
-        game.add_creature(creature)  # Assuming a method to add creatures to the game
+        game.add_game_object(creature)  # Assuming a method to add creatures to the game
 
     return game
 
@@ -25,6 +25,7 @@ def main():
     game = initialize_game()
     for _ in range(100):  
         game.simulate_turn()
+
     game.record_game("simulation_record5.json")
 
 if __name__ == "__main__":
