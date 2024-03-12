@@ -12,6 +12,7 @@ def initialize_game():
         name=f"Creature {i}", 
         max_turn_rate=random.randint(2, 10),
         shoot_cooldown=random.randint(5, 20),
+        bounding_box_size = (100, 180)
     ) for i in range(4)]
 
     for creature in creatures:

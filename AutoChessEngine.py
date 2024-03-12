@@ -46,7 +46,6 @@ def recordable(method):
             return result
     return wrapper
 
-
 class Collider:
     def __init__(self, center=(0, 0), angle=0, **kwargs):
         self._center = center
@@ -82,8 +81,6 @@ class Collider:
     def check_collision(self, other):
         raise NotImplementedError("This method should be implemented by subclasses.")
 
-
-
 class RectCollider(Collider):
     def __init__(self, center=(0, 0), size=(1, 1), angle=0, **kwargs):
         super().__init__(center, angle, **kwargs)  # Call the base class constructor first
@@ -110,8 +107,68 @@ class RectCollider(Collider):
         self.rect.center = value  # Update the pygame.Rect object
 
 
+    def get_vertices(self):
+            # Calculate the four corners of the rotated rectangle
+            rad = math.radians(self._angle)
+            cos_rad = math.cos(rad)
+            sin_rad = math.sin(rad)
+            w, h = self._size
+            cx, cy = self._center
 
+            # Corners relative to the center
+            corners = [(-w/2, -h/2), (w/2, -h/2), (w/2, h/2), (-w/2, h/2)]
 
+            # Rotate and translate corners
+            return [(cx + cos_rad * x - sin_rad * y, cy + sin_rad * x + cos_rad * y) for x, y in corners]
+
+    def check_collision(self, other):
+        if isinstance(other, RectCollider):
+            return self._obb_collision(other)
+
+    def _obb_collision(self, other):
+        # Calculate the axes for the first OBB
+        axes1 = self._get_obb_axes()
+        # Calculate the axes for the second OBB
+        axes2 = other._get_obb_axes()
+
+        # Check for overlap on each axis
+        for axis in axes1 + axes2:
+            if not self._overlap_on_axis(other, axis):
+                return False
+
+        return True
+
+    def _get_obb_axes(self):
+        # Calculate the axes of the OBB based on its angle
+        rad = math.radians(self.angle)
+        cos_rad = math.cos(rad)
+        sin_rad = math.sin(rad)
+        return [(cos_rad, sin_rad), (-sin_rad, cos_rad)]
+
+    def _overlap_on_axis(self, other, axis):
+        # Project the OBBs onto the axis
+        self_vertices = self.get_vertices()
+        other_vertices = other.get_vertices()
+        self_min, self_max = self._project_onto_axis(self_vertices, axis)
+        other_min, other_max = self._project_onto_axis(other_vertices, axis)
+
+        # Check for overlap
+        if self_max < other_min or other_max < self_min:
+            return False
+
+        return True
+
+    def _project_onto_axis(self, vertices, axis):
+        min_projection = float('inf')
+        max_projection = float('-inf')
+
+        for vertex in vertices:
+            projection = vertex[0] * axis[0] + vertex[1] * axis[1]
+            min_projection = min(min_projection, projection)
+            max_projection = max(max_projection, projection)
+
+        return min_projection, max_projection
+    
 
 class CircleCollider(Collider):
     def __init__(self, center=(0, 0), radius=1, **kwargs):
@@ -233,7 +290,6 @@ class PlaybackGameObject(GameObject):
         pass     
     
     def move(self):
-        # Use events to update position, angle, etc., based on the new event structure.
         time_key = str(self.game.time)
         if time_key in self.events:
             for event in self.events[time_key]:
@@ -261,8 +317,7 @@ class BaseCreature:
 
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
-    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, events=None, **kwargs):
-        bounding_box_size = (200, 400)  # Example size
+    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, events=None, **kwargs):
         # Adjust bounding_rect initialization as needed to fit the game's logic
         bounding_rect = pygame.Rect(position[0] - bounding_box_size[0] / 2,
                                     position[1] - bounding_box_size[1] / 2,
@@ -300,28 +355,48 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         return max(-self.max_turn_rate, min(angle_diff, self.max_turn_rate))
 
 
-    def move(self, arena, time_index):
-
-        while self.action_plan:
-            action, value = self.action_plan.popleft()
+    def move(self):
+        if self.action_plan:
+            action, value = self.action_plan[0]  # Peek at the first action
             if action == 'turn':
-                # Use the property setter for angle
                 self.angle = self.angle + value
-            # Implement other actions as necessary
 
-        # Calculate the new position based on the current angle and speed
+        # Calculate the potential new position
         radians = math.radians(self.angle)
         dx = math.cos(radians) * self.speed
         dy = math.sin(radians) * self.speed
         new_x = self.position[0] + dx
         new_y = self.position[1] + dy
 
-        # Ensure the new position does not exceed the arena boundaries
-        new_x = max(0, min(arena.width, new_x))
-        new_y = max(0, min(arena.height, new_y))
+        # Check for collisions
+        will_collide = False
+        for other in self.game.game_objects:
+            if other is not self:  # Don't check collision with self
+                old_pos = self.collider.center 
+                self.collider.center = (new_x, new_y)  # Temporarily update position for collision check
+                
+                if self.collider.check_collision(other):
+                    will_collide = True
+                    break  # Stop checking if any collision is found
+                self.collider.center = old_pos  # Revert position after check
 
-        # Use the property setter for position
-        self.position = (new_x, new_y)
+        # Check for collisions with arena walls
+        arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
+        creature_bounds = self.collider.rect.copy()
+        creature_bounds.center = (new_x, new_y)
+        if not arena_bounds.contains(creature_bounds):
+            will_collide = True  # Set collision flag for arena boundary collision
+
+
+        if not will_collide:
+            # Move only if there's no collision
+            if self.action_plan:
+                self.action_plan.popleft()  # Remove the action after processing
+            self.position = (new_x, new_y)  # Update position if no collision
+        else:
+            # Handle collision (e.g., stop movement, bounce back, etc.)
+            # For now, we just clear the action plan to simulate stopping
+            self.action_plan.clear()
 
         # Decrement the shoot timer if it's greater than 0
         if self.shoot_timer > 0:
@@ -382,7 +457,6 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         if self.game.show_bounding_boxes:
             # Scale size and scale position
             scaled_size = self.scale_size(self.collider.size)
-            scaled_center = self.scale_position(self.collider.center)
 
             # Calculate the corners of the bounding box relative to its center
             corners = [
@@ -452,7 +526,7 @@ class SimulationGame(Game):
         arena_center = (self.arena.width / 2, self.arena.height / 2)
         for creature in self.game_objects:
             creature.think(arena_center)  # Let each creature decide its move
-            creature.move(self.arena, self.time)
+            creature.move()
         self.time += 1
 
 
