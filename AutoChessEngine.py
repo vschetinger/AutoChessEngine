@@ -48,17 +48,20 @@ def recordable(method):
 
 
 class Collider:
-    def __init__(self, position=(0, 0), angle=0, **kwargs):
-        self._position = position  # Use an internal variable to avoid recursion
+    def __init__(self, center=(0, 0), angle=0, **kwargs):
+        self._center = center
         self._angle = angle
 
     @property
-    def position(self):
-        return self._position
+    def center(self):
+        return self._center
 
-    @position.setter
-    def position(self, value):
-        self._position = value
+    @center.setter
+    def center(self, value):
+        if isinstance(value, tuple) and len(value) == 2:
+            self._center = value
+        else:
+            raise ValueError("Center must be a tuple with two numeric values.")
 
     @property
     def angle(self):
@@ -68,8 +71,13 @@ class Collider:
     def angle(self, value):
         self._angle = value
 
-    def rotate(self, angle):
-        self._angle += angle
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        self._position = value
 
     def check_collision(self, other):
         raise NotImplementedError("This method should be implemented by subclasses.")
@@ -77,24 +85,37 @@ class Collider:
 
 
 class RectCollider(Collider):
-    def __init__(self, position=(0, 0), size=(0, 0), angle=0, **kwargs):
-        super().__init__(position, angle, **kwargs)
-        self.rect = pygame.Rect(position[0], position[1], size[0], size[1])
+    def __init__(self, center=(0, 0), size=(1, 1), angle=0, **kwargs):
+        super().__init__(center, angle, **kwargs)  # Call the base class constructor first
+        self._size = size  # Set the size attribute
+        self.rect = pygame.Rect(0, 0, *size)  # Initialize the rect attribute
+        self.rect.center = center  # Set the center of the rect
 
     @property
-    def position(self):
-        return self.rect.topleft
+    def size(self):
+        return self._size
 
-    @position.setter
-    def position(self, value):
-        self.rect.topleft = value
+    @size.setter
+    def size(self, value):
+        if isinstance(value, tuple) and len(value) == 2:
+            self._size = value
+            self.rect.size = value  # Update the size of the rect
+        else:
+            raise ValueError("Size must be a tuple with two numeric values.")
+
+
+    @Collider.center.setter
+    def center(self, value):
+        Collider.center.fset(self, value)  # Set the center in the base class
+        self.rect.center = value  # Update the pygame.Rect object
+
 
 
 
 
 class CircleCollider(Collider):
-    def __init__(self, center, radius):
-        self.center = center
+    def __init__(self, center=(0, 0), radius=1, **kwargs):
+        super().__init__(center, **kwargs)
         self.radius = radius
 
     def check_collision(self, other):
@@ -162,12 +183,12 @@ class GameObject:
     
     @property
     def position(self):
-        return self.collider.position
+        return self.collider.center
 
     @position.setter
     @recordable
     def position(self, value):
-        self.collider.position = value
+        self.collider.center = value
 
     @property
     def angle(self):
@@ -211,15 +232,20 @@ class PlaybackGameObject(GameObject):
         # do not cause errors when called on a PlaybackCreature instance.
         pass     
     
-    def move(self, time_index):
+    def move(self):
         # Use events to update position, angle, etc., based on the new event structure.
-        if time_index in self.events:
-            for event in self.events[time_index]:
+        time_key = str(self.game.time)
+        if time_key in self.events:
+            for event in self.events[time_key]:
                 if event["type"] == "deltaSetter":
                     attribute = event["attribute"]
                     value = event["value"]
+                    # Ensure 'position' is a tuple before setting it
+                    if attribute == "position":
+                        value = tuple(value)
                     # Update the attribute based on the event information.
                     setattr(self, attribute, value)
+
 
     def draw(self, *args, **kwargs):
         # Placeholder for draw, to be overridden by subclasses
@@ -236,12 +262,12 @@ class BaseCreature:
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
     def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, events=None, **kwargs):
-        bounding_box_size = (12, 30)  # Example size
+        bounding_box_size = (200, 400)  # Example size
         # Adjust bounding_rect initialization as needed to fit the game's logic
         bounding_rect = pygame.Rect(position[0] - bounding_box_size[0] / 2,
                                     position[1] - bounding_box_size[1] / 2,
                                     *bounding_box_size)
-        collider = RectCollider(bounding_rect)
+        collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
         super().__init__(position, angle, collider=collider, **kwargs)
         BaseCreature.__init__(self, health, speed, name, **kwargs)
         
@@ -301,31 +327,84 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         if self.shoot_timer > 0:
             self.shoot_timer -= 1
 
+def draw_rotated_box(screen, rect, angle, color):
+        # Calculate the angle in radians
+        radians = math.radians(angle)
+        
+        # Calculate the four corners of the rotated rectangle
+        corners = [
+            (rect.centerx + math.cos(radians) * rect.width / 2 - math.sin(radians) * rect.height / 2,
+            rect.centery + math.sin(radians) * rect.width / 2 + math.cos(radians) * rect.height / 2),
+            (rect.centerx - math.cos(radians) * rect.width / 2 - math.sin(radians) * rect.height / 2,
+            rect.centery - math.sin(radians) * rect.width / 2 + math.cos(radians) * rect.height / 2),
+            (rect.centerx - math.cos(radians) * rect.width / 2 + math.sin(radians) * rect.height / 2,
+            rect.centery - math.sin(radians) * rect.width / 2 - math.cos(radians) * rect.height / 2),
+            (rect.centerx + math.cos(radians) * rect.width / 2 + math.sin(radians) * rect.height / 2,
+            rect.centery + math.sin(radians) * rect.width / 2 - math.cos(radians) * rect.height / 2)
+        ]
+        
+        # Draw the polygon on the screen
+        pygame.draw.polygon(screen, color, corners)
 
 class PlaybackCreature(PlaybackGameObject, BaseCreature):
-    def __init__(self, playback_id, health, position, speed, name, angle, events, collider):
+    def __init__(self, playback_id, health, position, speed, name, angle, events, collider, scale_size, scale_position):
+        self.scale_size = scale_size
+        self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
         BaseCreature.__init__(self, health, speed, name)
         self.collider = collider  # Use the provided collider
+        # Load the image only once in the constructor
+        self.image = pygame.image.load('assets/car1.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, self.collider.size)  # Scale to match the collider size
+
+
 
     def draw(self, screen, convert_to_screen):
-        # Convert the collider's position to screen coordinates
-        screen_position = convert_to_screen(self.collider.position)
+        # Convert the collider's center to screen coordinates
+        screen_center = convert_to_screen(self.collider.center)
 
-        radians = math.radians(self.collider.angle)
+        # Draw the sprite
+        rotated_image = pygame.transform.rotate(self.image, -self.angle + 90)
+        new_rect = rotated_image.get_rect(center=screen_center)
+        screen.blit(rotated_image, new_rect.topleft)
 
-        # Triangle points for visual representation
-        base_length = 20
-        front_point = (screen_position[0] + math.cos(radians) * base_length, screen_position[1] + math.sin(radians) * base_length)
-        back_center_point = (screen_position[0] - math.cos(radians) * base_length / 2, screen_position[1] - math.sin(radians) * base_length / 2)
-        left_point = (back_center_point[0] + math.cos(radians + math.pi / 2) * base_length / 2, back_center_point[1] + math.sin(radians + math.pi / 2) * base_length / 2)
-        right_point = (back_center_point[0] + math.cos(radians - math.pi / 2) * base_length / 2, back_center_point[1] + math.sin(radians - math.pi / 2) * base_length / 2)
-        points = [front_point, left_point, right_point]
-        color = self.color
+        # Draw the triangle pointer
+        radians = math.radians(self.angle)
+        base_length = 10  # Smaller size for the triangle pointer
+        triangle_height = (math.sqrt(3) / 2) * base_length
+        front_point = (screen_center[0] + math.cos(radians) * triangle_height, screen_center[1] + math.sin(radians) * triangle_height)
+        back_center_point = (screen_center[0] - math.cos(radians) * triangle_height / 2, screen_center[1] - math.sin(radians) * triangle_height / 2)
+        left_point = (back_center_point[0] + math.cos(radians + math.pi / 2) * (base_length / 2), back_center_point[1] + math.sin(radians + math.pi / 2) * (base_length / 2))
+        right_point = (back_center_point[0] + math.cos(radians - math.pi / 2) * (base_length / 2), back_center_point[1] + math.sin(radians - math.pi / 2) * (base_length / 2))
+        triangle_points = [front_point, left_point, right_point]
+        pygame.draw.polygon(screen, (255, 255, 255), triangle_points)
 
-        pygame.draw.rect(screen, color, self.collider.rect, 1)  # Draw collider
+        if self.game.show_bounding_boxes:
+            # Scale size and scale position
+            scaled_size = self.scale_size(self.collider.size)
+            scaled_center = self.scale_position(self.collider.center)
 
-        pygame.draw.polygon(screen, (255, 255, 255), points)
+            # Calculate the corners of the bounding box relative to its center
+            corners = [
+                (-scaled_size[0]/2, -scaled_size[1]/2),
+                (scaled_size[0]/2, -scaled_size[1]/2),
+                (scaled_size[0]/2, scaled_size[1]/2),
+                (-scaled_size[0]/2, scaled_size[1]/2),
+            ]
+            
+            # Rotate and translate corners
+            rotated_corners = []
+            for (x, y) in corners:
+                # Rotate
+                rotated_x = x * math.cos(math.radians(-self.angle)) - y * math.sin(math.radians(-self.angle))
+                rotated_y = x * math.sin(math.radians(-self.angle)) + y * math.cos(math.radians(-self.angle))
+                # Translate
+                screen_x, screen_y = convert_to_screen((rotated_x + self.collider.center[0], rotated_y + self.collider.center[1]))
+                rotated_corners.append((screen_x, screen_y))
+
+            # Draw the bounding box
+            pygame.draw.polygon(screen, self.color, rotated_corners, 1)
+
 
 
 
@@ -334,16 +413,16 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
 class Game:
     def __init__(self, arena):
         self.arena = arena
-        self.creatures = []  # Initialized but can be populated by derived classes
+        self.game_objects = []  # Initialized but can be populated by derived classes
         self.time = -1
 
     def add_creature(self, creature):
-        self.creatures.append(creature)  # Add the creature to the game's list of creatures
+        self.game_objects.append(creature)  # Add the creature to the game's list of creatures
         creature.set_game(self)  # Set this game instance as the creature's game
 
     def set_game_for_creatures(self):
-        for creature in self.creatures:
-            creature.set_game(self)
+        for game_objects in self.game_objects:
+            game_objects.set_game(self)
 
 
 
@@ -359,10 +438,11 @@ def serialize_events(events):
 
 
 class SimulationGame(Game):
-    def __init__(self, arena, creatures):
+    def __init__(self, arena, creatures = None):
         super().__init__(arena)
-        self.creatures = creatures
-        self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
+        self.game_objects = creatures
+        if(creatures):
+            self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
         
     
 
@@ -370,7 +450,7 @@ class SimulationGame(Game):
         if self.time == -1:
             self.time = 0  # Start the game
         arena_center = (self.arena.width / 2, self.arena.height / 2)
-        for creature in self.creatures:
+        for creature in self.game_objects:
             creature.think(arena_center)  # Let each creature decide its move
             creature.move(self.arena, self.time)
         self.time += 1
@@ -379,18 +459,26 @@ class SimulationGame(Game):
 
 
     def record_game(self, filename):
+
         header = {
-            "arena": {"width": self.arena.width, "height": self.arena.height},
-            "creatures": [
-                {"id": creature.id, "health": creature.health, "position": creature.initial_position, "speed": creature.speed, "name": creature.name, "angle": creature.angle, "color": creature.color} for creature in self.creatures
-            ],
-            "metadata": {
-                "playerNames": ["Player 1", "Player 2"],
-            }
-        }
+        "arena": {"width": self.arena.width, "height": self.arena.height},
+        "creatures": [
+            {
+                "id": creature.id,
+                "health": creature.health,
+                "position": creature.initial_position,
+                "speed": creature.speed,
+                "name": creature.name,
+                "angle": creature.angle,
+                "color": creature.color,
+                "size": (creature.collider.rect.width, creature.collider.rect.height)
+            } for creature in self.game_objects
+        ],
+    }
+
         # Collect events from all turns; each creature manages its own events
         events = {}
-        for creature in self.creatures:
+        for creature in self.game_objects:
             for time_index, event_list in creature.events.items():
                 if time_index not in events:
                     events[time_index] = []

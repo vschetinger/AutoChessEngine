@@ -8,11 +8,11 @@ def initialize_game():
         position=(random.randint(100, 900), random.randint(100, 900)), 
         angle=random.randint(0, 360),
         health=100, 
-        speed=random.randint(5, 50), 
+        speed=random.randint(20, 100), 
         name=f"Creature {i}", 
         max_turn_rate=random.randint(2, 10),
         shoot_cooldown=random.randint(5, 20),
-    ) for i in range(1)]
+    ) for i in range(4)]
 
     for creature in creatures:
         creature.set_game(game)  # Associate each creature with the game
@@ -22,7 +22,7 @@ def initialize_game():
 
 def main():
     game = initialize_game()
-    for _ in range(50):  
+    for _ in range(100):  
         game.simulate_turn()
     game.record_game("simulation_record5.json")
 
