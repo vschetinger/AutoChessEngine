@@ -4,16 +4,52 @@ import random
 import pygame
 from collections import deque
 import copy
+import copy
 
 class Arena:
     def __init__(self, width, height):
         self.width = width
         self.height = height
 
-def recordable(method):
+
+# def recordable_event(event_type):
+#     def decorator(method):
+#         def wrapper(first_arg, *args, **kwargs):
+#             result = method(first_arg, *args, **kwargs)
+#             print(f"Recording event: {event_type}")
+
+#             # Check if first_arg is a class or an instance
+#             if isinstance(first_arg, type):
+#                 obj = args[0] # The object is the first argument after 'cls'
+#             else:
+#                 obj = first_arg # The object is 'self'
+
+#             if Game.get_time() >= 0:
+#                 # Generate an event with more general details
+#                 event = {
+#                     "type": event_type,
+#                     "id": obj._internal_id, # Ensure each game object has a unique identifier
+#                 }
+
+#                 # Depending on the event_type, you can customize the recorded data
+#                 if event_type == "creation":
+#                     event['object_type'] = obj.type_identifier
+#                     event['origin_id'] = obj.origin_id
+#                     event["details"] = {"position": obj.position,"angle":obj.angle, "speed": obj.speed, "size": obj.collider.size}
+
+#                 # Record the event through the game object
+#                 obj.game.record_event(event)
+
+#             return result
+#         return wrapper
+#     return decorator
+
+
+def recordable_field(method):
     def wrapper(self, *args, **kwargs):
         # Check if _internal_id is set before proceeding
-        if hasattr(self, '_internal_id') and self._internal_id and self.game.time >= 0:
+        if (hasattr(self, '_internal_id') and self._internal_id and 
+            Game.get_time() >= 0):
             result = method(self, *args, **kwargs)
 
             # Prepare the attribute name
@@ -22,30 +58,20 @@ def recordable(method):
             # Prepare the value to record
             value_to_record = kwargs.get('value', args[0] if args else None)
 
-            # Check if the attribute being updated is a tuple (e.g., 'position')
-            if isinstance(value_to_record, tuple):
-                # Here you can decide how to handle tuples; for this example, we're recording it directly
-                event_value = value_to_record
-            else:
-                current_value = getattr(self, attribute_name)
-                if isinstance(current_value, tuple):
-                    # If the current attribute is a tuple but the update is not, this part needs adjustment
-                    # For simplicity, let's assume the update is for the x coordinate
-                    event_value = (value_to_record, current_value[1])
-                else:
-                    event_value = value_to_record
-
             # Generate the event
             event = {
                 "type": "deltaSetter",
-                "id": self.id,  # Assuming self.id is correctly set
+                "id": self.id, # Assuming self.id is correctly set
                 "attribute": attribute_name,
-                "value": event_value
+                "value": value_to_record
             }
-            self.record_event(event)
-            
+
+            # Record the event through the game object
+            self.game.record_event(event)
+
             return result
     return wrapper
+
 
 class Collider:
     def __init__(self, center=(0, 0), angle=0, **kwargs):
@@ -201,7 +227,7 @@ class CircleCollider(Collider):
 
 
 class GameObject:
-    def __init__(self, position, angle, collider=None, **kwargs):
+    def __init__(self, position, angle, game = None, collider=None, **kwargs):
         
         if collider is None:
             self.collider = Collider(position, angle)
@@ -211,10 +237,10 @@ class GameObject:
         self.initial_position = position  # Use copy() if it's a mutable object like a list or dict
         self.angle = angle
         self.initial_angle = angle
-        self.game = None
+        self.game = game
 
-        def check_collision_with(self, other):
-            return self.collider.check_collision(other.collider)
+    def check_collision_with(self, other):
+        return self.collider.check_collision(other.collider)
 
     def set_game(self, game):
         self.game = game
@@ -227,11 +253,11 @@ class GameObject:
         # Placeholder for move, to be overridden by subclasses
         pass
 
-    @recordable
+    @recordable_field
     def set_position(self, x, y):
         self.collider.position((x, y))
 
-    @recordable
+    @recordable_field
     def set_angle(self, angle):
         self.collider.angle = (angle % 360)  # Normalize the angle
 
@@ -244,7 +270,7 @@ class GameObject:
         return self.collider.center
 
     @position.setter
-    @recordable
+    @recordable_field
     def position(self, value):
         self.collider.center = value
 
@@ -253,24 +279,37 @@ class GameObject:
         return self.collider.angle
 
     @angle.setter
-    @recordable
+    @recordable_field
     def angle(self, value):
         self.collider.angle = (value % 360)  # Normalize the angle
 
+    def die(self):
+        print(f"{Game.get_time()} ====={self.id}=== has died!") 
+        self.game.remove_game_object(self)
+
 class SimulationGameObject(GameObject):
-    def __init__(self, position, angle, collider=None, **kwargs):
-        super().__init__(position, angle, collider=collider, **kwargs)  # Now correctly forwards expected arguments
-        self._internal_id = id(self)  # Unique internal ID (using Python's built-in id())
+    def __init__(self, position, angle, game = None,collider=None,  **kwargs):
+        super().__init__(position, angle,game=game, collider=collider, **kwargs)  # Now correctly forwards expected arguments
+        # self._internal_id = id(self)  # Unique internal ID (using Python's built-in id())
         self.action_plan = deque()
         self.events = {}
-        
-    def record_event(self, event):
-        # Only record the event if the game attribute is set
-        if self.game is not None:
-            time_index = self.game.time
-            if time_index not in self.events:
-                self.events[time_index] = []
-            self.events[time_index].append(event)
+
+
+    # Could be powerful, but its behaving crazy
+    # def __deepcopy__(self, memo):
+    #     # Create a new instance of the class without calling __init__
+    #     cls = self.__class__
+    #     copied_obj = cls.__new__(cls)
+    #     memo[id(self)] = copied_obj
+
+    #     # Copy all attributes except _internal_id
+    #     for k, v in self.__dict__.items():
+    #         if k != '_internal_id':
+    #             setattr(copied_obj, k, copy.deepcopy(v, memo))
+
+    #     # Generate a new unique identifier for the copied object
+    #     copied_obj._internal_id = id(copied_obj)
+
 
 class PlaybackGameObject(GameObject):
     def __init__(self, playback_id, position, angle, events=None, **kwargs):
@@ -284,21 +323,21 @@ class PlaybackGameObject(GameObject):
         # Reset to the initial position and angle
         self.collider.position = self.initial_position
         self.collider.angle = self.initial_angle
-
+ 
     def record_event(self, event):
         # This base method does nothing, and is here to ensure that the decorated setters
         # do not cause errors when called on a PlaybackCreature instance.
-        pass     
+        pass
     
     def move(self):
-        time_key = str(self.game.time)
+        time_key = str(Game.get_time())
         if time_key in self.events:
             for event in self.events[time_key]:
                 if event["type"] == "deltaSetter":
                     attribute = event["attribute"]
                     value = event["value"]
                     # Ensure 'position' is a tuple before setting it
-                    if attribute == "position":
+                    if attribute == "position" or attribute == "target":
                         value = tuple(value)
                     # Update the attribute based on the event information.
                     setattr(self, attribute, value)
@@ -310,30 +349,34 @@ class PlaybackGameObject(GameObject):
 
 
 class BaseCreature:
-    def __init__(self, health, speed, name,):    
+    def __init__(self, health, speed, name):    
         self.health = health
         self.speed = speed
         self.name = name
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        
 
-    @recordable
+    @recordable_field
     def set_target(self, target):
         self.target = target
 
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
     def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, events=None, **kwargs):
-        # Adjust bounding_rect initialization as needed to fit the game's logic
-        collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
-        super().__init__(position, angle, collider=collider, **kwargs)
-        BaseCreature.__init__(self, health, speed, name, **kwargs)
-        
-        self.max_turn_rate = max_turn_rate
-        self.shoot_cooldown = shoot_cooldown
-        self.shoot_timer = 0
-        self.events = events or {}
+            # Adjust bounding_rect initialization as needed to fit the game's logic
+            collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
+            super().__init__(position, angle, collider=collider, **kwargs)
+            BaseCreature.__init__(self, health, speed, name, **kwargs)
 
-        self.target = None
+            # Assign the id before any other operations
+            self._internal_id = self.game.generate_id() if self.game else None
+
+            self.max_turn_rate = max_turn_rate
+            self.shoot_cooldown = shoot_cooldown
+            self.shoot_timer = 0
+            self.events = events or {}
+
+            self.target = None
 
 
 
@@ -352,16 +395,21 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
 
 
     def think(self):
-        self.set_target(self.find_nearest_creature().position)
+        nearest = self.find_nearest_creature()
+        if nearest:
+            self.set_target(nearest.position)
+        else:
+            arena_center = (self.game.arena.width / 2, self.game.arena.height / 2)
+            self.set_target(arena_center)
         if ('blocked', None) in self.action_plan:
             self.action_plan.remove(('blocked', None))
             self.action_plan.append(('reverse', None))
-            return
         # Example logic to add 'turn' action every turn and 'shoot' action if cooldown allows
         if self.target is not None:
             self.action_plan.append(('turn', self.calculate_turn(self.target)))
         if self.shoot_timer <= 0:  # Can shoot if shoot_timer is 0 or less
             self.action_plan.append(('shoot', None))
+            print(f"{self.id} aiming!")
             self.shoot_timer = self.shoot_cooldown  # Reset shoot cooldown timer
             
     def calculate_turn(self, target):
@@ -379,21 +427,41 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         return max(-self.max_turn_rate, min(angle_diff, self.max_turn_rate))
 
     def shoot(self):
-        # Create a new projectile and add it to the game
-        projectile_speed = random.randint(50, 100)
-        projectile = SimulationProjectile(self.position, self.angle, projectile_speed)
-        self.game.add_game_object(projectile)
+        # Create a new bullet instance each time it's called
+        bullet_body = RectCollider(self.position,(2, 2), self.angle)
+        new_bullet = SimulationProjectile(self.position, self.angle, 20, self.id, self.game, bullet_body)
+        # Record the creation event explicitly
+        
+        self.game.add_game_object(new_bullet) # Add the new bullet to the game
+        event = {
+                    "type": "creation",
+                    "id": new_bullet.id,
+                    "object_type": new_bullet.type_identifier,
+                    "origin_id": new_bullet.origin_id,
+                    "details": {
+                        "position": new_bullet.position,
+                        "angle": new_bullet.angle,
+                        "speed": new_bullet.speed,
+                        "size": new_bullet.collider.size
+                    }
+                }
+
+        self.game.record_event(event)
+        print(f"{self.id} shots fired!")
 
     def move(self):
-        
+        temp_collider = copy.deepcopy(self.collider)
 
-        if self.action_plan:
-            action, value = self.action_plan[0]  # Peek at the first action
+        while self.action_plan:
+            action, value = self.action_plan.popleft()  # Pop the first action
             if action == 'reverse':
                 self.angle += 180
-                self.action_plan.popleft()
-            if action == 'turn':
+            elif action == 'turn':
                 self.angle += value
+            elif action == 'shoot':
+                print(f"{self.id} gun cocked!")
+                self.shoot()
+                
 
         # Calculate the potential new position
         radians = math.radians(self.angle)
@@ -404,17 +472,21 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         new_position = (new_x, new_y)
 
         # Create a copy of the collider for collision checking
-        temp_collider = copy.deepcopy(self.collider)
+        
         temp_collider.center = new_position
 
         # Check for collisions with other creatures
         will_collide = False
         for other in self.game.game_objects:
             if other is not self and temp_collider.check_collision(other.collider):
-                will_collide = True
-                #print(f"====T: {self.game.time}====")
-                #print(f"Collision detected between {self.id} and {other.id}")
-                break
+                if isinstance(other, SimulationProjectile) and other.origin_id != self.id:
+                    will_collide = True
+                    print(f"Collision detected between {self.id} and {other.id}")
+                    break
+                elif isinstance(other, SimulationCreature) and other.id != self.id:
+                    will_collide = True
+                    print(f"Collision detected between {self.id} and {other.id}")
+                    break
 
         # Check for collisions with arena walls
         arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
@@ -504,11 +576,10 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
 
 
 class BaseProjectile:
-    def __init__(self, position, angle, speed):
-        self.position = position
-        self.angle = angle
+    def __init__(self, speed, origin_id, **kwargs):
         self.speed = speed
-        self.collider = RectCollider(center=self.position, size=(10, 10))  # Example size
+        # Store the origin (id of creator game_object) of the projectile
+        self.origin_id = origin_id
 
     def move(self):
         # Logic to move the projectile forward
@@ -518,32 +589,144 @@ class BaseProjectile:
         # Additional logic if needed
         pass
 
-    def die(self):
-        # Logic to remove the projectile from the game
+    @property
+    def type_identifier(self):
+        return "Projectile"
+
+    @classmethod
+    def from_existing(cls, existing_projectile):
+        # Create a new instance by copying the existing one
+        new_projectile = copy.deepcopy(existing_projectile)
+        # Assign the id after the object is fully initialized
+        new_projectile._internal_id = existing_projectile.game.generate_id() # Use the game's generate_id method
+        new_projectile.id = new_projectile._internal_id # Ensure the id property is updated
+        return new_projectile
+
+
+
+class SimulationProjectile(SimulationGameObject, BaseProjectile):
+    def __init__(self, position, angle, speed, origin_id, game, collider=None, **kwargs):
+        # Assign the id before any other operations
+        #self._internal_id = game.generate_id() if game else None
+        # If a collider is provided, deep copy it to ensure each projectile has its own
+        if collider is not None:
+            self.collider = copy.deepcopy(collider)
+        else:
+            # Create a new collider if none is provided
+            self.collider = RectCollider(center=position, angle=angle, size=(10, 10))
+
+        # Set the game attribute before calling the super constructor
+        self.game = game
+
+        super().__init__(position, angle, game, collider=self.collider, **kwargs)
+        BaseProjectile.__init__(self, speed, origin_id, **kwargs)
+        # Move the print statement after the id has been assigned
+        # print(f"Projectile {self.id} created!")
+
+    
+
+    def think(self):
+        # Placeholder for think, to be overridden by subclasses
         pass
 
-class SimulationProjectile(BaseProjectile):
-    pass
+    def move(self):
+        radians = math.radians(self.angle)
+        dx = math.cos(radians) * self.speed
+        dy = math.sin(radians) * self.speed
+        new_x = self.position[0] + dx
+        new_y = self.position[1] + dy
+        self.position = (new_x, new_y)
+            
+        for game_object in self.game.game_objects:
+            if isinstance(game_object, SimulationProjectile):
+                if self.collider.check_collision(game_object.collider) and self.origin_id != game_object.origin_id and self.id != game_object.id:
+                    game_object.die()
+                    self.die()
+            elif isinstance(game_object, SimulationCreature):
+                if self.collider.check_collision(game_object.collider) and self.origin_id != game_object.id and self.id != game_object.id:
+                    game_object.die()
+                    self.die()
 
-class PlaybackProjectile(BaseProjectile):
-    pass
+    
+    @property
+    def id(self):
+        return self._internal_id # Return the id that was generated in __init__
+
+    @id.setter
+    def id(self, value):
+        self._internal_id = value # Set the internal id to the new value
 
 
+class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
+    def __init__(self, playback_id, position, angle, speed,  events, collider=None, scale_size=None, scale_position=None):
+        self.scale_size = scale_size
+        self.scale_position = scale_position
+        PlaybackGameObject.__init__(self, playback_id, position, angle, events)
+        BaseProjectile.__init__(self, speed,origin_id=None)
+        if collider is not None:
+            self.collider = collider
+
+    def draw(self, screen, convert_to_screen=None):
+        # Convert the position to screen coordinates if necessary
+        if convert_to_screen:
+            screen_position = convert_to_screen(self.position)
+        else:
+            screen_position = self.position
+
+        # Create the rectangle at origin, then rotate and move to the correct position
+        unrotated_rect = pygame.Rect(0, 0, *self.collider.size)
+        rotated_rect = pygame.transform.rotate(pygame.Surface(unrotated_rect.size), -self.angle).get_rect()
+        rotated_rect.center = screen_position
+
+        # Draw the rectangle
+        pygame.draw.rect(screen, (255, 0, 0), rotated_rect)
 
 
 class Game:
+    _time = -1
+
     def __init__(self, arena):
         self.arena = arena
         self.game_objects = []  # Initialized but can be populated by derived classes
-        self.time = -1
+        self.cemetery = []
+        self.global_events = {}
+
+    @classmethod
+    def update_time(cls):
+        cls._time += 1
+
+    @classmethod
+    def get_time(cls):
+        return cls._time
+    
+    @classmethod
+    def reset_time(cls):
+        cls._time = 0
+    
+
 
     def add_game_object(self, creature):
-        self.game_objects.append(creature)  # Add the creature to the game's list of creatures
-        creature.set_game(self)  # Set this game instance as the creature's game
+        """Add a game object and assign it a unique ID."""
+        self.game_objects.append(creature)
+        creature.set_game(self)
 
     def set_game_for_creatures(self):
         for game_objects in self.game_objects:
             game_objects.set_game(self)
+
+    # Removed objects always go to the cemetery
+    # However, Simulation and Playback games may handle them differently
+    def remove_game_object(self, obj):
+        if obj in self.game_objects:
+            self.cemetery.append(obj)
+            self.game_objects.remove(obj)
+
+    def record_event(self, event):
+        # This method will be called by all game objects to record their events
+        time_index = Game.get_time()
+        if time_index not in self.global_events:
+            self.global_events[time_index] = []
+        self.global_events[time_index].append(event)
 
 
 
@@ -551,10 +734,30 @@ class Game:
 def serialize_events(events):
     serialized_events = {}
     for time_index, event_list in events.items():
-        serialized_events[time_index] = [
-            {"type": event["type"], "id": event["id"], "attribute": event["attribute"], "value": event["value"]}
-            for event in event_list
-        ]
+        serialized_events[time_index] = []
+        for event in event_list:
+            if event["type"] == "creation":
+                serialized_event = {
+                    'origin_id': event["origin_id"],  
+                    "type": event["type"],
+                    "id": event["id"],
+                    "object_type": event["object_type"],
+                    "details": event["details"]
+                }
+            elif event["type"] == "destruction":
+                serialized_event = {
+                    "type": event["type"],
+                    "id": event["id"],
+                    "final_position": event["final_position"]
+                }
+            else:
+                serialized_event = {
+                    "type": event["type"],
+                    "id": event["id"],
+                    "attribute": event["attribute"],
+                    "value": event["value"]
+                }
+            serialized_events[time_index].append(serialized_event)
     return serialized_events
 
 
@@ -562,24 +765,41 @@ class SimulationGame(Game):
     def __init__(self, arena, creatures = None):
         super().__init__(arena)
         self.game_objects = creatures
+        self.id_counter = 0
         if(creatures):
             self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
         
-    
+    def generate_id(self):
+        """Generate a new unique ID."""
+        new_id = self.id_counter
+        self.id_counter += 1
+        return new_id
+
+    def remove_game_object(self, obj):
+        if obj in self.game_objects:
+            self.cemetery.append(obj)
+            self.game_objects.remove(obj)
 
     def simulate_turn(self):
-        if self.time == -1:
-            self.time = 0  # Start the game
-        arena_center = (self.arena.width / 2, self.arena.height / 2)
+        if Game.get_time() == -1:
+            Game.update_time() # Start the game
+        print(f"===T: {Game.get_time()} ========") 
         for game_object in self.game_objects:
             game_object.think()  # Let each creature decide its move
             game_object.move()
-        self.time += 1
+        Game.update_time()  # Increment the time after all creatures have moved
 
+    def add_game_object(self, object):
+        object._internal_id = self.generate_id()
+        object = super().add_game_object(object)
 
 
 
     def record_game(self, filename):
+
+        # Bring the cemetery back for recording
+        
+        self.game_objects.extend([obj for obj in self.cemetery if isinstance(obj, BaseCreature)])
 
         header = {
         "arena": {"width": self.arena.width, "height": self.arena.height},
@@ -593,18 +813,11 @@ class SimulationGame(Game):
                 "angle": creature.angle,
                 "color": creature.color,
                 "size": (creature.collider.rect.width, creature.collider.rect.height)
-            } for creature in self.game_objects
+            } for creature in self.game_objects if isinstance(creature, BaseCreature)
         ],
     }
 
-        # Collect events from all turns; each creature manages its own events
-        events = {}
-        for creature in self.game_objects:
-            for time_index, event_list in creature.events.items():
-                if time_index not in events:
-                    events[time_index] = []
-                events[time_index].extend(event_list)
-
+        events = self.global_events
         # Use the serialize_events function to prepare events for serialization
         events = serialize_events(events)
 

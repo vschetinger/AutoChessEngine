@@ -2,24 +2,64 @@
 import pygame
 import json
 import sys
-from AutoChessEngine import PlaybackCreature, Game, Arena, RectCollider
+from AutoChessEngine import *
 
 
 class PlaybackGame(Game):
-    def __init__(self, arena):
+    def __init__(self, arena,battle_log=None):
         super().__init__(arena)
         self.set_game_for_creatures()
         self.show_bounding_boxes = True  # Start with bounding boxes
+        self.battle_log = battle_log
 
     def toggle_bounding_boxes(self):
         self.show_bounding_boxes = not self.show_bounding_boxes
+
     
     # Now handling only all creatures, should handle all kinds of events later
     def update_from_events(self):
+        current_events = self.global_events.get(str(Game.get_time()), [])
+
+        for event in current_events:
+            if event['type'] == 'creation':
+                # Get the class for the object type
+                class_name = "Playback" + event['object_type']
+                object_class = globals().get(class_name)
+                if object_class is not None:
+                    # Extract the required details
+                    details = event['details']
+                    playback_id = event['id']
+                    position = details.get('position')
+                    angle = details.get('angle')
+                    speed = details.get('speed')
+                    size = details.get('size')
+
+                    # Extract all events for this playback_id, indexed by time
+                    event_dict = {time: [event for event in self.battle_log['events'][time] if event['id'] == playback_id] 
+                            for time in self.battle_log['events']}
+
+                    # Filter out times with no events for this playback_id
+                    event_dict = {time: events for time, events in event_dict.items() if events}
+
+                    # Create a new object and add it to game_objects
+                    collider = RectCollider(position, size, angle)
+                    new_object = object_class(playback_id, position, angle, speed, event_dict, collider)
+                    self.game_objects.append(new_object)
+                    self.add_game_object(new_object)
+
+            elif event['type'] == 'destruction':
+                # Move the destroyed object to the cemetery
+                destroyed_object = next((obj for obj in self.game_objects if obj.id == event['id']), None)
+                if destroyed_object:
+                    self.game_objects.remove(destroyed_object)
+                    self.cemetery.append(destroyed_object)
+
         for game_object in self.game_objects:
             game_object.move()
 
-    def reset_creatures(self):
+        
+
+    def reset_objects(self):
         # Reset each creature to its initial state at the start of the playback loop
         for game_object in self.game_objects:
             game_object.reset_to_initial_state()
@@ -46,12 +86,12 @@ class AutoChessPlayer:
         pygame.init()
         self.screen = pygame.display.set_mode(self.screen_size)
 
-        self.game = PlaybackGame(Arena(*canvas_dimensions))
+        self.game = PlaybackGame(Arena(*canvas_dimensions), self.battle_log)
         self.initialize_creatures_for_playback()
-        
+        self.initialize_global_events()
 
         # Setup playback control
-        self.playing = True
+        self.playing = False
 
         
 
@@ -73,7 +113,7 @@ class AutoChessPlayer:
         self.font = pygame.font.Font(None, 36)
 
     def calculate_scale_ratio(self):
-        # Calculate scale ratio based on original arena dimensions and canvas dimensions
+        # Calculate scale ratio based on original arena dime    nsions and canvas dimensions
         scale_width = self.canvas_dimensions[0] / self.original_arena_width
         scale_height = self.canvas_dimensions[1] / self.original_arena_height
         return min(scale_width, scale_height)
@@ -106,10 +146,11 @@ class AutoChessPlayer:
             )
             self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)
-        self.game.creatures = creatures
+        self.game.game_objects = creatures
 
-
-
+    def initialize_global_events(self):
+        for time, events in self.battle_log['events'].items():
+            self.game.global_events[time] = [event for event in events if event['type'] in ['creation', 'destruction']]
 
     def scale_size(self, size):
         """Scales the size from arena to screen dimensions based on the calculated scale ratio."""
@@ -161,7 +202,7 @@ class AutoChessPlayer:
         # self.screen.blit(text_surface, text_rect)
 
         # Display current event_index at the top-right of the screen
-        event_index_text = f'Event Index: {self.game.time}'
+        event_index_text = f'Event Index: {Game.get_time()}'
         event_index_surface = self.font.render(event_index_text, True, (255, 255, 255))
         event_index_rect = event_index_surface.get_rect(topright=(self.screen.get_width() - 10, 10))
         self.screen.blit(event_index_surface, event_index_rect)
@@ -175,18 +216,22 @@ class AutoChessPlayer:
             self.draw_GUI()
 
             if self.playing:
-                if str(self.game.time) in self.battle_log['events']:
+                if str(Game.get_time()) in self.battle_log['events']:
                     self.game.update_from_events()
-                    self.game.time += 1
+                    Game.update_time()
                 else:
                     # Reset time and creatures' states to loop the playback
-                    self.game.time = 0
-                    self.game.reset_creatures()
+                    Game.reset_time()
+                    self.game.reset_objects()
 
-            # Draw creatures
-            for creature in self.game.creatures:
-                screen_position = self.virtual_to_screen(creature.position)  # Correctly call virtual_to_screen here
-                creature.draw(self.screen, self.virtual_to_screen)
+            # Draw objects
+            for game_object in self.game.game_objects:
+                self.virtual_to_screen(game_object.position)  # Correctly call virtual_to_screen here
+                game_object.draw(self.screen, self.virtual_to_screen)
+
+            # Pauses the player at t0
+            # if self.game.time == 0:   
+            # self.playing = False
                 
             pygame.display.flip()
             clock.tick(10)  # Control playback speed

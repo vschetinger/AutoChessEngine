@@ -1,23 +1,50 @@
-from AutoChessEngine import Arena, SimulationCreature, SimulationGame
+from AutoChessEngine import Arena, RectCollider, SimulationCreature, SimulationGame, SimulationProjectile
 import random
+
+
+
+def calculate_lattice_position(arena, n, i):
+    # Calculate the number of rows and columns for the grid
+    rows = int(n ** 0.5)
+    cols = n if rows == 0 else (n // rows) + (n % rows > 0)
+
+    # Calculate the row and column for the current creature
+    row = i // cols
+    col = i % cols
+
+    # Calculate the size of each cell in the grid
+    cell_width = arena.width / cols
+    cell_height = arena.height / rows
+
+    # Calculate the position of the creature within its cell
+    # The creature is placed in the center of the cell
+    x = (col * cell_width) + (cell_width / 2)
+    y = (row * cell_height) + (cell_height / 2)
+
+    return x, y
 
 def initialize_game():
     arena = Arena(width=2000, height=2000)
     game = SimulationGame(arena, [])
+
+    # Initialize a SimulationProjectile
+
+    # Number of creatures in simulation
+    n = 5
+
     creatures = [SimulationCreature(
-        position=(random.randint(100, 900), random.randint(100, 900)), 
+        position=calculate_lattice_position(arena, n, i), 
         angle=random.randint(0, 360),
         health=100, 
-        speed=random.randint(1, 120), 
-        name=f"Creature {i}", 
-        max_turn_rate=random.randint(30, 80),
-        shoot_cooldown=random.randint(5, 20),
-        bounding_box_size = (50, 100)
-    ) for i in range(10)]
+        speed=random.randint(3, 5), 
+        name=f"Creature {i}",
+        max_turn_rate=random.randint(1, 5),
+        shoot_cooldown=random.randint(5, 15),
+        bounding_box_size=(50, 100)
+    ) for i in range(n)]
 
     for creature in creatures:
-        creature.set_game(game)  # Associate each creature with the game
-        game.add_game_object(creature)  # Assuming a method to add creatures to the game
+        game.add_game_object(creature) # Add the creature to the game
 
     return game
 
