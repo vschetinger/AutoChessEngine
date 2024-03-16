@@ -44,7 +44,7 @@ class PlaybackGame(Game):
                     # Create a new object and add it to game_objects
                     collider = RectCollider(position, size, angle)
                     new_object = object_class(playback_id, position, angle, speed, event_dict, collider)
-                    self.game_objects.append(new_object)
+                    # self.game_objects.append(new_object)
                     self.add_game_object(new_object)
 
             elif event['type'] == 'destruction':
@@ -60,10 +60,16 @@ class PlaybackGame(Game):
         
 
     def reset_objects(self):
-        # Reset each creature to its initial state at the start of the playback loop
-        for game_object in self.game_objects:
-            game_object.reset_to_initial_state()
 
+        # Reset each creature to its initial state at the start of the playback loop
+        for creature in self.cemetery:
+            if isinstance(creature, PlaybackCreature): # Check if the object is a PlaybackCreature
+                creature.reset_to_initial_state()
+                self.game_objects.append(creature)
+        self.game_objects = [obj for obj in self.game_objects if isinstance(obj, PlaybackCreature)]
+        # The game_objects now only contains PlaybackCreatures
+        self.cemetery.clear()
+        
 
 class AutoChessPlayer:
     def __init__(self, battle_log_path, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670)):
@@ -128,14 +134,14 @@ class AutoChessPlayer:
             scaled_position = self.scale_position(position)
             scaled_size = self.scale_size(size)
 
-            collider = RectCollider(center=scaled_position, size=scaled_size)
+            collider = RectCollider(center=position, size=scaled_size, angle = info['angle'])
             creature_events = {str(time): [event for event in events if event['id'] == info['id']]
                             for time, events in self.battle_log['events'].items()}
 
             creature = PlaybackCreature(
                 playback_id=info['id'],
                 health=info['health'],
-                position=scaled_position,
+                position=position,
                 speed=info['speed'],
                 name=info['name'],
                 angle=info['angle'],
@@ -209,11 +215,17 @@ class AutoChessPlayer:
 
     def run(self):
         clock = pygame.time.Clock()
+        # Manually call update_from_events to simulate the first update without rendering
+        if str(Game.get_time()) in self.battle_log['events']:
+            self.game.update_from_events()
+            Game.update_time()
+        else:
+            # Reset time and creatures' states to loop the playback
+            Game.reset_time()
+            self.game.reset_objects()
+
         while True:
             self.handle_events()
-            self.screen.blit(self.background, (0, 0))
-            self.draw_arena()
-            self.draw_GUI()
 
             if self.playing:
                 if str(Game.get_time()) in self.battle_log['events']:
@@ -224,17 +236,20 @@ class AutoChessPlayer:
                     Game.reset_time()
                     self.game.reset_objects()
 
-            # Draw objects
-            for game_object in self.game.game_objects:
-                self.virtual_to_screen(game_object.position)  # Correctly call virtual_to_screen here
-                game_object.draw(self.screen, self.virtual_to_screen)
+            # Start rendering at time 0
+            if Game.get_time() >= 0:
+                self.screen.blit(self.background, (0, 0))
+                self.draw_arena()
+                self.draw_GUI()
 
-            # Pauses the player at t0
-            # if self.game.time == 0:   
-            # self.playing = False
-                
+                # Draw objects
+                for game_object in self.game.game_objects:
+                    self.virtual_to_screen(game_object.position) # Correctly call virtual_to_screen here
+                    game_object.draw(self.screen, self.virtual_to_screen)
+
+
             pygame.display.flip()
-            clock.tick(10)  # Control playback speed
+            clock.tick(10) # Control playback speed
 
 
 

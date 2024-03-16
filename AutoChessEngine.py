@@ -284,7 +284,13 @@ class GameObject:
         self.collider.angle = (value % 360)  # Normalize the angle
 
     def die(self):
-        print(f"{Game.get_time()} ====={self.id}=== has died!") 
+        print(f"{Game.get_time()} ====={self.id}=== has died! Class: {self.__class__.__name__}")
+        event = {
+            "type": "destruction",
+            "id": self.id,
+            "final_position": self.position
+        }
+        self.game.record_event(event)
         self.game.remove_game_object(self)
 
 class SimulationGameObject(GameObject):
@@ -635,8 +641,19 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
         dy = math.sin(radians) * self.speed
         new_x = self.position[0] + dx
         new_y = self.position[1] + dy
-        self.position = (new_x, new_y)
-            
+        new_position = (new_x, new_y)
+
+        # Check for collisions with the arena walls
+        arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
+        if not arena_bounds.contains(self.collider.rect):
+            # If the projectile is outside the arena, it dies
+            self.die()
+            return
+
+        # Update the position if no collision with the arena walls
+        self.position = new_position
+
+        # Check for collisions with other game objects
         for game_object in self.game.game_objects:
             if isinstance(game_object, SimulationProjectile):
                 if self.collider.check_collision(game_object.collider) and self.origin_id != game_object.origin_id and self.id != game_object.id:
@@ -665,21 +682,26 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
         BaseProjectile.__init__(self, speed,origin_id=None)
         if collider is not None:
             self.collider = collider
+        self.start_position = position
 
     def draw(self, screen, convert_to_screen=None):
-        # Convert the position to screen coordinates if necessary
-        if convert_to_screen:
-            screen_position = convert_to_screen(self.position)
-        else:
-            screen_position = self.position
+            # Convert the position to screen coordinates if necessary
+            if convert_to_screen:
+                screen_position = convert_to_screen(self.position)
+            else:
+                screen_position = self.position
 
-        # Create the rectangle at origin, then rotate and move to the correct position
-        unrotated_rect = pygame.Rect(0, 0, *self.collider.size)
-        rotated_rect = pygame.transform.rotate(pygame.Surface(unrotated_rect.size), -self.angle).get_rect()
-        rotated_rect.center = screen_position
+            # Draw the trail
+            if self.start_position: # Assuming start_position is a class attribute
+                start_position_screen = convert_to_screen(self.start_position) if convert_to_screen else self.start_position
+                pygame.draw.line(screen, (255, 255, 255), start_position_screen, screen_position, 1) # Draw a white line
+            # Create the rectangle at origin, then rotate and move to the correct position
+            unrotated_rect = pygame.Rect(0, 0, *self.collider.size)
+            rotated_rect = pygame.transform.rotate(pygame.Surface(unrotated_rect.size), -self.angle).get_rect()
+            rotated_rect.center = screen_position
 
-        # Draw the rectangle
-        pygame.draw.rect(screen, (255, 0, 0), rotated_rect)
+            # Draw the rectangle
+            pygame.draw.rect(screen, (255, 0, 0), rotated_rect)
 
 
 class Game:
@@ -765,7 +787,7 @@ class SimulationGame(Game):
     def __init__(self, arena, creatures = None):
         super().__init__(arena)
         self.game_objects = creatures
-        self.id_counter = 0
+        self.id_counter = 1
         if(creatures):
             self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
         

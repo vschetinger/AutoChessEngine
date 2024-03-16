@@ -30,7 +30,7 @@ def initialize_game():
     # Initialize a SimulationProjectile
 
     # Number of creatures in simulation
-    n = 5
+    n = 20
 
     creatures = [SimulationCreature(
         position=calculate_lattice_position(arena, n, i), 
@@ -39,7 +39,7 @@ def initialize_game():
         speed=random.randint(3, 5), 
         name=f"Creature {i}",
         max_turn_rate=random.randint(1, 5),
-        shoot_cooldown=random.randint(5, 15),
+        shoot_cooldown=random.randint(10, 20),
         bounding_box_size=(50, 100)
     ) for i in range(n)]
 
