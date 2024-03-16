@@ -10,11 +10,15 @@ class PlaybackGame(Game):
         super().__init__(arena)
         self.set_game_for_creatures()
         self.show_bounding_boxes = True  # Start with bounding boxes
+        self.draw_shooting_ranges = True  # Start with shooting ranges
         self.battle_log = battle_log
+        
 
     def toggle_bounding_boxes(self):
         self.show_bounding_boxes = not self.show_bounding_boxes
 
+    def toggle_shooting_ranges(self):
+            self.draw_shooting_ranges = not self.draw_shooting_ranges
     
     # Now handling only all creatures, should handle all kinds of events later
     def update_from_events(self):
@@ -99,10 +103,6 @@ class AutoChessPlayer:
         # Setup playback control
         self.playing = False
 
-        
-
-        
-
         # self.background = pygame.image.load('assets/bg5.png')
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill((130, 130, 124))
@@ -145,6 +145,7 @@ class AutoChessPlayer:
                 speed=info['speed'],
                 name=info['name'],
                 angle=info['angle'],
+                bullet_range=info['bullet_range'],
                 events=creature_events,
                 collider=collider,
                 scale_size=self.scale_size,
@@ -184,6 +185,8 @@ class AutoChessPlayer:
     def play_pause(self):
         self.playing = not self.playing
 
+
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -197,6 +200,9 @@ class AutoChessPlayer:
                     self.play_pause()  # Toggle the play/pause state
                 elif event.key == pygame.K_z:  # If the 'z' key is pressed
                     self.game.toggle_bounding_boxes()  # Toggle the bounding boxes
+                elif event.key == pygame.K_r: # If the 'r' key is pressed
+                    self.game.toggle_shooting_ranges()
+                    
 
 
     def draw_GUI(self):
@@ -249,7 +255,7 @@ class AutoChessPlayer:
 
 
             pygame.display.flip()
-            clock.tick(20) # Control playback speed
+            clock.tick(10) # Control playback speed
 
 
 

@@ -59,17 +59,21 @@ def initialize_game():
     # Initialize a SimulationProjectile
 
     # Number of creatures in simulation
-    n = 10
+    n = 3
 
     creatures = [SimulationCreature(
         position=calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150),
         angle=random.randint(0, 360),
-        health=100, 
-        speed=random.randint(5, 10), 
+        health=100,
+        speed=random.randint(5, 40),
         name=f"Creature {i}",
-        max_turn_rate=random.randint(1, 5),
-        shoot_cooldown=random.randint(10, 20),
-        bounding_box_size=(50, 100)
+        max_turn_rate=random.randint(1, 6),
+        shoot_cooldown=random.randint(5, 30),
+        bounding_box_size=(50, 100),
+        damage=random.randint(10, 100), # Random damage value between 10 and 50
+        bullet_speed=random.randint(10, 50), # Random bullet speed value between 10 and 50
+        bullet_range=random.randint(200, 500), # Random bullet range between 100 and 500
+        # ... any other new attributes you want to initialize ...
     ) for i in range(n)]
 
     for creature in creatures:

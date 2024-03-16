@@ -355,11 +355,13 @@ class PlaybackGameObject(GameObject):
 
 
 class BaseCreature:
-    def __init__(self, health, speed, name):
-        self.max_health = health    
-        self.health = health
+    def __init__(self, health, speed,bullet_range, name):
+        self.max_health = health 
+        #TODO: will this be a problem for deltaSetters?   
+        self._health = health
         self.speed = speed
         self.name = name
+        self.bullet_range = bullet_range
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         
 
@@ -367,23 +369,36 @@ class BaseCreature:
     def set_target(self, target):
         self.target = target
 
+    @property
+    def health(self):
+        return self._health
+
+    @health.setter
+    @recordable_field
+    def health(self, value):
+        self._health = value
+
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
-    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, events=None, **kwargs):
+    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size,damage,bullet_speed,bullet_range, events=None, **kwargs):
             # Adjust bounding_rect initialization as needed to fit the game's logic
             collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
             super().__init__(position, angle, collider=collider, **kwargs)
-            BaseCreature.__init__(self, health, speed, name, **kwargs)
+            BaseCreature.__init__(self, health, speed,bullet_range, name, **kwargs)
 
             # Assign the id before any other operations
             self._internal_id = self.game.generate_id() if self.game else None
 
             self.max_turn_rate = max_turn_rate
             self.shoot_cooldown = shoot_cooldown
+            self.damage = damage
+            self.bullet_speed = bullet_speed
             self.shoot_timer = 0
             self.events = events or {}
 
             self.target = None
+
+
 
     def take_damage(self, damage):
             self.health -= damage
@@ -410,6 +425,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         nearest = self.find_nearest_creature()
         if nearest:
             self.set_target(nearest.position)
+            distance_to_target = math.hypot(nearest.position[0] - self.position[0], nearest.position[1] - self.position[1])
         else:
             arena_center = (self.game.arena.width / 2, self.game.arena.height / 2)
             self.set_target(arena_center)
@@ -419,7 +435,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         # Example logic to add 'turn' action every turn and 'shoot' action if cooldown allows
         if self.target is not None:
             self.action_plan.append(('turn', self.calculate_turn(self.target)))
-        if self.shoot_timer <= 0:  # Can shoot if shoot_timer is 0 or less
+        if self.shoot_timer <= 0 and distance_to_target <= self.bullet_range:  # Can shoot if shoot_timer is 0 or less
             self.action_plan.append(('shoot', None))
             # print(f"{self.id} aiming!")
             self.shoot_timer = self.shoot_cooldown  # Reset shoot cooldown timer
@@ -441,7 +457,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
     def shoot(self):
         # Create a new bullet instance each time it's called
         bullet_body = RectCollider(self.position,(2, 2), self.angle)
-        new_bullet = SimulationProjectile(self.position, self.angle, 20, self.id,50, self.game, bullet_body)
+        new_bullet = SimulationProjectile(self.position, self.angle, self.bullet_speed, self.id,self.damage, self.bullet_range,self.game, bullet_body)
         # Record the creation event explicitly
         
         self.game.add_game_object(new_bullet) # Add the new bullet to the game
@@ -540,11 +556,11 @@ def draw_rotated_box(screen, rect, angle, color):
         pygame.draw.polygon(screen, color, corners)
 
 class PlaybackCreature(PlaybackGameObject, BaseCreature):
-    def __init__(self, playback_id, health, position, speed, name, angle, events, collider, scale_size, scale_position):
+    def __init__(self, playback_id, health, position, speed, name, angle,bullet_range, events, collider, scale_size, scale_position):
         self.scale_size = scale_size
         self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
-        BaseCreature.__init__(self, health, speed, name)
+        BaseCreature.__init__(self, health, speed,bullet_range, name)
         self.collider = collider  # Use the provided collider
         # Load the image only once in the constructor
         self.image = pygame.image.load('assets/car1.png').convert_alpha()
@@ -571,7 +587,7 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         left_point = (back_center_point[0] + math.cos(radians + math.pi / 2) * (base_length / 2), back_center_point[1] + math.sin(radians + math.pi / 2) * (base_length / 2))
         right_point = (back_center_point[0] + math.cos(radians - math.pi / 2) * (base_length / 2), back_center_point[1] + math.sin(radians - math.pi / 2) * (base_length / 2))
         triangle_points = [front_point, left_point, right_point]
-        pygame.draw.polygon(screen, (255, 255, 255), triangle_points)
+        pygame.draw.polygon(screen, self.color, triangle_points)
 
         if self.game.show_bounding_boxes:
             # Create a surface for the bounding box with the same size as the collider
@@ -585,6 +601,24 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
             # Use the same center as the sprite for positioning
             bbox_rect = rotated_bbox_surface.get_rect(center=screen_center)
             screen.blit(rotated_bbox_surface, bbox_rect.topleft)
+
+        if self.game.draw_shooting_ranges:
+            screen_center = convert_to_screen(self.collider.center)
+            scaled_size = self.scale_size((self.bullet_range, self.bullet_range)) # Convert the bullet range to screen coordinates
+            screen_bullet_range = scaled_size[0] # Use the scaled width as the radius
+            pygame.draw.circle(screen, self.color, screen_center, screen_bullet_range, width=1)
+
+        
+        health_bar_height = 3 # Height of the health bar
+        health_bar_width = self.collider.size[0] # Width of the health bar
+        if self.max_health != 0:
+            health_ratio = self.health / self.max_health
+        else:
+            health_ratio = 0
+        health_bar_color = (0, 255, 0) if health_ratio > 0.5 else (255, 255, 0) if health_ratio > 0.25 else (255, 0, 0) # Change color based on health
+        
+        pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
+
 
 
 class BaseProjectile:
@@ -617,11 +651,12 @@ class BaseProjectile:
 
 
 class SimulationProjectile(SimulationGameObject, BaseProjectile):
-    def __init__(self, position, angle, speed, origin_id,damage, game, collider=None, **kwargs):
+    def __init__(self, position, angle, speed, origin_id,damage,range, game, collider=None, **kwargs):
         # Assign the id before any other operations
         #self._internal_id = game.generate_id() if game else None
         # If a collider is provided, deep copy it to ensure each projectile has its own
         self.damage = damage
+        self.range = range
         if collider is not None:
             self.collider = copy.deepcopy(collider)
         else:
@@ -635,7 +670,7 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
         BaseProjectile.__init__(self, speed, origin_id, **kwargs)
         # Move the print statement after the id has been assigned
         # print(f"Projectile {self.id} created!")
-
+        self.start_position = position
     
 
     def think(self):
@@ -649,6 +684,11 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
         new_x = self.position[0] + dx
         new_y = self.position[1] + dy
         new_position = (new_x, new_y)
+
+        # Check if the distance between start_position and new_position is larger than the bullet's range
+        distance_run = math.sqrt((new_position[0] - self.start_position[0])**2 + (new_position[1] - self.start_position[1])**2)
+        if distance_run > self.range:
+            self.die()
 
         # Check for collisions with the arena walls
         arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
@@ -835,12 +875,13 @@ class SimulationGame(Game):
         "creatures": [
             {
                 "id": creature.id,
-                "health": creature.health,
+                "health": creature.max_health,
                 "position": creature.initial_position,
                 "speed": creature.speed,
                 "name": creature.name,
                 "angle": creature.angle,
                 "color": creature.color,
+                "bullet_range": creature.bullet_range,
                 "size": (creature.collider.rect.width, creature.collider.rect.height)
             } for creature in self.game_objects if isinstance(creature, BaseCreature)
         ],
