@@ -249,7 +249,7 @@ class AutoChessPlayer:
 
 
             pygame.display.flip()
-            clock.tick(10) # Control playback speed
+            clock.tick(20) # Control playback speed
 
 
 

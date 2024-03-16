@@ -284,7 +284,7 @@ class GameObject:
         self.collider.angle = (value % 360)  # Normalize the angle
 
     def die(self):
-        print(f"{Game.get_time()} ====={self.id}=== has died! Class: {self.__class__.__name__}")
+        # print(f"{Game.get_time()} ====={self.id}=== has died! Class: {self.__class__.__name__}")
         event = {
             "type": "destruction",
             "id": self.id,
@@ -355,7 +355,8 @@ class PlaybackGameObject(GameObject):
 
 
 class BaseCreature:
-    def __init__(self, health, speed, name):    
+    def __init__(self, health, speed, name):
+        self.max_health = health    
         self.health = health
         self.speed = speed
         self.name = name
@@ -384,7 +385,12 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
 
             self.target = None
 
-
+    def take_damage(self, damage):
+            self.health -= damage
+            print(f"===T:{Game.get_time()}==={self.id} took {damage} damage! Health: {self.health}/{self.max_health}")
+            if self.health <= 0:
+                print("This kills it!")
+                self.die()
 
     def find_nearest_creature(self):
         nearest_distance = float('inf')
@@ -415,7 +421,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.action_plan.append(('turn', self.calculate_turn(self.target)))
         if self.shoot_timer <= 0:  # Can shoot if shoot_timer is 0 or less
             self.action_plan.append(('shoot', None))
-            print(f"{self.id} aiming!")
+            # print(f"{self.id} aiming!")
             self.shoot_timer = self.shoot_cooldown  # Reset shoot cooldown timer
             
     def calculate_turn(self, target):
@@ -435,7 +441,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
     def shoot(self):
         # Create a new bullet instance each time it's called
         bullet_body = RectCollider(self.position,(2, 2), self.angle)
-        new_bullet = SimulationProjectile(self.position, self.angle, 20, self.id, self.game, bullet_body)
+        new_bullet = SimulationProjectile(self.position, self.angle, 20, self.id,50, self.game, bullet_body)
         # Record the creation event explicitly
         
         self.game.add_game_object(new_bullet) # Add the new bullet to the game
@@ -453,7 +459,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 }
 
         self.game.record_event(event)
-        print(f"{self.id} shots fired!")
+        # print(f"{self.id} shots fired!")
 
     def move(self):
         temp_collider = copy.deepcopy(self.collider)
@@ -465,7 +471,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             elif action == 'turn':
                 self.angle += value
             elif action == 'shoot':
-                print(f"{self.id} gun cocked!")
+                # print(f"{self.id} gun cocked!")
                 self.shoot()
                 
 
@@ -487,11 +493,11 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             if other is not self and temp_collider.check_collision(other.collider):
                 if isinstance(other, SimulationProjectile) and other.origin_id != self.id:
                     will_collide = True
-                    print(f"Collision detected between {self.id} and {other.id}")
+                    # print(f"Collision detected between {self.id} and {other.id}")
                     break
                 elif isinstance(other, SimulationCreature) and other.id != self.id:
                     will_collide = True
-                    print(f"Collision detected between {self.id} and {other.id}")
+                    # print(f"Collision detected between {self.id} and {other.id}")
                     break
 
         # Check for collisions with arena walls
@@ -611,10 +617,11 @@ class BaseProjectile:
 
 
 class SimulationProjectile(SimulationGameObject, BaseProjectile):
-    def __init__(self, position, angle, speed, origin_id, game, collider=None, **kwargs):
+    def __init__(self, position, angle, speed, origin_id,damage, game, collider=None, **kwargs):
         # Assign the id before any other operations
         #self._internal_id = game.generate_id() if game else None
         # If a collider is provided, deep copy it to ensure each projectile has its own
+        self.damage = damage
         if collider is not None:
             self.collider = copy.deepcopy(collider)
         else:
@@ -661,7 +668,7 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
                     self.die()
             elif isinstance(game_object, SimulationCreature):
                 if self.collider.check_collision(game_object.collider) and self.origin_id != game_object.id and self.id != game_object.id:
-                    game_object.die()
+                    game_object.take_damage(self.damage) # Assuming the bullet has a damage attribute
                     self.die()
 
     
@@ -805,7 +812,7 @@ class SimulationGame(Game):
     def simulate_turn(self):
         if Game.get_time() == -1:
             Game.update_time() # Start the game
-        print(f"===T: {Game.get_time()} ========") 
+        # print(f"===T: {Game.get_time()} ========") 
         for game_object in self.game_objects:
             game_object.think()  # Let each creature decide its move
             game_object.move()
