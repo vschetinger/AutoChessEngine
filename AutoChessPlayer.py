@@ -1,9 +1,13 @@
 # No need to import Creature directly if it's not used here
-import pygame
 import json
 import sys
 from AutoChessEngine import *
-
+from moviepy.editor import ImageSequenceClip
+from PIL import Image
+import glob
+import os
+import pygame
+import moviepy
 
 class PlaybackGame(Game):
     def __init__(self, arena,battle_log=None):
@@ -79,7 +83,7 @@ class PlaybackGame(Game):
         
 
 class AutoChessPlayer:
-    def __init__(self, battle_log_path, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670)):
+    def __init__(self, battle_log_path, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670), output_image=False, render=True):
         with open(battle_log_path, 'r') as f:
             self.battle_log = json.load(f)
 
@@ -88,6 +92,12 @@ class AutoChessPlayer:
         # For clarity, storing original dimensions separately
         self.original_arena_width = original_arena_dimensions['width']
         self.original_arena_height = original_arena_dimensions['height']
+
+        # Will the the generate_frame method spit images? T or F
+        self.output_image = output_image
+        self.frames = []  # List to store frames in memory
+        # Will the game be rendered? T or F
+        self.render = render
 
         # Setting the canvas dimensions based on the input parameter
         self.canvas_dimensions = canvas_dimensions
@@ -176,6 +186,7 @@ class AutoChessPlayer:
             self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)
         self.game.game_objects = creatures
+        self.game.winner = self.battle_log['header']['winner']
 
     def initialize_global_events(self):
         for time, events in self.battle_log['events'].items():
@@ -244,6 +255,37 @@ class AutoChessPlayer:
         event_index_rect = event_index_surface.get_rect(topright=(self.screen.get_width() - 10, 10))
         self.screen.blit(event_index_surface, event_index_rect)
 
+
+    def generate_frame(self):
+        # Clear the screen
+        self.screen.fill((0, 0, 0))
+
+        # Draw the background
+        self.screen.blit(self.background, (0, 0))
+
+        # Draw the arena
+        pygame.draw.rect(self.screen, (255, 100, 100), self.arena_rect, 2)
+
+        # Draw the game objects
+        for game_object in self.game.game_objects:
+            game_object.draw(self.screen, self.virtual_to_screen)
+
+        # Draw the GUI
+        self.draw_GUI()
+
+        # If output_image is True, return the current screen as a PIL image
+        if self.output_image:
+            frame_copy = self.screen.copy()
+            # Resize the frame to the desired dimensions
+            frame_copy = pygame.transform.scale(frame_copy, self.screen.get_size())
+            pil_image = Image.frombytes("RGBA", frame_copy.get_size(), pygame.image.tostring(frame_copy, "RGBA"))
+            self.frames.append(pil_image)
+
+    def capture_last_frame(self):
+        # Capture the last frame of the game
+        last_frame = self.screen.copy()
+        return last_frame
+
     def run(self):
         clock = pygame.time.Clock()
         # Manually call update_from_events to simulate the first update without rendering
@@ -269,23 +311,50 @@ class AutoChessPlayer:
 
             # Start rendering at time 0
             if Game.get_time() >= 0:
-                self.screen.blit(self.background, (0, 0))
-                self.draw_arena()
-                self.draw_GUI()
+                self.generate_frame()
 
-                # Draw objects
-                for game_object in self.game.game_objects:
-                    self.virtual_to_screen(game_object.position) # Correctly call virtual_to_screen here
-                    game_object.draw(self.screen, self.virtual_to_screen)
+                if self.render:
+                    pygame.display.flip()
 
+                if not self.playing or Game.get_time() >= len(self.battle_log['events']):
+                    break
 
-            pygame.display.flip()
             clock.tick(10) # Control playback speed
+        
 
+        # last_frame = self.capture_last_frame()
+
+        if self.game.winner == "Draw":
+            winner_text = "It's a draw!"
+            # Add an extra frame with the winner's name
+        else:
+            winner_text = f"{self.game.winner} wins!"
+
+        # Render the winner's name text
+        text_surface = self.font.render(winner_text, True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.screen.get_rect().center)
+        self.screen.blit(text_surface, text_rect)
+        pygame.display.flip() # Update the display
+
+        # Capture the last frame with the winner's name
+        last_frame = self.screen.copy()
+        # Resize the last frame to match the dimensions of the other frames
+        last_frame = pygame.transform.scale(last_frame, self.screen.get_size())
+        # Convert the last frame to a PIL Image object in RGBA mode
+        last_frame_pil = Image.frombytes("RGBA", last_frame.get_size(), pygame.image.tostring(last_frame, "RGBA"))
+        self.frames.append(last_frame_pil)
+
+        # Wait for 3 seconds before ending the video
+        pygame.time.wait(3000)
 
 
 if __name__ == "__main__":
-    # arena_rect = (50, 50, 700, 700)  # Example coordinates and size (x, y, width, height)
+    # Get a list of all JSON files in the directory
+    json_files = glob.glob('playbacks/*.json')
 
-    player = AutoChessPlayer('simulation_record5.json')
+    # Find the most recent file
+    latest_file = max(json_files, key=os.path.getctime)
+
+    # Initialize and run the player with the most recent file
+    player = AutoChessPlayer(latest_file)
     player.run()

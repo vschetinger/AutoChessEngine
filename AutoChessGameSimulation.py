@@ -1,6 +1,7 @@
 from AutoChessEngine import Arena, RectCollider, SimulationCreature, SimulationGame, SimulationProjectile, Game
 import random
 import math
+import datetime
 
 def get_sniper_creature(position, i):
     return SimulationCreature(
@@ -112,26 +113,65 @@ def initialize_game():
     # Randomly choose the type of creature to instantiate
     creature_types = [get_sniper_creature, get_machine_gun_creature, get_mine_laying_creature]
 
-    creatures = [
-        random.choice(creature_types)(calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150),i)
-        for i in range(n)
-    ]
+    # Initialize a dictionary to keep track of creature counts
+    creature_counts = {
+        'S': 0,
+        'ML': 0,
+        'MG': 0
+        # Add more creature types and their counts as needed
+    }
 
-    for creature in creatures:
+    creatures = []
+    for i in range(n):
+        creature_type = random.choice(creature_types)
+        creature = creature_type(calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150), i)
+        creatures.append(creature)
         game.add_game_object(creature) # Add the creature to the game
+        
 
+        # Update the creature counts based on the creature type
+        if creature_type == get_sniper_creature:
+            creature_counts['S'] += 1
+        elif creature_type == get_machine_gun_creature:
+            creature_counts['MG'] += 1
+        elif creature_type == get_mine_laying_creature:
+            creature_counts['ML'] += 1
+        # Add more conditions for other creature types as needed
+    game.creature_counts = creature_counts
     return game
+
+def generate_filename(creature_counts):
+    # Create a timestamp for the current time
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Construct the filename based on the creature counts
+    filename = f"AutoChessSimulationRun_{timestamp}_"
+    for creature_type, count in creature_counts.items():
+        filename += f"{creature_type}{count}_"
+    filename += ".json"
+
+    return filename
 
 def main():
     game = initialize_game()
+    creature_counts = game.creature_counts
     time_limit = 5000 # Set your desired time limit here
     while True:
         game.simulate_turn()
         alive_creatures = [creature for creature in game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]
-        if len(alive_creatures) <= 1 or Game.get_time() >= time_limit:
+        if len(alive_creatures) == 1: 
+            game.winner = alive_creatures[0].name
+            break
+        if Game.get_time() >= time_limit or len(alive_creatures) == 0:
+            game.winner = "Draw"
             break
 
-    game.record_game("simulation_record5.json")
+    # Generate the filename based on the simulation parameters
+    filename = generate_filename(creature_counts)
+
+    # Save the simulation record with the generated filename
+    game.record_game(f"playbacks/{filename}")
+    print(f"Simulation saved to playbacks/{filename}")
 
 if __name__ == "__main__":
     main()

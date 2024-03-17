@@ -775,6 +775,7 @@ class Game:
         self.game_objects = []  # Initialized but can be populated by derived classes
         self.cemetery = []
         self.global_events = {}
+        self.winner = None
 
     @classmethod
     def update_time(cls):
@@ -855,6 +856,7 @@ class SimulationGame(Game):
     def __init__(self, arena, creatures = None):
         super().__init__(arena)
         self.game_objects = creatures
+        self.creature_counts = {}
         self.id_counter = 1
         if(creatures):
             self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
@@ -893,6 +895,7 @@ class SimulationGame(Game):
 
         header = {
         "arena": {"width": self.arena.width, "height": self.arena.height},
+        "winner": self.winner,
         "creatures": [
             {
                 "id": creature.id,
@@ -906,7 +909,7 @@ class SimulationGame(Game):
                 "shoot_cooldown": creature.shoot_cooldown,
                 "size": (creature.collider.rect.width, creature.collider.rect.height)
             } for creature in self.game_objects if isinstance(creature, BaseCreature)
-        ],
+        ]
     }
 
         events = self.global_events
