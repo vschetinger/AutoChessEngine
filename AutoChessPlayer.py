@@ -37,6 +37,7 @@ class PlaybackGame(Game):
                     angle = details.get('angle')
                     speed = details.get('speed')
                     size = details.get('size')
+                    origin_id = event.get('origin_id')
 
                     # Extract all events for this playback_id, indexed by time
                     event_dict = {time: [event for event in self.battle_log['events'][time] if event['id'] == playback_id] 
@@ -47,9 +48,11 @@ class PlaybackGame(Game):
 
                     # Create a new object and add it to game_objects
                     collider = RectCollider(position, size, angle)
-                    new_object = object_class(playback_id, position, angle, speed, event_dict, collider)
+                    new_object = object_class(playback_id,origin_id, position, angle, speed, event_dict, collider)
                     # self.game_objects.append(new_object)
                     self.add_game_object(new_object)
+                    creature_of_origin = self.get_game_object_by_id(origin_id)
+                    creature_of_origin.shoot_timer = 0 # Reset the shoot timer for the origin creature
 
             elif event['type'] == 'destruction':
                 # Move the destroyed object to the cemetery
@@ -101,7 +104,7 @@ class AutoChessPlayer:
         self.initialize_global_events()
 
         # Setup playback control
-        self.playing = False
+        self.playing = True
 
         # self.background = pygame.image.load('assets/bg5.png')
         self.background = pygame.Surface(self.screen.get_size())
@@ -126,6 +129,12 @@ class AutoChessPlayer:
 
     def initialize_creatures_for_playback(self):
         creatures = []
+
+        # Load the images for the different kinds of creatures
+        sniper_image = pygame.image.load('assets/sniper_sprite.png').convert_alpha()
+        machine_gun_image = pygame.image.load('assets/machine_gun_sprite.png').convert_alpha()
+        mine_layer_image = pygame.image.load('assets/mine_layer_sprite.png').convert_alpha()
+
         for info in self.battle_log['header']['creatures']:
             # Extract position and size from the JSON record, scale them, and initialize creatures
             position = tuple(info['position'])
@@ -137,19 +146,32 @@ class AutoChessPlayer:
             collider = RectCollider(center=position, size=scaled_size, angle = info['angle'])
             creature_events = {str(time): [event for event in events if event['id'] == info['id']]
                             for time, events in self.battle_log['events'].items()}
+            
+            creature_name = info['name']
+            if 'Sniper' in creature_name:
+                sprite = sniper_image
+            elif 'Machine_Gun' in creature_name:
+                sprite = machine_gun_image
+            elif 'Mine_Layer' in creature_name:
+                sprite = mine_layer_image
+            else:
+                sprite = None # Default to no sprite if the name doesn't match any known types
+
 
             creature = PlaybackCreature(
                 playback_id=info['id'],
                 health=info['health'],
                 position=position,
                 speed=info['speed'],
-                name=info['name'],
+                name=creature_name,
+                sprite=sprite,
                 angle=info['angle'],
                 bullet_range=info['bullet_range'],
                 events=creature_events,
                 collider=collider,
                 scale_size=self.scale_size,
-                scale_position=self.scale_position
+                scale_position=self.scale_position,
+                shoot_cooldown=info['shoot_cooldown'],
             )
             self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)
@@ -158,6 +180,7 @@ class AutoChessPlayer:
     def initialize_global_events(self):
         for time, events in self.battle_log['events'].items():
             self.game.global_events[time] = [event for event in events if event['type'] in ['creation', 'destruction']]
+
 
     def scale_size(self, size):
         """Scales the size from arena to screen dimensions based on the calculated scale ratio."""
@@ -214,7 +237,9 @@ class AutoChessPlayer:
         # self.screen.blit(text_surface, text_rect)
 
         # Display current event_index at the top-right of the screen
-        event_index_text = f'Event Index: {Game.get_time()}'
+        total_turns = len(self.battle_log['events'])
+        current_turn = Game.get_time()
+        event_index_text = f'Turn: {current_turn}/{total_turns}'
         event_index_surface = self.font.render(event_index_text, True, (255, 255, 255))
         event_index_rect = event_index_surface.get_rect(topright=(self.screen.get_width() - 10, 10))
         self.screen.blit(event_index_surface, event_index_rect)

@@ -355,7 +355,7 @@ class PlaybackGameObject(GameObject):
 
 
 class BaseCreature:
-    def __init__(self, health, speed,bullet_range, name):
+    def __init__(self, health, speed, bullet_range, name,shoot_cooldown=0):
         self.max_health = health 
         #TODO: will this be a problem for deltaSetters?   
         self._health = health
@@ -363,7 +363,8 @@ class BaseCreature:
         self.name = name
         self.bullet_range = bullet_range
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-        
+        self.shoot_timer = 0 
+        self.shoot_cooldown = shoot_cooldown 
 
     @recordable_field
     def set_target(self, target):
@@ -384,7 +385,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             # Adjust bounding_rect initialization as needed to fit the game's logic
             collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
             super().__init__(position, angle, collider=collider, **kwargs)
-            BaseCreature.__init__(self, health, speed,bullet_range, name, **kwargs)
+            BaseCreature.__init__(self, health, speed,bullet_range, name,shoot_cooldown, **kwargs)
 
             # Assign the id before any other operations
             self._internal_id = self.game.generate_id() if self.game else None
@@ -393,7 +394,6 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.shoot_cooldown = shoot_cooldown
             self.damage = damage
             self.bullet_speed = bullet_speed
-            self.shoot_timer = 0
             self.events = events or {}
 
             self.target = None
@@ -475,7 +475,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 }
 
         self.game.record_event(event)
-        # print(f"{self.id} shots fired!")
+        print(f"===T:{Game.get_time()}==={self.id} shots fired!")
 
     def move(self):
         temp_collider = copy.deepcopy(self.collider)
@@ -509,6 +509,8 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             if other is not self and temp_collider.check_collision(other.collider):
                 if isinstance(other, SimulationProjectile) and other.origin_id != self.id:
                     will_collide = True
+                    self.take_damage(other.damage)  # Assuming the bullet has a damage attribute
+                    other.die()
                     # print(f"Collision detected between {self.id} and {other.id}")
                     break
                 elif isinstance(other, SimulationCreature) and other.id != self.id:
@@ -556,15 +558,17 @@ def draw_rotated_box(screen, rect, angle, color):
         pygame.draw.polygon(screen, color, corners)
 
 class PlaybackCreature(PlaybackGameObject, BaseCreature):
-    def __init__(self, playback_id, health, position, speed, name, angle,bullet_range, events, collider, scale_size, scale_position):
+    def __init__(self, playback_id, health, position, speed, name,sprite, angle,bullet_range, events, collider, scale_size, scale_position, shoot_cooldown):
         self.scale_size = scale_size
         self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
-        BaseCreature.__init__(self, health, speed,bullet_range, name)
+        BaseCreature.__init__(self, health, speed,bullet_range, name, shoot_cooldown)
         self.collider = collider  # Use the provided collider
         # Load the image only once in the constructor
-        self.image = pygame.image.load('assets/car1.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, self.collider.size)  # Scale to match the collider size
+
+        #self.image = pygame.image.load('assets/car1.png').convert_alpha()
+        self.sprite = sprite
+        self.sprite = pygame.transform.scale(self.sprite, self.collider.size)  # Scale to match the collider size
 
 
 
@@ -573,9 +577,9 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         screen_center = convert_to_screen(self.collider.center)
 
         # Draw the sprite
-        rotated_image = pygame.transform.rotate(self.image, -self.angle + 90)
-        new_rect = rotated_image.get_rect(center=screen_center)
-        screen.blit(rotated_image, new_rect.topleft)
+        rotated_sprite = pygame.transform.rotate(self.sprite, -self.angle + 90)
+        new_rect = rotated_sprite.get_rect(center=screen_center)
+        screen.blit(rotated_sprite, new_rect.topleft)
         
 
         # Draw the triangle pointer
@@ -606,7 +610,16 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
             screen_center = convert_to_screen(self.collider.center)
             scaled_size = self.scale_size((self.bullet_range, self.bullet_range)) # Convert the bullet range to screen coordinates
             screen_bullet_range = scaled_size[0] # Use the scaled width as the radius
-            pygame.draw.circle(screen, self.color, screen_center, screen_bullet_range, width=1)
+
+            # Calculate the angle of the arc based on the cooldown timer
+            cooldown_ratio = self.shoot_timer / self.shoot_cooldown if self.shoot_cooldown else 0
+            arc_angle = 360 * cooldown_ratio
+
+            # print(f"Creature ID: {self.id}, shoot_timer: {self.shoot_timer}, shoot_cooldown: {self.shoot_cooldown}, cooldown_ratio: {cooldown_ratio}, arc_angle: {arc_angle}")
+
+
+            # Draw the arc representing the shooting cooldown
+            pygame.draw.arc(screen, self.color, pygame.Rect(screen_center[0] - screen_bullet_range, screen_center[1] - screen_bullet_range, screen_bullet_range * 2, screen_bullet_range * 2), 0, math.radians(arc_angle), width=1)
 
         
         health_bar_height = 3 # Height of the health bar
@@ -618,6 +631,9 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         health_bar_color = (0, 255, 0) if health_ratio > 0.5 else (255, 255, 0) if health_ratio > 0.25 else (255, 0, 0) # Change color based on health
         
         pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
+        # Because this timer is only used for drawing, it doesn't need to be updated in the move method
+        if self.shoot_timer < self.shoot_cooldown:
+            self.shoot_timer += 1
 
 
 
@@ -722,11 +738,11 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
 
 
 class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
-    def __init__(self, playback_id, position, angle, speed,  events, collider=None, scale_size=None, scale_position=None):
+    def __init__(self, playback_id,origin_id, position, angle, speed,  events, collider=None, scale_size=None, scale_position=None):
         self.scale_size = scale_size
         self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
-        BaseProjectile.__init__(self, speed,origin_id=None)
+        BaseProjectile.__init__(self, speed,origin_id)
         if collider is not None:
             self.collider = collider
         self.start_position = position
@@ -750,7 +766,7 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
             # Draw the rectangle
             pygame.draw.rect(screen, (255, 0, 0), rotated_rect)
 
-
+#TODO make Game proper singleton and remove the self.game references
 class Game:
     _time = -1
 
@@ -771,7 +787,12 @@ class Game:
     @classmethod
     def reset_time(cls):
         cls._time = 0
-    
+
+    def get_game_object_by_id(self, object_id):
+        for game_object in self.game_objects:
+            if game_object.id == object_id:
+                return game_object
+        return None
 
 
     def add_game_object(self, creature):
@@ -882,6 +903,7 @@ class SimulationGame(Game):
                 "angle": creature.angle,
                 "color": creature.color,
                 "bullet_range": creature.bullet_range,
+                "shoot_cooldown": creature.shoot_cooldown,
                 "size": (creature.collider.rect.width, creature.collider.rect.height)
             } for creature in self.game_objects if isinstance(creature, BaseCreature)
         ],

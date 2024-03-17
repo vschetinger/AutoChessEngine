@@ -1,6 +1,54 @@
-from AutoChessEngine import Arena, RectCollider, SimulationCreature, SimulationGame, SimulationProjectile
+from AutoChessEngine import Arena, RectCollider, SimulationCreature, SimulationGame, SimulationProjectile, Game
 import random
+import math
 
+def get_sniper_creature(position, i):
+    return SimulationCreature(
+        position=position,
+        angle=random.randint(0, 360),
+        health=100,
+        speed=random.randint(5, 40),
+        name=f"Sniper {i}",
+        max_turn_rate=random.randint(8, 16),
+        shoot_cooldown=random.randint(15, 30),
+        bounding_box_size=(50, 100),
+        damage=random.randint(50, 150), # Sniper damage range
+        bullet_speed=random.randint(50, 100), # Sniper bullet speed range
+        bullet_range=random.randint(500, 900), # Sniper bullet range
+        # ... any other new attributes you want to initialize ...
+    )
+
+def get_machine_gun_creature(position, i):
+    return SimulationCreature(
+        position=position,
+        angle=random.randint(0, 360),
+        health=100,
+        speed=random.randint(5, 40),
+        name=f"Machine_Gun {i}",
+        max_turn_rate=random.randint(5, 15),
+        shoot_cooldown=random.randint(2, 5),
+        bounding_box_size=(50, 100),
+        damage=random.randint(15, 25), # Machine Gun damage range
+        bullet_speed=random.randint(10, 50), # Machine Gun bullet speed range
+        bullet_range=random.randint(200, 500), # Machine Gun bullet range
+        # ... any other new attributes you want to initialize ...
+    )
+
+def get_mine_laying_creature(position, i):
+    return SimulationCreature(
+        position=position,
+        angle=random.randint(0, 360),
+        health=100,
+        speed=random.randint(5, 40),
+        name=f"Mine_Layer {i}",
+        max_turn_rate=random.randint(1, 8),
+        shoot_cooldown=random.randint(5, 30),
+        bounding_box_size=(50, 100),
+        damage=random.randint(80, 120), # Mine Layer damage range
+        bullet_speed=0,
+        bullet_range=random.randint(500, 700), # Mine Layer bullet range
+        # ... any other new attributes you want to initialize ...
+    )
 
 
 def calculate_lattice_position(arena, n, i):
@@ -59,22 +107,15 @@ def initialize_game():
     # Initialize a SimulationProjectile
 
     # Number of creatures in simulation
-    n = 3
+    n = 4
 
-    creatures = [SimulationCreature(
-        position=calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150),
-        angle=random.randint(0, 360),
-        health=100,
-        speed=random.randint(5, 40),
-        name=f"Creature {i}",
-        max_turn_rate=random.randint(1, 6),
-        shoot_cooldown=random.randint(5, 30),
-        bounding_box_size=(50, 100),
-        damage=random.randint(10, 100), # Random damage value between 10 and 50
-        bullet_speed=random.randint(10, 50), # Random bullet speed value between 10 and 50
-        bullet_range=random.randint(200, 500), # Random bullet range between 100 and 500
-        # ... any other new attributes you want to initialize ...
-    ) for i in range(n)]
+    # Randomly choose the type of creature to instantiate
+    creature_types = [get_sniper_creature, get_machine_gun_creature, get_mine_laying_creature]
+
+    creatures = [
+        random.choice(creature_types)(calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150),i)
+        for i in range(n)
+    ]
 
     for creature in creatures:
         game.add_game_object(creature) # Add the creature to the game
@@ -83,8 +124,12 @@ def initialize_game():
 
 def main():
     game = initialize_game()
-    for _ in range(300):  
+    time_limit = 5000 # Set your desired time limit here
+    while True:
         game.simulate_turn()
+        alive_creatures = [creature for creature in game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]
+        if len(alive_creatures) <= 1 or Game.get_time() >= time_limit:
+            break
 
     game.record_game("simulation_record5.json")
 
