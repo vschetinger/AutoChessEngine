@@ -12,39 +12,6 @@ class Arena:
         self.height = height
 
 
-# def recordable_event(event_type):
-#     def decorator(method):
-#         def wrapper(first_arg, *args, **kwargs):
-#             result = method(first_arg, *args, **kwargs)
-#             print(f"Recording event: {event_type}")
-
-#             # Check if first_arg is a class or an instance
-#             if isinstance(first_arg, type):
-#                 obj = args[0] # The object is the first argument after 'cls'
-#             else:
-#                 obj = first_arg # The object is 'self'
-
-#             if Game.get_time() >= 0:
-#                 # Generate an event with more general details
-#                 event = {
-#                     "type": event_type,
-#                     "id": obj._internal_id, # Ensure each game object has a unique identifier
-#                 }
-
-#                 # Depending on the event_type, you can customize the recorded data
-#                 if event_type == "creation":
-#                     event['object_type'] = obj.type_identifier
-#                     event['origin_id'] = obj.origin_id
-#                     event["details"] = {"position": obj.position,"angle":obj.angle, "speed": obj.speed, "size": obj.collider.size}
-
-#                 # Record the event through the game object
-#                 obj.game.record_event(event)
-
-#             return result
-#         return wrapper
-#     return decorator
-
-
 def recordable_field(method):
     def wrapper(self, *args, **kwargs):
         # Check if _internal_id is set before proceeding
@@ -71,7 +38,6 @@ def recordable_field(method):
 
             return result
     return wrapper
-
 
 class Collider:
     def __init__(self, center=(0, 0), angle=0, **kwargs):
@@ -196,7 +162,6 @@ class RectCollider(Collider):
 
         return min_projection, max_projection
     
-
 class CircleCollider(Collider):
     def __init__(self, center=(0, 0), radius=1, **kwargs):
         super().__init__(center, **kwargs)
@@ -399,12 +364,27 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.target = None
 
 
+    def to_dict(self):
+        return {
+            'position': self.position,
+            'angle': self.angle,
+            'health': self.health,
+            'speed': self.speed,
+            'name': self.name,
+            'max_turn_rate': self.max_turn_rate,
+            'shoot_cooldown': self.shoot_cooldown,
+            # 'bounding_box_size': self.bounding_box_size,
+            'damage': self.damage,
+            'bullet_speed': self.bullet_speed,
+            'bullet_range': self.bullet_range,
+            # Include any other attributes you want to log
+        }
 
     def take_damage(self, damage):
             self.health -= damage
-            print(f"===T:{Game.get_time()}==={self.id} took {damage} damage! Health: {self.health}/{self.max_health}")
+            # print(f"===T:{Game.get_time()}==={self.id} took {damage} damage! Health: {self.health}/{self.max_health}")
             if self.health <= 0:
-                print("This kills it!")
+                # print("This kills it!")
                 self.die()
 
     def find_nearest_creature(self):
@@ -475,7 +455,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 }
 
         self.game.record_event(event)
-        print(f"===T:{Game.get_time()}==={self.id} shots fired!")
+        # print(f"===T:{Game.get_time()}==={self.id} shots fired!")
 
     def move(self):
         temp_collider = copy.deepcopy(self.collider)
@@ -688,6 +668,16 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
         # print(f"Projectile {self.id} created!")
         self.start_position = position
     
+    def set_color_from_origin(self, game):
+        # Retrieve the origin creature using the game's get_game_object_by_id method
+        origin_creature = game.get_game_object_by_id(self.origin_id)
+        if origin_creature:
+            # Set the color of the projectile to the color of the origin creature
+            self.color = origin_creature.color
+        else:
+            # Handle the case where the origin creature is not found
+            # You can set a default color or raise an error
+            self.color = (255, 255, 255) # Default color (white)
 
     def think(self):
         # Placeholder for think, to be overridden by subclasses
@@ -738,9 +728,10 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
 
 
 class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
-    def __init__(self, playback_id,origin_id, position, angle, speed,  events, collider=None, scale_size=None, scale_position=None):
+    def __init__(self, playback_id,origin_id, position, angle, speed,  events, collider=None,color = None, scale_size=None, scale_position=None):
         self.scale_size = scale_size
         self.scale_position = scale_position
+        self.color = color
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
         BaseProjectile.__init__(self, speed,origin_id)
         if collider is not None:
@@ -748,6 +739,7 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
         self.start_position = position
 
     def draw(self, screen, convert_to_screen=None):
+
             # Convert the position to screen coordinates if necessary
             if convert_to_screen:
                 screen_position = convert_to_screen(self.position)
@@ -764,7 +756,7 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
             rotated_rect.center = screen_position
 
             # Draw the rectangle
-            pygame.draw.rect(screen, (255, 0, 0), rotated_rect)
+            pygame.draw.rect(screen, self.color, rotated_rect)
 
 #TODO make Game proper singleton and remove the self.game references
 class Game:

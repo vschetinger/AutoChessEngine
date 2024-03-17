@@ -52,7 +52,8 @@ class PlaybackGame(Game):
 
                     # Create a new object and add it to game_objects
                     collider = RectCollider(position, size, angle)
-                    new_object = object_class(playback_id,origin_id, position, angle, speed, event_dict, collider)
+                    color = self.get_game_object_by_id(origin_id).color
+                    new_object = object_class(playback_id,origin_id, position, angle, speed, event_dict, collider,color)
                     # self.game_objects.append(new_object)
                     self.add_game_object(new_object)
                     creature_of_origin = self.get_game_object_by_id(origin_id)

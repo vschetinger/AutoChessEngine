@@ -152,6 +152,10 @@ def generate_filename(creature_counts):
 
     return filename
 
+
+
+
+
 def main():
     game = initialize_game()
     creature_counts = game.creature_counts
