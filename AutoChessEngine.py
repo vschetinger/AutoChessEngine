@@ -115,6 +115,7 @@ class RectCollider(Collider):
             return [(cx + cos_rad * x - sin_rad * y, cy + sin_rad * x + cos_rad * y) for x, y in corners]
 
     def check_collision(self, other):
+        Game.increment_collision_checks()
         if isinstance(other, RectCollider):
             return self._obb_collision(other)
 
@@ -205,6 +206,7 @@ class GameObject:
         self.game = game
 
     def check_collision_with(self, other):
+        
         return self.collider.check_collision(other.collider)
 
     def set_game(self, game):
@@ -366,6 +368,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'position': self.position,
             'angle': self.angle,
             'health': self.health,
@@ -373,7 +376,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             'name': self.name,
             'max_turn_rate': self.max_turn_rate,
             'shoot_cooldown': self.shoot_cooldown,
-            # 'bounding_box_size': self.bounding_box_size,
+            'size': (self.collider.rect.width, self.collider.rect.height),
             'damage': self.damage,
             'bullet_speed': self.bullet_speed,
             'bullet_range': self.bullet_range,
@@ -761,6 +764,7 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
 #TODO make Game proper singleton and remove the self.game references
 class Game:
     _time = -1
+    _collision_checks = 0 # Static counter for collision checks
 
     def __init__(self, arena):
         self.arena = arena
@@ -780,6 +784,21 @@ class Game:
     @classmethod
     def reset_time(cls):
         cls._time = 0
+
+    @classmethod
+    def increment_collision_checks(cls):
+        """Increment the static collision check counter."""
+        cls._collision_checks += 1
+
+    @classmethod
+    def get_collision_checks(cls):
+        """Get the current number of collision checks."""
+        return cls._collision_checks
+
+    @classmethod
+    def reset_collision_checks(cls):
+        """Reset the static collision check counter."""
+        cls._collision_checks = 0
 
     def get_game_object_by_id(self, object_id):
         for game_object in self.game_objects:
@@ -867,7 +886,9 @@ class SimulationGame(Game):
     def simulate_turn(self):
         if Game.get_time() == -1:
             Game.update_time() # Start the game
-        # print(f"===T: {Game.get_time()} ========") 
+        # print(f"===T: {Game.get_time()} ========")
+        # print(f"Collision checks: {Game._collision_checks}")
+        Game.reset_collision_checks() 
         for game_object in self.game_objects:
             game_object.think()  # Let each creature decide its move
             game_object.move()
@@ -882,33 +903,26 @@ class SimulationGame(Game):
     def record_game(self, filename):
 
         # Bring the cemetery back for recording
-        
         self.game_objects.extend([obj for obj in self.cemetery if isinstance(obj, BaseCreature)])
 
-        header = {
-        "arena": {"width": self.arena.width, "height": self.arena.height},
-        "winner": self.winner,
-        "creatures": [
-            {
-                "id": creature.id,
-                "health": creature.max_health,
-                "position": creature.initial_position,
-                "speed": creature.speed,
-                "name": creature.name,
-                "angle": creature.angle,
-                "color": creature.color,
-                "bullet_range": creature.bullet_range,
-                "shoot_cooldown": creature.shoot_cooldown,
-                "size": (creature.collider.rect.width, creature.collider.rect.height)
-            } for creature in self.game_objects if isinstance(creature, BaseCreature)
-        ]
-    }
+        # Serialize the creatures
+        creatures_data = [creature.to_dict() for creature in self.game_objects if isinstance(creature, SimulationCreature)]
 
-        events = self.global_events
-        # Use the serialize_events function to prepare events for serialization
-        events = serialize_events(events)
+        # Serialize the events
+        events = serialize_events(self.global_events)
 
-        game_record = {"header": header, "events": events}
+        # Prepare the game record
+        game_record = {
+            "header": {
+                "arena": {"width": self.arena.width, "height": self.arena.height},
+                "winner": self.winner,
+                "creatures": creatures_data, # Include the serialized creatures
+            },
+            "events": events,
+        }
+
+        # Save the game record to a JSON file
         with open(filename, 'w') as f:
             json.dump(game_record, f, indent=4)
+
 

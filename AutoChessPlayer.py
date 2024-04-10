@@ -8,6 +8,8 @@ import glob
 import os
 import pygame
 import moviepy
+import argparse
+
 
 class PlaybackGame(Game):
     def __init__(self, arena,battle_log=None):
