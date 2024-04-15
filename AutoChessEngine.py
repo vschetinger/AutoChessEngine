@@ -312,6 +312,9 @@ class PlaybackGameObject(GameObject):
                     # Ensure 'position' is a tuple before setting it
                     if attribute == "position" or attribute == "target":
                         value = tuple(value)
+                    # Update the score attribute
+                    elif attribute == "score":
+                        self.score = value
                     # Update the attribute based on the event information.
                     setattr(self, attribute, value)
 
@@ -332,6 +335,7 @@ class BaseCreature:
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.shoot_timer = 0 
         self.shoot_cooldown = shoot_cooldown 
+        self._score = 0
 
     @recordable_field
     def set_target(self, target):
@@ -346,9 +350,18 @@ class BaseCreature:
     def health(self, value):
         self._health = value
 
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    @recordable_field
+    def score(self, value):
+        self._score = value
+
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
-    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size,damage,bullet_speed,bullet_range, events=None, **kwargs):
+    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size,damage,bullet_speed,bullet_range, brake_power, brake_cooldown, events=None, **kwargs):
             # Adjust bounding_rect initialization as needed to fit the game's logic
             collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
             super().__init__(position, angle, collider=collider, **kwargs)
@@ -361,6 +374,11 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.shoot_cooldown = shoot_cooldown
             self.damage = damage
             self.bullet_speed = bullet_speed
+            self.brake_power = brake_power
+            self.brake_cool = brake_cooldown
+            self.original_speed = speed
+            self.brake_timer = 0
+
             self.events = events or {}
 
             self.target = None
@@ -380,15 +398,24 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             'damage': self.damage,
             'bullet_speed': self.bullet_speed,
             'bullet_range': self.bullet_range,
+            'score': self.score,
             # Include any other attributes you want to log
         }
 
-    def take_damage(self, damage):
-            self.health -= damage
-            # print(f"===T:{Game.get_time()}==={self.id} took {damage} damage! Health: {self.health}/{self.max_health}")
-            if self.health <= 0:
-                # print("This kills it!")
-                self.die()
+    def take_damage(self, damage, attacker_id):
+        self.health -= damage
+        self.score += self.game.score_values["hit_taken"]  # Deduct points for getting hit
+
+        attacker = self.game.get_game_object_by_id(attacker_id)
+        if attacker:
+            attacker.score += self.game.score_values["hit_given"]  # Add points for hitting someone
+
+        if self.health <= 0:
+            self.die()
+            self.score += self.game.score_values["death"]  # Deduct points for dying
+
+            if attacker:
+                attacker.score += self.game.score_values["kill"]  # Add points for killing someone
 
     def find_nearest_creature(self):
         nearest_distance = float('inf')
@@ -402,13 +429,13 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         return nearest_creature
     
 
-
-
     def think(self):
         nearest = self.find_nearest_creature()
         if nearest:
             self.set_target(nearest.position)
             distance_to_target = math.hypot(nearest.position[0] - self.position[0], nearest.position[1] - self.position[1])
+            if distance_to_target <= self.bullet_range and self.brake_timer == 0:
+                self.action_plan.append(('brake', None))  # Add brake action to the queue
         else:
             arena_center = (self.game.arena.width / 2, self.game.arena.height / 2)
             self.set_target(arena_center)
@@ -472,7 +499,6 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             elif action == 'shoot':
                 # print(f"{self.id} gun cocked!")
                 self.shoot()
-                
 
         # Calculate the potential new position
         radians = math.radians(self.angle)
@@ -483,7 +509,6 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         new_position = (new_x, new_y)
 
         # Create a copy of the collider for collision checking
-        
         temp_collider.center = new_position
 
         # Check for collisions with other creatures
@@ -492,7 +517,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             if other is not self and temp_collider.check_collision(other.collider):
                 if isinstance(other, SimulationProjectile) and other.origin_id != self.id:
                     will_collide = True
-                    self.take_damage(other.damage)  # Assuming the bullet has a damage attribute
+                    self.take_damage(other.damage, other.origin_id)  # Pass the origin_id to take_damage
                     other.die()
                     # print(f"Collision detected between {self.id} and {other.id}")
                     break
@@ -541,7 +566,7 @@ def draw_rotated_box(screen, rect, angle, color):
         pygame.draw.polygon(screen, color, corners)
 
 class PlaybackCreature(PlaybackGameObject, BaseCreature):
-    def __init__(self, playback_id, health, position, speed, name,sprite, angle,bullet_range, events, collider, scale_size, scale_position, shoot_cooldown):
+    def __init__(self, playback_id, health, position, speed, name,sprite, angle,bullet_range, events, collider, scale_size, scale_position, shoot_cooldown, score):
         self.scale_size = scale_size
         self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
@@ -613,6 +638,13 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
             health_ratio = 0
         health_bar_color = (0, 255, 0) if health_ratio > 0.5 else (255, 255, 0) if health_ratio > 0.25 else (255, 0, 0) # Change color based on health
         
+        # Draw the score above the creature's head
+        score_text = str(self.score)
+        score_font = pygame.font.Font(None, 24)  # Adjust the font size as needed
+        score_surface = score_font.render(score_text, True, (255, 255, 255))  # White color
+        score_rect = score_surface.get_rect(center=(screen_center[0], screen_center[1] - 30))  # Adjust the vertical position as needed
+        screen.blit(score_surface, score_rect)
+
         pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
         # Because this timer is only used for drawing, it doesn't need to be updated in the move method
         if self.shoot_timer < self.shoot_cooldown:
@@ -696,6 +728,7 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
 
         # Check if the distance between start_position and new_position is larger than the bullet's range
         distance_run = math.sqrt((new_position[0] - self.start_position[0])**2 + (new_position[1] - self.start_position[1])**2)
+        
         if distance_run > self.range:
             self.die()
 
@@ -717,7 +750,7 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
                     self.die()
             elif isinstance(game_object, SimulationCreature):
                 if self.collider.check_collision(game_object.collider) and self.origin_id != game_object.id and self.id != game_object.id:
-                    game_object.take_damage(self.damage) # Assuming the bullet has a damage attribute
+                    game_object.take_damage(self.damage, self.origin_id)  # Pass the origin_id as the attacker_id
                     self.die()
 
     
@@ -871,6 +904,13 @@ class SimulationGame(Game):
         self.id_counter = 1
         if(creatures):
             self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
+
+        self.score_values = {
+            "hit_taken": -2,
+            "hit_given": 5,
+            "death": -20,
+            "kill": 30,
+        }
         
     def generate_id(self):
         """Generate a new unique ID."""

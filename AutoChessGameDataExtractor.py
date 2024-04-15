@@ -40,6 +40,13 @@ def extract_game_statistics(json_file_path):
     arena_size = header['arena']['width']  # or height, since they are the same
     turns = max(map(int, data['events'].keys())) if data['events'] else 0
 
+    # Find the high score of the winner
+    high_score = 0
+    for creature in header['creatures']:
+        if raw_winner in creature['name']:
+            high_score = creature['score']
+            break
+
     return {
         'winner_type': winner_type,
         'winner': raw_winner,
@@ -48,6 +55,7 @@ def extract_game_statistics(json_file_path):
         'machine_guns': creatures_count['Machine_Gun'],
         'mine_layers': creatures_count['Mine_Layer'],
         'arena_size': arena_size,
+        'high_score': high_score,  # Add the high score field
         'replay_path': get_filename_without_extension(json_file_path)
     }
 
@@ -62,7 +70,7 @@ def write_statistics_to_csv(folder_path, output_csv_path):
         games_data.append(game_stats)
 
     with open(output_csv_path, 'w', newline='') as csvfile:
-        fieldnames = ['winner_type', 'winner', 'turns', 'snipers', 'machine_guns', 'mine_layers', 'arena_size', 'replay_path']
+        fieldnames = ['winner_type', 'winner', 'turns', 'snipers', 'machine_guns', 'mine_layers', 'arena_size', 'high_score', 'replay_path']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()

@@ -185,6 +185,7 @@ class AutoChessPlayer:
                 scale_size=self.scale_size,
                 scale_position=self.scale_position,
                 shoot_cooldown=info['shoot_cooldown'],
+                score=info['score'],
             )
             self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)

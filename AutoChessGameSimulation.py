@@ -2,6 +2,7 @@ from AutoChessEngine import Arena, RectCollider, SimulationCreature, SimulationG
 import random
 import math
 import datetime
+import uuid
 
 def get_sniper_creature(position, i):
     return SimulationCreature(
@@ -108,7 +109,7 @@ def initialize_game():
     # Initialize a SimulationProjectile
 
     # Number of creatures in simulation
-    n = 100
+    n = 10
 
     # Randomly choose the type of creature to instantiate
     creature_types = [get_sniper_creature, get_machine_gun_creature, get_mine_laying_creature]
@@ -140,17 +141,14 @@ def initialize_game():
     game.creature_counts = creature_counts
     return game
 
+import uuid
+from datetime import datetime
+
 def generate_filename(creature_counts):
-    # Create a timestamp for the current time
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
-
-    # Construct the filename based on the creature counts
-    filename = f"AutoChessSimulationRun--{timestamp}--"
-    for creature_type, count in creature_counts.items():
-        filename += f"{creature_type}{count}--"
-    filename += ".json"
-
-    return filename
+    timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    unique_id = str(uuid.uuid4())[:8]  # Generate a unique identifier (first 8 characters of UUID)
+    creature_counts_str = "--".join(f"{k}{v}" for k, v in creature_counts.items())
+    return f"machine_gun_gauntlet--{timestamp}--{unique_id}--{creature_counts_str}--.json"
 
 
 
@@ -159,7 +157,7 @@ def generate_filename(creature_counts):
 def main():
     game = initialize_game()
     creature_counts = game.creature_counts
-    time_limit = 50 # Set your desired time limit here
+    time_limit = 500 # Set your desired time limit here
     while True:
         game.simulate_turn()
         alive_creatures = [creature for creature in game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]

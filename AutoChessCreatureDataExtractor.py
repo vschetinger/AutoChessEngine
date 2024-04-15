@@ -42,6 +42,7 @@ def extract_creature_statistics(json_file_path):
             'bullet_speed': creature['bullet_speed'],
             'shoot_cooldown': creature['shoot_cooldown'],
             'bullet_range': creature['bullet_range'],
+            'score': creature['score'], 
             'winner': is_winner,
             'arena_size': arena_size,
             'max_turns': turns + 1, # Adding 1 because turn indexing starts at 0
@@ -60,7 +61,7 @@ def write_creatures_to_csv(folder_path, output_csv_path):
         all_creatures_data.extend(creatures_stats)
 
     with open(output_csv_path, 'w', newline='') as csvfile:
-        fieldnames = ['type', 'speed', 'max_turn_rate', 'damage', 'bullet_speed', 'shoot_cooldown', 'bullet_range', 'winner', 'arena_size', 'max_turns', 'replay_path']
+        fieldnames = ['type', 'speed', 'max_turn_rate', 'damage', 'bullet_speed', 'shoot_cooldown', 'bullet_range','score', 'winner', 'arena_size', 'max_turns', 'replay_path']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     
         writer.writeheader()
