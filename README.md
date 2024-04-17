@@ -25,8 +25,7 @@ This project provides a game engine for simulating and playing Auto Chess games.
 ### Installation
 
 1. Clone the repository:
-git clone https://github.com/your-username/auto-chess-engine.git
-
+git clone https://github.com/vschetinger/AutoChessEngine.git
 
 2. Install the required dependencies:
 pip install pygame moviepy
@@ -99,14 +98,13 @@ If you want to conduct your own experiments using the Auto Chess game engine, fo
    - Open the `AutoChessBatchSimulation.py` script in your preferred Python IDE or text editor.
    - Locate the `__main__` section at the bottom of the script.
    - Modify the parameters according to your experiment design. For example:
-     ```
-python num_simulations = 100 # Number of simulations to run creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b] arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes
+``` python num_simulations = 100 # Number of simulations to run creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b] arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes ```
+
 
    - Save the changes to the script.
    - Open a terminal or command prompt and navigate to the project directory.
    - Run the script using the following command:
-     ```
-python AutoChessBatchSimulation.py
+```python AutoChessBatchSimulation.py```
 
    - The script will execute the specified number of simulations with the configured parameters and save the results as JSON files in the `playbacks` directory.
 
