@@ -117,8 +117,7 @@ python AutoChessBatchSimulation.py
 ```bash
 ./all_playbacks_to_video.sh playbacks [output_directory]
 ```
-
-     Replace `playbacks` with the path to the directory containing the JSON playback files, and optionally specify an output directory for the generated videos.
+Replace `playbacks` with the path to the directory containing the JSON playback files, and optionally specify an output directory for the generated videos.
    - The script will process all the JSON files in the specified directory and generate a video for each playback using the `AutoChessPlaybackToVideo.py` script.
    - You can watch some of the generated videos to visually analyze the simulations.
 
