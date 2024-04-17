@@ -99,12 +99,12 @@ If you want to conduct your own experiments using the Auto Chess game engine, fo
    - Locate the `__main__` section at the bottom of the script.
    - Modify the parameters according to your experiment design. For example:
 
-        python num_simulations = 100 # Number of simulations to run 
+        ```python num_simulations = 100 # Number of simulations to run                                     ```
 
-        creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b]
+        ```creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b]```
 
-        arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes
-        
+        ```arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes                             ```
+
    - Save the changes to the script.
    - Open a terminal or command prompt and navigate to the project directory.
    - Run the script using the following command:
