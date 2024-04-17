@@ -101,16 +101,12 @@ If you want to conduct your own experiments using the Auto Chess game engine, fo
 ```python 
 num_simulations = 100 # Number of simulations to run
 arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes
-creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b]
 ```
-
-
-
    - Save the changes to the script.
    - Open a terminal or command prompt and navigate to the project directory.
    - Run the script using the following command:
-```python 
-AutoChessBatchSimulation.py
+```bash 
+python AutoChessBatchSimulation.py
 ```
 
    - The script will execute the specified number of simulations with the configured parameters and save the results as JSON files in the `playbacks` directory.
@@ -134,9 +130,9 @@ python AutoChessCreatureDataExtractor.py playbacks creature_data.csv
 
      Replace `playbacks` with the path to the directory containing the JSON files, and `creature_data.csv` with the desired output CSV file name.
    - Run the `AutoChessGameDataExtractor.py` script to extract game statistics from the recorded game files:
-     ```
+```bash
 python AutoChessGameDataExtractor.py playbacks game_data.csv
-
+```
      Replace `playbacks` with the path to the directory containing the JSON files, and `game_data.csv` with the desired output CSV file name.
    - Open Orange Data Mining and create a new project.
    - Import the generated CSV files (`creature_data.csv` and `game_data.csv`) into Orange Data Mining.
