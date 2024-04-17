@@ -126,13 +126,10 @@ Replace `playbacks` with the path to the directory containing the JSON playback 
 ```bash 
 python AutoChessCreatureDataExtractor.py playbacks creature_data.csv
 ```
-
-     Replace `playbacks` with the path to the directory containing the JSON files, and `creature_data.csv` with the desired output CSV file name.
    - Run the `AutoChessGameDataExtractor.py` script to extract game statistics from the recorded game files:
 ```bash
 python AutoChessGameDataExtractor.py playbacks game_data.csv
 ```
-     Replace `playbacks` with the path to the directory containing the JSON files, and `game_data.csv` with the desired output CSV file name.
    - Open Orange Data Mining and create a new project.
    - Import the generated CSV files (`creature_data.csv` and `game_data.csv`) into Orange Data Mining.
    - Use the various data analysis and visualization tools provided by Orange Data Mining to explore and interpret the extracted data.
