@@ -109,15 +109,18 @@ creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_la
    - Save the changes to the script.
    - Open a terminal or command prompt and navigate to the project directory.
    - Run the script using the following command:
-```python AutoChessBatchSimulation.py```
+```python 
+AutoChessBatchSimulation.py
+```
 
    - The script will execute the specified number of simulations with the configured parameters and save the results as JSON files in the `playbacks` directory.
 
 3. **Use `all_playbacks_to_video.sh` to generate videos:**
    - Open a terminal or command prompt and navigate to the project directory.
    - Run the `all_playbacks_to_video.sh` script using the following command:
-     ```
+```bash
 ./all_playbacks_to_video.sh playbacks [output_directory]
+```
 
      Replace `playbacks` with the path to the directory containing the JSON playback files, and optionally specify an output directory for the generated videos.
    - The script will process all the JSON files in the specified directory and generate a video for each playback using the `AutoChessPlaybackToVideo.py` script.
@@ -125,8 +128,9 @@ creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_la
 
 4. **Extract the CSV data and load it into Orange Data Mining:**
    - Run the `AutoChessCreatureDataExtractor.py` script to extract creature statistics from the recorded game files:
-     ```
+```bash 
 python AutoChessCreatureDataExtractor.py playbacks creature_data.csv
+```
 
      Replace `playbacks` with the path to the directory containing the JSON files, and `creature_data.csv` with the desired output CSV file name.
    - Run the `AutoChessGameDataExtractor.py` script to extract game statistics from the recorded game files:
