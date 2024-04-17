@@ -79,8 +79,8 @@ def get_machine_gun_creature_b(position, i):
         damage=random.randint(5, 50), # Machine Gun damage range
         bullet_speed=random.randint(10, 80), # Machine Gun bullet speed range
         bullet_range=random.randint(50, 800), # Machine Gun bullet range
-        brake_power=random.uniform(0.5, 0.9),  # Adjust the range as needed
-        brake_cooldown=random.randint(50, 100),  # Adjust the range as needed
+        brake_power=random.uniform(0.85, 0.98),  # Adjust the range as needed
+        brake_cooldown=random.randint(10, 100),  # Adjust the range as needed
     )
 
 def get_mine_laying_creature_b(position, i):
@@ -265,9 +265,9 @@ class AutoChessBatchedSimulator:
 
 # Call the function to run the batch of simulations
 if __name__ == "__main__":
-    num_simulations = 1 # Number of simulations to run
+    num_simulations = 100 # Number of simulations to run
     creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b]
-    arena_sizes = [2000, 2500, 3000] # List of arena sizes
+    arena_sizes = [2000, 2500, 3000, 4000, 10000] # List of arena sizes
 
     simulator = AutoChessBatchedSimulator(arena_sizes, creature_types, 3, 500) # Initialize the simulator
     simulator.run_batch_simulations(num_simulations) 

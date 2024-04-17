@@ -74,33 +74,29 @@ def calculate_lattice_position(arena, n, i):
 
     return x, y
 
-def calculate_lattice_position_with_jitter(arena, n, i, jitter_range=100):
-    # Calculate the number of rows and columns for the grid
-    rows = int(n ** 0.5)
-    cols = n if rows == 0 else (n // rows) + (n % rows > 0)
-
-    # Calculate the row and column for the current creature
+def calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150, safe_zone=150):
+    rows = int(math.sqrt(n))
+    cols = n // rows
+    cell_width = (arena.width - 2 * safe_zone) // cols
+    cell_height = (arena.height - 2 * safe_zone) // rows
     row = i // cols
     col = i % cols
+    x = col * cell_width + cell_width // 2 + safe_zone
+    y = row * cell_height + cell_height // 2 + safe_zone
 
-    # Calculate the size of each cell in the grid
-    cell_width = arena.width / cols
-    cell_height = arena.height / rows
+    # Calculate the maximum jitter range based on the cell dimensions
+    max_jitter_x = min(jitter_range, cell_width // 2 - 50)  # Adjust the buffer value (50) as needed
+    max_jitter_y = min(jitter_range, cell_height // 2 - 50)  # Adjust the buffer value (50) as needed
 
-    # Calculate the position of the creature within its cell
-    # The creature is placed in the center of the cell
-    x = (col * cell_width) + (cell_width / 2)
-    y = (row * cell_height) + (cell_height / 2)
+    # Apply jitter while ensuring the positions stay within the arena boundaries
+    jittered_x = x + random.randint(-max_jitter_x, max_jitter_x)
+    jittered_y = y + random.randint(-max_jitter_y, max_jitter_y)
 
-    # Add jittering to the position
-    x += random.uniform(-jitter_range, jitter_range)
-    y += random.uniform(-jitter_range, jitter_range)
+    # Ensure the positions are within the arena boundaries, considering the safe zone
+    jittered_x = max(safe_zone, min(jittered_x, arena.width - safe_zone))
+    jittered_y = max(safe_zone, min(jittered_y, arena.height - safe_zone))
 
-    # Ensure the position stays within the arena bounds
-    x = max(0, min(arena.width, x))
-    y = max(0, min(arena.height, y))
-
-    return x, y
+    return jittered_x, jittered_y
 
 def initialize_game():
     arena = Arena(width=2000, height=2000)
