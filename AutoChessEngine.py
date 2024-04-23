@@ -456,22 +456,22 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             # Include any other attributes you want to log
         }
 
-def take_damage(self, damage, attacker_id):
-    self.health -= damage
-    self.score += self.game.score_values["hit_taken"]  # Deduct points for getting hit
+    def take_damage(self, damage, attacker_id):
+        self.health -= damage
+        self.score += self.game.score_values["hit_taken"]  # Deduct points for getting hit
 
-    attacker = self.game.get_game_object_by_id(attacker_id)
-    if attacker:
-        attacker.score += self.game.score_values["hit_given"]  # Add points for hitting someone
-    else:
-        print(f"Warning: Attacker with ID {attacker_id} not found.")
-
-    if self.health <= 0:
-        self.die()
-        self.score += self.game.score_values["death"]  # Deduct points for dying
-
+        attacker = self.game.get_game_object_by_id(attacker_id)
         if attacker:
-            attacker.score += self.game.score_values["kill"]  # Add points for killing someone
+            attacker.score += self.game.score_values["hit_given"]  # Add points for hitting someone
+        else:
+            print(f"Warning: Attacker with ID {attacker_id} not found.")
+
+        if self.health <= 0:
+            self.die()
+            self.score += self.game.score_values["death"]  # Deduct points for dying
+
+            if attacker:
+                attacker.score += self.game.score_values["kill"]  # Add points for killing someone
 
     def find_nearest_creature(self):
         nearest_distance = float('inf')

@@ -17,6 +17,8 @@ def get_sniper_creature(position, i):
         damage=random.randint(50, 150), # Sniper damage range
         bullet_speed=random.randint(50, 100), # Sniper bullet speed range
         bullet_range=random.randint(500, 900), # Sniper bullet range
+        brake_cooldown=100,
+        brake_power=random.randint(1,9)/10,
         # ... any other new attributes you want to initialize ...
     )
 
@@ -33,6 +35,8 @@ def get_machine_gun_creature(position, i):
         damage=random.randint(15, 25), # Machine Gun damage range
         bullet_speed=random.randint(10, 50), # Machine Gun bullet speed range
         bullet_range=random.randint(200, 500), # Machine Gun bullet range
+        brake_cooldown=100,
+        brake_power=random.randint(1,9)/10,
         # ... any other new attributes you want to initialize ...
     )
 
@@ -49,6 +53,8 @@ def get_mine_laying_creature(position, i):
         damage=random.randint(80, 120), # Mine Layer damage range
         bullet_speed=0,
         bullet_range=random.randint(500, 700), # Mine Layer bullet range
+        brake_cooldown=100,
+        brake_power=random.randint(1,9)/10,
         # ... any other new attributes you want to initialize ...
     )
 
@@ -156,11 +162,12 @@ def main():
     time_limit = 500 # Set your desired time limit here
     while True:
         game.simulate_turn()
+
         alive_creatures = [creature for creature in game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]
         if len(alive_creatures) == 1: 
             game.winner = alive_creatures[0].name
             break
-        if Game.get_time() >= time_limit or len(alive_creatures) == 0:
+        if game.get_time() >= time_limit or len(alive_creatures) == 0:
             game.winner = "Draw"
             break
 
