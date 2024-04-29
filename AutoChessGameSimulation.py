@@ -74,33 +74,18 @@ def calculate_lattice_position(arena, n, i):
 
     return x, y
 
-def calculate_lattice_position_with_jitter(arena, n, i, jitter_range=100):
-    # Calculate the number of rows and columns for the grid
-    rows = int(n ** 0.5)
-    cols = n if rows == 0 else (n // rows) + (n % rows > 0)
-
-    # Calculate the row and column for the current creature
+def calculate_lattice_position_with_jitter(arena, n, i, jitter_range=150, padding=180):
+    rows = int(math.sqrt(n))
+    cols = n // rows
+    cell_width = (arena.width - 2 * padding) // cols
+    cell_height = (arena.height - 2 * padding) // rows
     row = i // cols
     col = i % cols
-
-    # Calculate the size of each cell in the grid
-    cell_width = arena.width / cols
-    cell_height = arena.height / rows
-
-    # Calculate the position of the creature within its cell
-    # The creature is placed in the center of the cell
-    x = (col * cell_width) + (cell_width / 2)
-    y = (row * cell_height) + (cell_height / 2)
-
-    # Add jittering to the position
-    x += random.uniform(-jitter_range, jitter_range)
-    y += random.uniform(-jitter_range, jitter_range)
-
-    # Ensure the position stays within the arena bounds
-    x = max(0, min(arena.width, x))
-    y = max(0, min(arena.height, y))
-
-    return x, y
+    x = col * cell_width + cell_width // 2 + padding
+    y = row * cell_height + cell_height // 2 + padding
+    jitter_x = random.randint(-jitter_range // 2, jitter_range // 2)
+    jitter_y = random.randint(-jitter_range // 2, jitter_range // 2)
+    return x + jitter_x, y + jitter_y
 
 def initialize_game():
     arena = Arena(width=2000, height=2000)

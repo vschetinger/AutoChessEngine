@@ -1,3 +1,11 @@
+"""
+AutoChessEngine.py
+
+This module provides the core classes and functionality for an Auto Chess game engine.
+It includes classes for the game arena, game objects, creatures, projectiles, and the game itself.
+The module supports both simulation and playback modes.
+"""
+
 import json
 import math
 import random
@@ -7,6 +15,13 @@ import copy
 import copy
 
 class Arena:
+    """
+    Represents the game arena.
+
+    Attributes:
+        width (int): The width of the arena.
+        height (int): The height of the arena.
+    """
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -193,6 +208,15 @@ class CircleCollider(Collider):
 
 
 class GameObject:
+    """
+    Base class for all game objects.
+
+    Attributes:
+        position (tuple): The position of the game object.
+        angle (float): The angle of the game object.
+        game (Game): The game instance the object belongs to.
+        collider (Collider): The collider associated with the game object.
+    """
     def __init__(self, position, angle, game = None, collider=None, **kwargs):
         
         if collider is None:
@@ -261,6 +285,13 @@ class GameObject:
         self.game.remove_game_object(self)
 
 class SimulationGameObject(GameObject):
+    """
+    Represents a game object in the simulation mode.
+
+    Attributes:
+        action_plan (deque): The action plan queue for the game object.
+        events (dict): The events associated with the game object.
+    """
     def __init__(self, position, angle, game = None,collider=None,  **kwargs):
         super().__init__(position, angle,game=game, collider=collider, **kwargs)  # Now correctly forwards expected arguments
         # self._internal_id = id(self)  # Unique internal ID (using Python's built-in id())
@@ -268,23 +299,15 @@ class SimulationGameObject(GameObject):
         self.events = {}
 
 
-    # Could be powerful, but its behaving crazy
-    # def __deepcopy__(self, memo):
-    #     # Create a new instance of the class without calling __init__
-    #     cls = self.__class__
-    #     copied_obj = cls.__new__(cls)
-    #     memo[id(self)] = copied_obj
-
-    #     # Copy all attributes except _internal_id
-    #     for k, v in self.__dict__.items():
-    #         if k != '_internal_id':
-    #             setattr(copied_obj, k, copy.deepcopy(v, memo))
-
-    #     # Generate a new unique identifier for the copied object
-    #     copied_obj._internal_id = id(copied_obj)
-
 
 class PlaybackGameObject(GameObject):
+    """
+    Represents a game object in the playback mode.
+
+    Attributes:
+        playback_id (int): The unique identifier for the game object in playback mode.
+        events (dict): The events associated with the game object.
+    """
     def __init__(self, playback_id, position, angle, events=None, **kwargs):
         super().__init__(position, angle, **kwargs)
         self._internal_id = playback_id  # Use the playback_id as the internal ID
@@ -325,7 +348,21 @@ class PlaybackGameObject(GameObject):
 
 
 class BaseCreature:
-    def __init__(self, health, speed, bullet_range, name, shoot_cooldown=0, brake_power=0.8, brake_cooldown=30):
+    """
+    Base class for creatures in the game.
+
+    Attributes:
+        max_health (int): The maximum health of the creature.
+        health (int): The current health of the creature.
+        speed (float): The speed of the creature.
+        name (str): The name of the creature.
+        bullet_range (float): The range of the creature's bullets.
+        color (tuple): The color of the creature.
+        shoot_timer (int): The timer for shooting cooldown.
+        shoot_cooldown (int): The cooldown time between shots.
+        score (int): The score of the creature.
+    """
+    def __init__(self, health, speed, bullet_range, name,shoot_cooldown=0):
         self.max_health = health 
         #TODO: will this be a problem for deltaSetters?   
         self._health = health
@@ -336,8 +373,6 @@ class BaseCreature:
         self.shoot_timer = 0 
         self.shoot_cooldown = shoot_cooldown 
         self._score = 0
-        self.brake_power = brake_power
-        self.brake_cooldown = brake_cooldown
 
     @recordable_field
     def set_target(self, target):
@@ -363,27 +398,42 @@ class BaseCreature:
 
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
+    """
+    Represents a creature in the simulation mode.
+
+    Attributes:
+        max_turn_rate (float): The maximum turn rate of the creature.
+        damage (int): The damage inflicted by the creature's bullets.
+        bullet_speed (float): The speed of the creature's bullets.
+        brake_power (float): The braking power of the creature.
+        brake_cooldown (int): The cooldown time for braking.
+        original_speed (float): The original speed of the creature.
+        brake_timer (int): The timer for braking cooldown.
+        is_braking (bool): Indicates if the creature is currently braking.
+        target (tuple): The target position of the creature.
+    """
     def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, damage, bullet_speed, bullet_range, brake_power, brake_cooldown, events=None, **kwargs):
-            # Adjust bounding_rect initialization as needed to fit the game's logic
-            collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
-            super().__init__(position, angle, collider=collider, **kwargs)
-            BaseCreature.__init__(self, health, speed,bullet_range, name,shoot_cooldown, **kwargs)
+        # Adjust bounding_rect initialization as needed to fit the game's logic
+        collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
+        super().__init__(position, angle, collider=collider, **kwargs)
+        BaseCreature.__init__(self, health, speed, bullet_range, name, shoot_cooldown, **kwargs)
 
-            # Assign the id before any other operations
-            self._internal_id = self.game.generate_id() if self.game else None
+        # Assign the id before any other operations
+        self._internal_id = self.game.generate_id() if self.game else None
 
-            self.max_turn_rate = max_turn_rate
-            self.shoot_cooldown = shoot_cooldown
-            self.damage = damage
-            self.bullet_speed = bullet_speed
-            self.brake_power = brake_power
-            self.brake_cool = brake_cooldown
-            self.original_speed = speed
-            self.brake_timer = 0
+        self.max_turn_rate = max_turn_rate
+        self.shoot_cooldown = shoot_cooldown
+        self.damage = damage
+        self.bullet_speed = bullet_speed
+        self.brake_power = brake_power
+        self.brake_cooldown = brake_cooldown
+        self.original_speed = speed
+        self.brake_timer = 0
+        self.is_braking = False
 
-            self.events = events or {}
+        self.events = events or {}
 
-            self.target = None
+        self.target = None
 
 
     def to_dict(self):
@@ -406,20 +456,22 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             # Include any other attributes you want to log
         }
 
-    def take_damage(self, damage, attacker_id):
-        self.health -= damage
-        self.score += self.game.score_values["hit_taken"]  # Deduct points for getting hit
+def take_damage(self, damage, attacker_id):
+    self.health -= damage
+    self.score += self.game.score_values["hit_taken"]  # Deduct points for getting hit
 
-        attacker = self.game.get_game_object_by_id(attacker_id)
+    attacker = self.game.get_game_object_by_id(attacker_id)
+    if attacker:
+        attacker.score += self.game.score_values["hit_given"]  # Add points for hitting someone
+    else:
+        print(f"Warning: Attacker with ID {attacker_id} not found.")
+
+    if self.health <= 0:
+        self.die()
+        self.score += self.game.score_values["death"]  # Deduct points for dying
+
         if attacker:
-            attacker.score += self.game.score_values["hit_given"]  # Add points for hitting someone
-
-        if self.health <= 0:
-            self.die()
-            self.score += self.game.score_values["death"]  # Deduct points for dying
-
-            if attacker:
-                attacker.score += self.game.score_values["kill"]  # Add points for killing someone
+            attacker.score += self.game.score_values["kill"]  # Add points for killing someone
 
     def find_nearest_creature(self):
         nearest_distance = float('inf')
@@ -504,10 +556,14 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 # print(f"{self.id} gun cocked!")
                 self.shoot()
             elif action == 'brake':
-               self.speed *= self.brake_power
-               if abs(self.speed) < 0.1:  # Adjust the threshold as needed
-                   self.speed = 0
-                   self.brake_timer = self.brake_cooldown
+                self.is_braking = True
+
+        if self.is_braking:
+            self.speed *= self.brake_power
+            if abs(self.speed) < 3:  # Adjust the threshold as needed
+                self.is_braking = False
+                self.speed = self.original_speed
+                self.brake_timer = self.brake_cooldown
 
         # Calculate the potential new position
         radians = math.radians(self.angle)
@@ -554,11 +610,9 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         # Decrement the shoot timer if it's greater than 0
         if self.shoot_timer > 0:
             self.shoot_timer -= 1
-
         if self.brake_timer > 0:
-           self.brake_timer -= 1
-        else:
-            self.speed = self.original_speed
+            self.brake_timer -= 1
+        
 
 def draw_rotated_box(screen, rect, angle, color):
         # Calculate the angle in radians
@@ -580,17 +634,26 @@ def draw_rotated_box(screen, rect, angle, color):
         pygame.draw.polygon(screen, color, corners)
 
 class PlaybackCreature(PlaybackGameObject, BaseCreature):
-    def __init__(self, playback_id, health, position, speed, name,sprite, angle,bullet_range, events, collider, scale_size, scale_position, shoot_cooldown, score):
+    """
+    Represents a creature in the playback mode.
+
+    Attributes:
+        scale_size (float): The scaling factor for the creature's size.
+        scale_position (float): The scaling factor for the creature's position.
+        sprite (pygame.Surface): The sprite image of the creature.
+    """
+    def __init__(self, playback_id, health, position, speed, name, sprite, angle, bullet_range, events, collider, scale_size, scale_position, shoot_cooldown, score):
         self.scale_size = scale_size
         self.scale_position = scale_position
         PlaybackGameObject.__init__(self, playback_id, position, angle, events)
-        BaseCreature.__init__(self, health, speed,bullet_range, name, shoot_cooldown)
+        BaseCreature.__init__(self, health, speed, bullet_range, name, shoot_cooldown)
         self.collider = collider  # Use the provided collider
         # Load the image only once in the constructor
 
         #self.image = pygame.image.load('assets/car1.png').convert_alpha()
         self.sprite = sprite
         self.sprite = pygame.transform.scale(self.sprite, self.collider.size)  # Scale to match the collider size
+        self.shoot_timer = 0
 
 
 
@@ -667,6 +730,13 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
 
 
 class BaseProjectile:
+    """
+    Base class for projectiles in the game.
+
+    Attributes:
+        speed (float): The speed of the projectile.
+        origin_id (int): The ID of the game object that fired the projectile.
+    """
     def __init__(self, speed, origin_id, **kwargs):
         self.speed = speed
         # Store the origin (id of creator game_object) of the projectile
@@ -696,6 +766,14 @@ class BaseProjectile:
 
 
 class SimulationProjectile(SimulationGameObject, BaseProjectile):
+    """
+    Represents a projectile in the simulation mode.
+
+    Attributes:
+        damage (int): The damage inflicted by the projectile.
+        range (float): The range of the projectile.
+        start_position (tuple): The starting position of the projectile.
+    """
     def __init__(self, position, angle, speed, origin_id,damage,range, game, collider=None, **kwargs):
         # Assign the id before any other operations
         #self._internal_id = game.generate_id() if game else None
@@ -778,6 +856,15 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
 
 
 class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
+    """
+    Represents a projectile in the playback mode.
+
+    Attributes:
+        scale_size (float): The scaling factor for the projectile's size.
+        scale_position (float): The scaling factor for the projectile's position.
+        color (tuple): The color of the projectile.
+        start_position (tuple): The starting position of the projectile.
+    """
     def __init__(self, playback_id,origin_id, position, angle, speed,  events, collider=None,color = None, scale_size=None, scale_position=None):
         self.scale_size = scale_size
         self.scale_position = scale_position
@@ -810,6 +897,16 @@ class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
 
 #TODO make Game proper singleton and remove the self.game references
 class Game:
+    """
+    Base class for the game.
+
+    Attributes:
+        arena (Arena): The game arena.
+        game_objects (list): The list of game objects in the game.
+        cemetery (list): The list of destroyed game objects.
+        global_events (dict): The global events in the game.
+        winner (GameObject): The winner of the game.
+    """
     _time = -1
     _collision_checks = 0 # Static counter for collision checks
 
@@ -911,6 +1008,14 @@ def serialize_events(events):
 
 
 class SimulationGame(Game):
+    """
+    Represents the game in simulation mode.
+
+    Attributes:
+        creature_counts (dict): The count of each type of creature in the game.
+        id_counter (int): The counter for generating unique IDs.
+        score_values (dict): The score values for different game events.
+    """
     def __init__(self, arena, creatures = None):
         super().__init__(arena)
         self.game_objects = creatures
@@ -955,12 +1060,31 @@ class SimulationGame(Game):
 
 
     def record_game(self, filename):
-
         # Bring the cemetery back for recording
         self.game_objects.extend([obj for obj in self.cemetery if isinstance(obj, BaseCreature)])
 
         # Serialize the creatures
-        creatures_data = [creature.to_dict() for creature in self.game_objects if isinstance(creature, SimulationCreature)]
+        creatures_data = [
+            {
+                'id': creature.id,
+                'position': creature.position,
+                'angle': creature.angle,
+                'health': creature.health,
+                'speed': creature.speed,
+                'name': creature.name,
+                'max_turn_rate': creature.max_turn_rate,
+                'shoot_cooldown': creature.shoot_cooldown,
+                'size': (creature.collider.rect.width, creature.collider.rect.height),
+                'damage': creature.damage,
+                'bullet_speed': creature.bullet_speed,
+                'bullet_range': creature.bullet_range,
+                'score': creature.score,
+                'brake_power': creature.brake_power,  # Add brake_power attribute
+                'brake_cooldown': creature.brake_cooldown,  # Add brake_cooldown attribute
+                # Include any other attributes you want to log
+            }
+            for creature in self.game_objects if isinstance(creature, SimulationCreature)
+        ]
 
         # Serialize the events
         events = serialize_events(self.global_events)
@@ -970,7 +1094,7 @@ class SimulationGame(Game):
             "header": {
                 "arena": {"width": self.arena.width, "height": self.arena.height},
                 "winner": self.winner,
-                "creatures": creatures_data, # Include the serialized creatures
+                "creatures": creatures_data,  # Include the serialized creatures
             },
             "events": events,
         }

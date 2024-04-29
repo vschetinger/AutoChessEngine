@@ -79,7 +79,7 @@ def get_machine_gun_creature_b(position, i):
         damage=random.randint(5, 50), # Machine Gun damage range
         bullet_speed=random.randint(10, 80), # Machine Gun bullet speed range
         bullet_range=random.randint(50, 800), # Machine Gun bullet range
-        brake_power=random.uniform(0.5, 0.9),  # Adjust the range as needed
+        brake_power=random.uniform(0.5, 0.8),  # Adjust the range as needed
         brake_cooldown=random.randint(50, 100),  # Adjust the range as needed
     )
 
