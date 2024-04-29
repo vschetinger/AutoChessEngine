@@ -204,7 +204,6 @@ class AutoChessBatchedSimulator:
         game.creature_counts = creature_counts
         return game
 
-    #TODO make a machine gun gauntlet later and its the second task
     def initialize_machine_gun_duel(self):
         # Randomly select an arena size from the list
         arena_size = random.choice(self.arena_sizes)
@@ -229,10 +228,35 @@ class AutoChessBatchedSimulator:
         }
 
         return game
+    
+    def initialize_machine_gun_gauntlet(self):
+        # Randomly select an arena size from the list
+        arena_size = random.choice(self.arena_sizes)
+        arena = Arena(width=arena_size, height=arena_size)
+
+        game = SimulationGame(arena, [])
+        Game.reset_time()
+        creatures = []
+
+        # Create n machine gun creatures
+        participants = random.randint(3, 6)
+        for i in range(participants):
+            creature = get_machine_gun_creature_b(calculate_lattice_position_with_jitter(arena, participants, i, jitter_range=self.jitter_range), i)
+            creatures.append(creature)
+            game.add_game_object(creature)
+
+        # Set the creature counts to indicate the number of machine gun creatures
+        game.creature_counts = {
+            'S': 0,
+            'ML': 0,
+            'MG': participants
+        }
+
+        return game
 
     # Function to run a single simulation and save the results
     def run_simulation(self):
-        self.game = self.initialize_machine_gun_duel()
+        self.game = self.initialize_machine_gun_gauntlet()
         while True:
             self.game.simulate_turn()
             alive_creatures = [creature for creature in self.game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]
@@ -266,9 +290,9 @@ class AutoChessBatchedSimulator:
 # Call the function to run the batch of simulations
 if __name__ == "__main__":
     num_simulations = 1 # Number of simulations to run
-    creature_types = [get_sniper_creature_b, get_machine_gun_creature_b, get_mine_laying_creature_b]
+    creature_types = [get_machine_gun_creature_b]
     arena_sizes = [2000, 2500, 3000] # List of arena sizes
 
-    simulator = AutoChessBatchedSimulator(arena_sizes, creature_types, 3, 500) # Initialize the simulator
+    simulator = AutoChessBatchedSimulator(arena_sizes, creature_types, 4, 500) # Initialize the simulator
     simulator.run_batch_simulations(num_simulations) 
    
