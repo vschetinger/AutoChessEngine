@@ -382,10 +382,21 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.brake_cool = brake_cooldown
             self.original_speed = speed
             self.brake_timer = 0
+            self._is_braking = False  # Initialize _is_braking attribute to False
+
 
             self.events = events or {}
 
             self.target = None
+
+    @property
+    def is_braking(self):
+        return self._is_braking
+
+    @is_braking.setter
+    @recordable_field
+    def is_braking(self, value):
+        self._is_braking = value
 
 
     def to_dict(self):
@@ -440,7 +451,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         if nearest:
             self.set_target(nearest.position)
             distance_to_target = math.hypot(nearest.position[0] - self.position[0], nearest.position[1] - self.position[1])
-            if distance_to_target <= self.bullet_range and self.brake_timer == 0:
+            if distance_to_target <= self.bullet_range and self.brake_timer == 0 and self.is_braking == False:
                 self.action_plan.append(('brake', None))  # Add brake action to the queue
         else:
             arena_center = (self.game.arena.width / 2, self.game.arena.height / 2)
@@ -506,10 +517,23 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 # print(f"{self.id} gun cocked!")
                 self.shoot()
             elif action == 'brake':
-               self.speed *= self.brake_power
-               if abs(self.speed) < 0.1:  # Adjust the threshold as needed
-                   self.speed = 0
-                   self.brake_timer = self.brake_cooldown
+                self.is_braking = True
+                print(f"Creature {self.id} started braking")
+
+
+        if self.is_braking:
+            self.speed *= self.brake_power
+            print(f"Creature {self.id} is braking. Current speed: {self.speed}")
+            if abs(self.speed) < 5:  # Adjust the threshold as needed
+                self.speed = 0
+                self.brake_timer = self.brake_cooldown
+                self.is_braking = False  # Set the braking state to False when speed is close to 0
+                print(f"Creature {self.id} finished braking. Speed set to 0. Brake timer set to {self.brake_cooldown}")
+        else:
+            self.speed = self.original_speed
+            # print(f"Creature {self.id} is not braking. Speed set to {self.original_speed}")
+    
+
 
         # Calculate the potential new position
         radians = math.radians(self.angle)
@@ -557,10 +581,11 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         if self.shoot_timer > 0:
             self.shoot_timer -= 1
 
+            # Decrement the shoot timer if it's greater than 0
+ 
         if self.brake_timer > 0:
-           self.brake_timer -= 1
-        else:
-            self.speed = self.original_speed
+            self.brake_timer -= 1
+
 
 def draw_rotated_box(screen, rect, angle, color):
         # Calculate the angle in radians
@@ -594,6 +619,15 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         self.sprite = sprite
         self.sprite = pygame.transform.scale(self.sprite, self.collider.size)  # Scale to match the collider size
 
+        self._is_braking = False  # Initialize _is_braking attribute to False
+
+    @property
+    def is_braking(self):
+        return self._is_braking
+
+    @is_braking.setter
+    def is_braking(self, value):
+        self._is_braking = value
 
 
     def draw(self, screen, convert_to_screen):
@@ -660,6 +694,16 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         score_surface = score_font.render(score_text, True, (255, 255, 255))  # White color
         score_rect = score_surface.get_rect(center=(screen_center[0], screen_center[1] - 30))  # Adjust the vertical position as needed
         screen.blit(score_surface, score_rect)
+
+        # Draw the "brake!" text under the creature when braking
+        if self.is_braking:
+            brake_text = "brake!"
+            brake_font = pygame.font.Font(None, 18)  # Adjust the font size as needed (smaller than score)
+            brake_color = (255, 0, 0)  # Red color
+            brake_surface = brake_font.render(brake_text, True, brake_color)
+            brake_rect = brake_surface.get_rect(center=(screen_center[0], screen_center[1] + 30))  # Adjust the vertical position as needed
+            screen.blit(brake_surface, brake_rect)
+
 
         pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
         # Because this timer is only used for drawing, it doesn't need to be updated in the move method

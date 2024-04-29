@@ -1,22 +1,22 @@
 {
-  "num_simulations": 3,
+  "num_simulations": 2,
   "creature_types": ["simple_creature"],
-  "num_creatures": 6,
+  "num_creatures": 2,
   "time_limit": 400,
   "arena_sizes": [2000, 3000],
   "jitter_range": 100,
   "creature_config": {
     "simple_creature": {
-      "health": 5,
+      "health": 100,
       "speed_range": [40, 80],
       "max_turn_rate_range": [5, 30],
       "shoot_cooldown_range": [10, 40],
       "bounding_box_size": [50, 100],
-      "damage_range": [1, 2],
+      "damage_range": [20, 100],
       "bullet_speed_range": [40, 100],
       "bullet_range_range": [200, 800],
-      "brake_power_range": [0.7, 0.95],
-      "brake_cooldown_range": [15, 30],
+      "brake_power_range": [0.9, 0.9],
+      "brake_cooldown_range": [100, 200],
       "sprite_filename": "machine_gun_sprite.png"
     }
   }
