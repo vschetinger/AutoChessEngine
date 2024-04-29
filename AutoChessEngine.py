@@ -363,7 +363,7 @@ class BaseCreature:
 
 
 class SimulationCreature(SimulationGameObject, BaseCreature):
-    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, damage, bullet_speed, bullet_range, brake_power, brake_cooldown, events=None, **kwargs):
+    def __init__(self, position, angle, health, speed, name, max_turn_rate, shoot_cooldown, bounding_box_size, damage, bullet_speed, bullet_range, brake_power, brake_cooldown, sprite_filename, events=None, **kwargs):
             # Adjust bounding_rect initialization as needed to fit the game's logic
             collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
             super().__init__(position, angle, collider=collider, **kwargs)
@@ -371,6 +371,8 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
 
             # Assign the id before any other operations
             self._internal_id = self.game.generate_id() if self.game else None
+
+            self.sprite_filename = sprite_filename
 
             self.max_turn_rate = max_turn_rate
             self.shoot_cooldown = shoot_cooldown
@@ -403,7 +405,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             'score': self.score,
             'brake_power': self.brake_power,
             'brake_cooldown': self.brake_cooldown,
-            # Include any other attributes you want to log
+            'sprite_filename': self.sprite_filename,  
         }
 
     def take_damage(self, damage, attacker_id):

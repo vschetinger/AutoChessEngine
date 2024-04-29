@@ -11,6 +11,19 @@ import moviepy
 import argparse
 
 
+class SpriteManager:
+    def __init__(self):
+        self.loaded_sprites = {}
+
+    def get_sprite(self, sprite_filename):
+        if sprite_filename not in self.loaded_sprites:
+            sprite_path = os.path.join('assets', sprite_filename)
+            if os.path.exists(sprite_path):
+                self.loaded_sprites[sprite_filename] = pygame.image.load(sprite_path).convert_alpha()
+            else:
+                self.loaded_sprites[sprite_filename] = None
+        return self.loaded_sprites[sprite_filename]
+
 class PlaybackGame(Game):
     def __init__(self, arena,battle_log=None):
         super().__init__(arena)
@@ -102,6 +115,10 @@ class AutoChessPlayer:
         # Will the game be rendered? T or F
         self.render = render
 
+        
+        self.sprite_manager = SpriteManager()  # Create an instance of the SpriteManager
+
+
         # Setting the canvas dimensions based on the input parameter
         self.canvas_dimensions = canvas_dimensions
         self.screen_size = screen_size
@@ -143,11 +160,6 @@ class AutoChessPlayer:
     def initialize_creatures_for_playback(self):
         creatures = []
 
-        # Load the images for the different kinds of creatures
-        sniper_image = pygame.image.load('assets/sniper_sprite.png').convert_alpha()
-        machine_gun_image = pygame.image.load('assets/machine_gun_sprite.png').convert_alpha()
-        mine_layer_image = pygame.image.load('assets/mine_layer_sprite.png').convert_alpha()
-
         for info in self.battle_log['header']['creatures']:
             # Extract position and size from the JSON record, scale them, and initialize creatures
             position = tuple(info['position'])
@@ -156,19 +168,15 @@ class AutoChessPlayer:
             scaled_position = self.scale_position(position)
             scaled_size = self.scale_size(size)
 
-            collider = RectCollider(center=position, size=scaled_size, angle = info['angle'])
+            collider = RectCollider(center=position, size=scaled_size, angle=info['angle'])
             creature_events = {str(time): [event for event in events if event['id'] == info['id']]
                             for time, events in self.battle_log['events'].items()}
-            
+
             creature_name = info['name']
-            if 'Sniper' in creature_name:
-                sprite = sniper_image
-            elif 'Machine_Gun' in creature_name:
-                sprite = machine_gun_image
-            elif 'Mine_Layer' in creature_name:
-                sprite = mine_layer_image
-            else:
-                sprite = None # Default to no sprite if the name doesn't match any known types
+            creature_type = creature_name.split()[0]  # Extract the creature type from the name
+
+            sprite_filename = info['sprite_filename']
+            sprite = self.sprite_manager.get_sprite(sprite_filename)
 
 
             creature = PlaybackCreature(

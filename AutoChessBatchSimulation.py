@@ -1,262 +1,71 @@
+from datetime import datetime
 import os
 import json
-from AutoChessGameSimulation import initialize_game, generate_filename,calculate_lattice_position_with_jitter
-from AutoChessEngine  import Game, SimulationCreature, Arena, SimulationGame
 import random
+from AutoChessGameSimulation import initialize_game, generate_filename, calculate_lattice_position_with_jitter
+from AutoChessEngine import Game, SimulationCreature, Arena, SimulationGame
+import hashlib
 
-# def get_sniper_creature_b(position, i):
-#     return SimulationCreature(
-#         position=position,
-#         angle=random.randint(0, 360),
-#         health=100,
-#         speed=random.randint(5, 40),
-#         name=f"Sniper {i}",
-#         max_turn_rate=random.randint(8, 16),
-#         shoot_cooldown=random.randint(15, 30),
-#         bounding_box_size=(50, 100),
-#         damage=random.randint(50, 150), # Sniper damage range
-#         bullet_speed=random.randint(50, 100), # Sniper bullet speed range
-#         bullet_range=random.randint(500, 900), # Sniper bullet range
-#     )
+def load_experiment_config(config_file):
+    with open(config_file, 'r') as file:
+        return json.load(file)
 
-# def get_machine_gun_creature_b(position, i):
-#     return SimulationCreature(
-#         position=position,
-#         angle=random.randint(0, 360),
-#         health=100,
-#         speed=random.randint(5, 40),
-#         name=f"Machine_Gun {i}",
-#         max_turn_rate=random.randint(5, 15),
-#         shoot_cooldown=random.randint(2, 5),
-#         bounding_box_size=(50, 100),
-#         damage=random.randint(15, 25), # Machine Gun damage range
-#         bullet_speed=random.randint(10, 50), # Machine Gun bullet speed range
-#         bullet_range=random.randint(200, 500), # Machine Gun bullet range
-#     )
-
-# def get_mine_laying_creature_b(position, i):
-#     return SimulationCreature(
-#         position=position,
-#         angle=random.randint(0, 360),
-#         health=100,
-#         speed=random.randint(4, 30),
-#         name=f"Mine_Layer {i}",
-#         max_turn_rate=random.randint(1, 8),
-#         shoot_cooldown=random.randint(5, 30),
-#         bounding_box_size=(50, 100),
-#         damage=random.randint(20, 40), # Mine Layer damage range
-#         bullet_speed=0,
-#         bullet_range=random.randint(500, 700), # Mine Layer bullet range
-#     )
-
-
-
-def get_sniper_creature_b(position, i):
+def create_creature(creature_type, position, i, creature_config):
     return SimulationCreature(
         position=position,
         angle=random.randint(0, 360),
-        health=100,
-        speed=random.randint(5, 40),
-        name=f"Sniper {i}",
-        max_turn_rate=random.randint(5, 20),
-        shoot_cooldown=random.randint(15, 50),
-        bounding_box_size=(50, 100),
-        damage=random.randint(40, 140), # Sniper damage range
-        bullet_speed=random.randint(40, 100), # Sniper bullet speed range
-        bullet_range=random.randint(400, 1200), # Sniper bullet range
-    )
-
-def get_machine_gun_creature_b(position, i):
-    return SimulationCreature(
-        position=position,
-        angle=random.randint(0, 360),
-        health=100,
-        speed=random.randint(10, 75),
-        name=f"Machine_Gun {i}",
-        max_turn_rate=random.randint(1, 30),
-        shoot_cooldown=random.randint(1, 10),
-        bounding_box_size=(50, 100),
-        damage=random.randint(5, 50), # Machine Gun damage range
-        bullet_speed=random.randint(10, 80), # Machine Gun bullet speed range
-        bullet_range=random.randint(50, 800), # Machine Gun bullet range
-        brake_power=random.uniform(0.5, 0.8),  # Adjust the range as needed
-        brake_cooldown=random.randint(50, 100),  # Adjust the range as needed
-    )
-
-def get_mine_laying_creature_b(position, i):
-    return SimulationCreature(
-        position=position,
-        angle=random.randint(0, 360),
-        health=100,
-        speed=random.randint(4, 40),
-        name=f"Mine_Layer {i}",
-        max_turn_rate=random.randint(1, 15),
-        shoot_cooldown=random.randint(5, 30),
-        bounding_box_size=(50, 100),
-        damage=random.randint(15, 60), # Mine Layer damage range
-        bullet_speed=0,
-        bullet_range=random.randint(400, 800), # Mine Layer bullet range
+        health=creature_config[creature_type]['health'],
+        speed=random.randint(*creature_config[creature_type]['speed_range']),
+        name=f"{creature_type} {i}",
+        max_turn_rate=random.randint(*creature_config[creature_type]['max_turn_rate_range']),
+        shoot_cooldown=random.randint(*creature_config[creature_type]['shoot_cooldown_range']),
+        bounding_box_size=tuple(creature_config[creature_type]['bounding_box_size']),
+        damage=random.randint(*creature_config[creature_type]['damage_range']),
+        bullet_speed=random.randint(*creature_config[creature_type]['bullet_speed_range']),
+        bullet_range=random.randint(*creature_config[creature_type]['bullet_range_range']),
+        brake_power=random.uniform(*creature_config[creature_type]['brake_power_range']),
+        brake_cooldown=random.randint(*creature_config[creature_type]['brake_cooldown_range']),
+        sprite_filename=creature_config[creature_type]['sprite_filename'],  
     )
 
 class AutoChessBatchedSimulator:
-    def __init__(self, arena_sizes, creature_types,n,time_limit, jitter_range=150):
-        self.creature_types = creature_types
-        self.jitter_range = jitter_range
-        self.n = n # Number of creatures
+    def __init__(self, experiment_config):
+        self.experiment_config = experiment_config
+        self.creature_types = experiment_config['creature_types']
+        self.jitter_range = experiment_config['jitter_range']
+        self.n = experiment_config['num_creatures']
         self.game = None
-        self.time_limit = time_limit
-        self.arena_sizes = arena_sizes # List of arena sizes
+        self.time_limit = experiment_config['time_limit']
+        self.arena_sizes = experiment_config['arena_sizes']
+        self.creature_config = experiment_config['creature_config']
+        self.experiment_hash = self.generate_experiment_hash(experiment_config)
 
-class AutoChessBatchedSimulator:
-    def __init__(self, arena_sizes, creature_types,n,time_limit, jitter_range=150):
-        self.creature_types = creature_types
-        self.jitter_range = jitter_range
-        self.n = n # Number of creatures
-        self.game = None
-        self.time_limit = time_limit
-        self.arena_sizes = arena_sizes # List of arena sizes
-
-
-    def initialize_balanced(self):
-        # Randomly select an arena size from the list
-        arena_size = random.choice(self.arena_sizes)
-        arena = Arena(width=arena_size, height=arena_size) # Assuming the width and height are the same
-
-        game = SimulationGame(arena, [])
-        Game.reset_time()
-        creatures = []
-        # Initialize a dictionary to keep track of creature counts
-        creature_counts = {
-            'S': 0,
-            'ML': 0,
-            'MG': 0
-            # Add more creature types and their counts as needed
-        }
-        
-        # Calculate the number of each creature type to add
-        num_creatures_per_type = self.n // len(self.creature_types)
-        remaining_creatures = self.n % len(self.creature_types)
-        
-        for creature_type in self.creature_types:
-            for i in range(num_creatures_per_type):
-                creature = creature_type(calculate_lattice_position_with_jitter(arena, self.n, i, jitter_range=self.jitter_range), i)
-                creatures.append(creature)
-                game.add_game_object(creature) # Add the creature to the game
-                
-                # Update the creature counts based on the creature type
-                if creature_type == get_sniper_creature_b:
-                    creature_counts['S'] += 1
-                elif creature_type == get_machine_gun_creature_b:
-                    creature_counts['MG'] += 1
-                elif creature_type == get_mine_laying_creature_b:
-                    creature_counts['ML'] += 1
-            
-            # Distribute the remaining creatures evenly among the types
-            if remaining_creatures > 0:
-                creature = creature_type(calculate_lattice_position_with_jitter(arena, self.n, i, jitter_range=self.jitter_range), i)
-                creatures.append(creature)
-                game.add_game_object(creature) # Add the creature to the game
-                
-                # Update the creature counts based on the creature type
-                if creature_type == get_sniper_creature_b:
-                    creature_counts['S'] += 1
-                elif creature_type == get_machine_gun_creature_b:
-                    creature_counts['MG'] += 1
-                elif creature_type == get_mine_laying_creature_b:
-                    creature_counts['ML'] += 1
-                remaining_creatures -= 1
-
-        game.creature_counts = creature_counts
-        return game
+    def generate_experiment_hash(self, experiment_config):
+        config_json = json.dumps(experiment_config, sort_keys=True)
+        hash_object = hashlib.sha256(config_json.encode('utf-8'))
+        return hash_object.hexdigest()
 
     def initialize_game(self):
-        # Randomly select an arena size from the list
         arena_size = random.choice(self.arena_sizes)
-        arena = Arena(width=arena_size, height=arena_size) # Assuming the width and height are the same
+        arena = Arena(width=arena_size, height=arena_size)
 
         game = SimulationGame(arena, [])
         Game.reset_time()
         creatures = []
-        # Initialize a dictionary to keep track of creature counts
-        creature_counts = {
-            'S': 0,
-            'ML': 0,
-            'MG': 0
-            # Add more creature types and their counts as needed
-        }
+        creature_counts = {creature_type: 0 for creature_type in self.creature_types}
+
         for i in range(self.n):
-            # Randomly select a creature type from the list
             creature_type = random.choice(self.creature_types)
-
-
-            creature = creature_type(calculate_lattice_position_with_jitter(arena, self.n, i, jitter_range=self.jitter_range),i)
+            creature = create_creature(creature_type, calculate_lattice_position_with_jitter(arena, self.n, i, jitter_range=self.jitter_range), i, self.creature_config)
             creatures.append(creature)
-            game.add_game_object(creature) # Add the creature to the game
-            
-            # Update the creature counts based on the creature type
-            if creature_type == get_sniper_creature_b:
-                creature_counts['S'] += 1
-            elif creature_type == get_machine_gun_creature_b:
-                creature_counts['MG'] += 1
-            elif creature_type == get_mine_laying_creature_b:
-                creature_counts['ML'] += 1
+            game.add_game_object(creature)
+            creature_counts[creature_type] += 1
 
         game.creature_counts = creature_counts
         return game
 
-    def initialize_machine_gun_duel(self):
-        # Randomly select an arena size from the list
-        arena_size = random.choice(self.arena_sizes)
-        arena = Arena(width=arena_size, height=arena_size)
-
-        game = SimulationGame(arena, [])
-        Game.reset_time()
-        creatures = []
-
-        # Create n machine gun creatures
-        participants = random.randint(3, 6)
-        for i in range(participants):
-            creature = get_machine_gun_creature_b(calculate_lattice_position_with_jitter(arena, 2, i, jitter_range=self.jitter_range), i)
-            creatures.append(creature)
-            game.add_game_object(creature)
-
-        # Set the creature counts to indicate two machine gun creatures
-        game.creature_counts = {
-            'S': 0,
-            'ML': 0,
-            'MG': participants
-        }
-
-        return game
-    
-    def initialize_machine_gun_gauntlet(self):
-        # Randomly select an arena size from the list
-        arena_size = random.choice(self.arena_sizes)
-        arena = Arena(width=arena_size, height=arena_size)
-
-        game = SimulationGame(arena, [])
-        Game.reset_time()
-        creatures = []
-
-        # Create n machine gun creatures
-        participants = random.randint(3, 6)
-        for i in range(participants):
-            creature = get_machine_gun_creature_b(calculate_lattice_position_with_jitter(arena, participants, i, jitter_range=self.jitter_range), i)
-            creatures.append(creature)
-            game.add_game_object(creature)
-
-        # Set the creature counts to indicate the number of machine gun creatures
-        game.creature_counts = {
-            'S': 0,
-            'ML': 0,
-            'MG': participants
-        }
-
-        return game
-
-    # Function to run a single simulation and save the results
-    def run_simulation(self):
-        self.game = self.initialize_machine_gun_gauntlet()
+    def run_simulation(self, simulation_number):
+        self.game = self.initialize_game()
         while True:
             self.game.simulate_turn()
             alive_creatures = [creature for creature in self.game.game_objects if isinstance(creature, SimulationCreature) and creature.health > 0]
@@ -264,7 +73,6 @@ class AutoChessBatchedSimulator:
                 self.game.winner = alive_creatures[0].name
                 break
             if Game.get_time() >= self.time_limit or len(alive_creatures) == 0:
-                # Determine the winner based on the highest score among alive creatures
                 if alive_creatures:
                     creatures_by_score = sorted(alive_creatures, key=lambda creature: creature.score, reverse=True)
                     self.game.winner = creatures_by_score[0].name
@@ -272,27 +80,40 @@ class AutoChessBatchedSimulator:
                     self.game.winner = "Draw"
                 break
 
-        # Generate the filename based on the simulation parameters
-        filename = generate_filename(self.game.creature_counts)
-
-        # Save the simulation record with the generated filename
+        filename = generate_batch_filename(self.game.creature_counts, self.experiment_hash, simulation_number)
         self.game.record_game(f"playbacks/{filename}")
         print(f"Simulation saved to playbacks/{filename}")
 
 
 
-    # Function to run multiple simulations
     def run_batch_simulations(self, num_simulations):
         for i in range(num_simulations):
             print(f"Running simulation {i + 1} of {num_simulations}")
-            self.run_simulation()
+            self.run_simulation(i + 1)
 
-# Call the function to run the batch of simulations
+    def save_batch_output(self, output_file):
+        batch_output = {
+            'experiment_config': self.experiment_config,
+            'experiment_hash': self.experiment_hash
+        }
+        output_path = os.path.join("playbacks", output_file)
+        with open(output_path, 'w') as file:
+            json.dump(batch_output, file, indent=4)
+
+
+def generate_batch_filename(creature_counts, experiment_hash, simulation_number):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    creature_counts_str = "_".join(f"{creature_type}_{count}" for creature_type, count in creature_counts.items())
+    game_hash = f"{experiment_hash}_{simulation_number}"
+    return f"AutoChessSimulationRun--{timestamp}--{game_hash}--{creature_counts_str}.json"
+
 if __name__ == "__main__":
-    num_simulations = 1 # Number of simulations to run
-    creature_types = [get_machine_gun_creature_b]
-    arena_sizes = [2000, 2500, 3000] # List of arena sizes
+    experiment_config_file = 'experiment_config.json'
+    experiment_config = load_experiment_config(experiment_config_file)
 
-    simulator = AutoChessBatchedSimulator(arena_sizes, creature_types, 4, 500) # Initialize the simulator
-    simulator.run_batch_simulations(num_simulations) 
-   
+    simulator = AutoChessBatchedSimulator(experiment_config)
+    simulator.run_batch_simulations(experiment_config['num_simulations'])
+
+    batch_output_file = f"batch_output_{simulator.experiment_hash}.json"
+    simulator.save_batch_output(batch_output_file)
+    print(f"Batch output saved to playbacks/{batch_output_file}")
