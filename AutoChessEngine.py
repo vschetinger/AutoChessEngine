@@ -416,7 +416,8 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             'score': self.score,
             'brake_power': self.brake_power,
             'brake_cooldown': self.brake_cooldown,
-            'sprite_filename': self.sprite_filename,  
+            'sprite_filename': self.sprite_filename,
+            'score_values': self.game.score_values,  # Include the score_values from the game
         }
 
     def take_damage(self, damage, attacker_id):
@@ -518,17 +519,17 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
                 self.shoot()
             elif action == 'brake':
                 self.is_braking = True
-                print(f"Creature {self.id} started braking")
+                # print(f"Creature {self.id} started braking")
 
 
         if self.is_braking:
             self.speed *= self.brake_power
-            print(f"Creature {self.id} is braking. Current speed: {self.speed}")
+            # print(f"Creature {self.id} is braking. Current speed: {self.speed}")
             if abs(self.speed) < 5:  # Adjust the threshold as needed
                 self.speed = 0
                 self.brake_timer = self.brake_cooldown
                 self.is_braking = False  # Set the braking state to False when speed is close to 0
-                print(f"Creature {self.id} finished braking. Speed set to 0. Brake timer set to {self.brake_cooldown}")
+                # print(f"Creature {self.id} finished braking. Speed set to 0. Brake timer set to {self.brake_cooldown}")
         else:
             self.speed = self.original_speed
             # print(f"Creature {self.id} is not braking. Speed set to {self.original_speed}")
@@ -687,7 +688,9 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
         else:
             health_ratio = 0
         health_bar_color = (0, 255, 0) if health_ratio > 0.5 else (255, 255, 0) if health_ratio > 0.25 else (255, 0, 0) # Change color based on health
-        
+
+        pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
+                
         # Draw the score above the creature's head
         score_text = str(self.score)
         score_font = pygame.font.Font(None, 24)  # Adjust the font size as needed
@@ -705,7 +708,6 @@ class PlaybackCreature(PlaybackGameObject, BaseCreature):
             screen.blit(brake_surface, brake_rect)
 
 
-        pygame.draw.rect(screen, health_bar_color, (screen_center[0] - health_bar_width / 2, screen_center[1] - health_bar_height - 10, health_bar_width * health_ratio, health_bar_height))
         # Because this timer is only used for drawing, it doesn't need to be updated in the move method
         if self.shoot_timer < self.shoot_cooldown:
             self.shoot_timer += 1
@@ -957,20 +959,20 @@ def serialize_events(events):
 
 
 class SimulationGame(Game):
-    def __init__(self, arena, creatures = None):
+    def __init__(self, arena, creatures=None, experiment_hash=None):
         super().__init__(arena)
         self.game_objects = creatures
         self.creature_counts = {}
         self.id_counter = 1
-        if(creatures):
-            self.set_game_for_creatures()  # Call the set_game_for_creatures() method on self
-
+        if creatures:
+            self.set_game_for_creatures()
         self.score_values = {
             "hit_taken": -2,
             "hit_given": 5,
             "death": -20,
             "kill": 30,
         }
+        self.experiment_hash = experiment_hash  # Store the experiment_hash
         
     def generate_id(self):
         """Generate a new unique ID."""
@@ -1001,7 +1003,6 @@ class SimulationGame(Game):
 
 
     def record_game(self, filename):
-
         # Bring the cemetery back for recording
         self.game_objects.extend([obj for obj in self.cemetery if isinstance(obj, BaseCreature)])
 
@@ -1015,11 +1016,17 @@ class SimulationGame(Game):
         game_record = {
             "header": {
                 "arena": {"width": self.arena.width, "height": self.arena.height},
-                "winner": self.winner,
-                "creatures": creatures_data, # Include the serialized creatures
+                "winner": self.winner.split(' ')[0] if self.winner else None,
+                "creatures": creatures_data,  # Include the serialized creatures
+                "score_values": self.score_values,  # Include the score_values dictionary
             },
+            "experiment_hash": self.experiment_hash,  # Include the experiment_hash
             "events": events,
         }
+
+        # Save the game record to a JSON file
+        with open(filename, 'w') as f:
+            json.dump(game_record, f, indent=4)
 
         # Save the game record to a JSON file
         with open(filename, 'w') as f:

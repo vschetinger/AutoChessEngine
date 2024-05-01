@@ -103,6 +103,11 @@ class AutoChessPlayer:
         with open(battle_log_path, 'r') as f:
             self.battle_log = json.load(f)
 
+        if 'header' not in self.battle_log:
+            print(f"Error: Missing 'header' key in the battle log file: {battle_log_path}")
+            raise KeyError(f"Missing 'header' key in the battle log file: {battle_log_path}")
+
+
         # Original arena dimensions from the JSON file
         original_arena_dimensions = self.battle_log['header']['arena']
         # For clarity, storing original dimensions separately

@@ -6,12 +6,12 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Use the first argument as the directory containing the .json playback files
-PLAYBACKS_DIRECTORY="$1"
+playback_dir=$1
+output_dir=$playback_dir
 
-# Iterate over all .json files in the specified directory
-for json_file in "$PLAYBACKS_DIRECTORY"/*.json; do
-    # Call the AutoChessPlaybackToVideo.py script with the current .json file as an argument
-    python AutoChessPlaybackToVideo.py "$json_file"
-    echo "Generated video for playback: $json_file"
+# Iterate over all JSON files in the playback directory, excluding the batch output file
+for file in "$playback_dir"/*.json; do
+    if [[ $file == *.json && $file != *"batch_output"* ]]; then
+        python AutoChessPlaybackToVideo.py "$file"
+    fi
 done

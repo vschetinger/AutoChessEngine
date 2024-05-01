@@ -1,7 +1,7 @@
 {
-  "num_simulations": 2,
-  "creature_types": ["simple_creature"],
-  "num_creatures": 2,
+  "num_simulations": 4,
+  "creature_types": ["simple_creature","normal_creature"],
+  "num_creatures": [3, 3],
   "time_limit": 400,
   "arena_sizes": [2000, 3000],
   "jitter_range": 100,
@@ -9,15 +9,29 @@
     "simple_creature": {
       "health": 100,
       "speed_range": [40, 80],
-      "max_turn_rate_range": [5, 30],
+      "max_turn_rate_range": [25, 50],
+      "shoot_cooldown_range": [5, 15],
+      "bounding_box_size": [50, 100],
+      "damage_range": [10, 20],
+      "bullet_speed_range": [80, 120],
+      "bullet_range_range": [200, 600],
+      "brake_power_range": [0.7, 0.9],
+      "brake_cooldown_range": [50, 200],
+      "sprite_filename": "machine_gun_sprite.png"
+    },
+    "normal_creature": {
+      "health": 50,
+      "speed_range": [60, 90],
+      "max_turn_rate_range": [25, 50],
       "shoot_cooldown_range": [10, 40],
       "bounding_box_size": [50, 100],
-      "damage_range": [20, 100],
-      "bullet_speed_range": [40, 100],
+      "damage_range": [20, 80],
+      "bullet_speed_range": [60, 120],
       "bullet_range_range": [200, 800],
-      "brake_power_range": [0.9, 0.9],
+      "brake_power_range": [0.5, 0.9],
       "brake_cooldown_range": [100, 200],
-      "sprite_filename": "machine_gun_sprite.png"
+      "sprite_filename": "sniper_sprite.png"
     }
   }
+  
 }

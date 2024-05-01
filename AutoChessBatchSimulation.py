@@ -33,7 +33,7 @@ class AutoChessBatchedSimulator:
         self.experiment_config = experiment_config
         self.creature_types = experiment_config['creature_types']
         self.jitter_range = experiment_config['jitter_range']
-        self.n = experiment_config['num_creatures']
+        self.n = experiment_config['num_creatures']  # Assign self.n as a list
         self.game = None
         self.time_limit = experiment_config['time_limit']
         self.arena_sizes = experiment_config['arena_sizes']
@@ -43,23 +43,25 @@ class AutoChessBatchedSimulator:
     def generate_experiment_hash(self, experiment_config):
         config_json = json.dumps(experiment_config, sort_keys=True)
         hash_object = hashlib.sha256(config_json.encode('utf-8'))
-        return hash_object.hexdigest()
+        full_hash = hash_object.hexdigest()
+        truncated_hash = full_hash[:8]  # Use the first 8 characters of the hash
+        return truncated_hash
 
     def initialize_game(self):
         arena_size = random.choice(self.arena_sizes)
         arena = Arena(width=arena_size, height=arena_size)
 
-        game = SimulationGame(arena, [])
+        game = SimulationGame(arena, [], experiment_hash=self.experiment_hash)
         Game.reset_time()
         creatures = []
         creature_counts = {creature_type: 0 for creature_type in self.creature_types}
 
-        for i in range(self.n):
-            creature_type = random.choice(self.creature_types)
-            creature = create_creature(creature_type, calculate_lattice_position_with_jitter(arena, self.n, i, jitter_range=self.jitter_range), i, self.creature_config)
-            creatures.append(creature)
-            game.add_game_object(creature)
-            creature_counts[creature_type] += 1
+        for creature_type, count in zip(self.creature_types, self.n):
+            for i in range(count):
+                creature = create_creature(creature_type, calculate_lattice_position_with_jitter(arena, sum(self.n), len(creatures), jitter_range=self.jitter_range), len(creatures), self.creature_config)
+                creatures.append(creature)
+                game.add_game_object(creature)
+                creature_counts[creature_type] += 1
 
         game.creature_counts = creature_counts
         return game
@@ -94,18 +96,19 @@ class AutoChessBatchedSimulator:
     def save_batch_output(self, output_file):
         batch_output = {
             'experiment_config': self.experiment_config,
-            'experiment_hash': self.experiment_hash
+            'experiment_hash': self.experiment_hash,
+            'score_values': self.game.score_values,
+            'num_simulations': self.experiment_config['num_simulations']
         }
-        output_path = os.path.join("playbacks", output_file)
+        output_path = os.path.join("experiments", output_file)  # Save in the "experiments" folder
         with open(output_path, 'w') as file:
             json.dump(batch_output, file, indent=4)
 
 
 def generate_batch_filename(creature_counts, experiment_hash, simulation_number):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    creature_counts_str = "_".join(f"{creature_type}_{count}" for creature_type, count in creature_counts.items())
     game_hash = f"{experiment_hash}_{simulation_number}"
-    return f"AutoChessSimulationRun--{timestamp}--{game_hash}--{creature_counts_str}.json"
+    return f"AutoChessSimulationRun--{timestamp}--{game_hash}.json"
 
 if __name__ == "__main__":
     experiment_config_file = 'experiment_config.json'
@@ -116,4 +119,4 @@ if __name__ == "__main__":
 
     batch_output_file = f"batch_output_{simulator.experiment_hash}.json"
     simulator.save_batch_output(batch_output_file)
-    print(f"Batch output saved to playbacks/{batch_output_file}")
+    print(f"Batch output saved to experiments/{batch_output_file}")
