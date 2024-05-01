@@ -367,7 +367,7 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             # Adjust bounding_rect initialization as needed to fit the game's logic
             collider = RectCollider(center=position, size=bounding_box_size, angle=angle)
             super().__init__(position, angle, collider=collider, **kwargs)
-            BaseCreature.__init__(self, health, speed,bullet_range, name,shoot_cooldown, **kwargs)
+            BaseCreature.__init__(self, health, speed,bullet_range, name,shoot_cooldown,brake_power,brake_cooldown, **kwargs)
 
             # Assign the id before any other operations
             self._internal_id = self.game.generate_id() if self.game else None
@@ -378,8 +378,6 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
             self.shoot_cooldown = shoot_cooldown
             self.damage = damage
             self.bullet_speed = bullet_speed
-            self.brake_power = brake_power
-            self.brake_cool = brake_cooldown
             self.original_speed = speed
             self.brake_timer = 0
             self._is_braking = False  # Initialize _is_braking attribute to False
@@ -1012,11 +1010,19 @@ class SimulationGame(Game):
         # Serialize the events
         events = serialize_events(self.global_events)
 
+        winner_creature = None
+        if self.winner:
+            for creature in self.game_objects:
+                if isinstance(creature, SimulationCreature) and creature.name == self.winner:
+                    winner_creature = creature
+                    break
+
         # Prepare the game record
         game_record = {
             "header": {
                 "arena": {"width": self.arena.width, "height": self.arena.height},
                 "winner": self.winner.split(' ')[0] if self.winner else None,
+                "winner_score": winner_creature.score if winner_creature else None,
                 "creatures": creatures_data,  # Include the serialized creatures
                 "score_values": self.score_values,  # Include the score_values dictionary
             },

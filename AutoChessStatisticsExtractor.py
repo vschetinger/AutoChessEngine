@@ -2,43 +2,88 @@ import os
 import json
 import csv
 from datetime import datetime
-import numpy as np
+import statistics
 
-def extract_experiment_statistics(json_file_path):
-    with open(json_file_path, 'r') as file:
-        data = json.load(file)
 
-    experiment_config = data['experiment_config']
-    experiment_hash = data['experiment_hash']
+def extract_creature_statistics(game_data):
+    creatures_stats = []
+
+    for creature in game_data['header']['creatures']:
+        creature_stats = {
+            'game_filename': game_data['filename'],
+            'creature_id': creature['id'],
+            'creature_type': creature['name'].split(' ')[0],
+            'speed': creature['speed'],
+            'max_turn_rate': creature['max_turn_rate'],
+            'damage': creature['damage'],
+            'bullet_speed': creature['bullet_speed'],
+            'shoot_cooldown': creature['shoot_cooldown'],
+            'bullet_range': creature['bullet_range'],
+            'score': creature['score'],
+            'brake_cooldown': creature['brake_cooldown'],
+            'brake_power': creature['brake_power'],
+        }
+        creatures_stats.append(creature_stats)
+
+    return creatures_stats
+
+def extract_game_statistics(game_data, creatures_stats):
+    header = game_data['header']
+    winner = header['winner']
+    total_score = sum(creature['score'] for creature in creatures_stats)
+    num_creatures = len(creatures_stats)
+
+    # Calculate average score per player
+    avg_score_per_player = total_score / num_creatures
+
+    # Get the winner's score directly from the game data
+    winner_score = header['winner_score']
+
+    # Find the maximum score among all creatures
+    max_score = max(creature['score'] for creature in creatures_stats)
+
+    return {
+        'filename': game_data['filename'],
+        'num_creatures': num_creatures,
+        'total_score': total_score,
+        'avg_score_per_player': avg_score_per_player,
+        'winner': winner,
+        'winner_score': winner_score,
+        'max_score': max_score
+    }
+
+def extract_experiment_statistics(experiment_data, game_stats, creature_stats):
+    experiment_config = experiment_data['experiment_config']
+    experiment_hash = experiment_data['experiment_hash']
     
-    score_values = data['score_values']
+    score_values = experiment_data['score_values']
     score_values_str = ', '.join(f"{key}: {value}" for key, value in score_values.items())
 
     # Calculate percentage of games that did not end by maximum turns
-    num_simulations = data['num_simulations']
-    num_games_ended_by_time = sum(1 for file in os.listdir('playbacks') if file.startswith(f"AutoChessSimulationRun--{experiment_hash}") and "time_limit_reached" in file)
+    num_simulations = experiment_data['num_simulations']
+    num_games_ended_by_time = sum(1 for game in game_stats if "time_limit_reached" in game['filename'])
     pct_games_not_ended_by_time = (num_simulations - num_games_ended_by_time) / num_simulations * 100
 
     # Calculate average score and standard deviation for all creatures in the experiment
-    all_creature_scores = []
-    winner_max_scores = []
+    all_creature_scores = [creature['score'] for creature in creature_stats]
+    avg_score = statistics.mean(all_creature_scores)
+    std_score = statistics.stdev(all_creature_scores)
 
-    for file in os.listdir('playbacks'):
-        if file.startswith(f"AutoChessSimulationRun--{experiment_hash}"):
-            with open(os.path.join('playbacks', file), 'r') as playback_file:
-                playback_data = json.load(playback_file)
-                creatures = playback_data['header']['creatures']
-                all_creature_scores.extend(float(creature['score']) for creature in creatures)
+    # Calculate average score and standard deviation for winning creatures in the experiment
+    winner_scores = [game['winner_score'] for game in game_stats if game['winner_score'] is not None]
+    if winner_scores:
+        avg_winner_score = statistics.mean(winner_scores)
+        std_winner_score = statistics.stdev(winner_scores)
+    else:
+        avg_winner_score = None
+        std_winner_score = None
 
-                winner_name = playback_data['header']['winner']
-                winner_creature = next((creature for creature in creatures if creature['name'].startswith(winner_name)), None)
-                if winner_creature:
-                    winner_max_scores.append(float(winner_creature['score']))
-
-    avg_score = np.mean(all_creature_scores) if all_creature_scores else 0.0
-    std_score = np.std(all_creature_scores) if all_creature_scores else 0.0
-    avg_winner_score = np.mean(winner_max_scores) if winner_max_scores else 0.0
-    std_winner_score = np.std(winner_max_scores) if winner_max_scores else 0.0
+    # Calculate average and standard deviation for each creature attribute
+    attribute_stats = {}
+    for attribute in ['speed', 'max_turn_rate', 'damage', 'bullet_speed', 'shoot_cooldown', 'bullet_range', 'brake_cooldown', 'brake_power']:
+        attribute_values = [creature[attribute] for creature in creature_stats]
+        attribute_stats[f'avg_{attribute}'] = statistics.mean(attribute_values)
+        attribute_stats[f'std_{attribute}'] = statistics.stdev(attribute_values)
 
     return {
         'experiment_hash': experiment_hash,
@@ -46,53 +91,80 @@ def extract_experiment_statistics(json_file_path):
         'num_simulations': num_simulations,
         'num_creatures': sum(experiment_config['num_creatures']),
         'creature_types': ', '.join(experiment_config['creature_types']),
-        'arena_sizes': ', '.join(map(str, experiment_config['arena_sizes'])),
         'time_limit': experiment_config['time_limit'],
+        'arena_sizes': ', '.join(map(str, experiment_config['arena_sizes'])),
+        'jitter_range': experiment_config['jitter_range'],
         'pct_games_not_ended_by_time': pct_games_not_ended_by_time,
         'avg_score': avg_score,
         'std_score': std_score,
         'avg_winner_score': avg_winner_score,
-        'std_winner_score': std_winner_score
+        'std_winner_score': std_winner_score,
+        **attribute_stats
     }
 
-def write_experiment_statistics_to_csv(folder_path):
-    experiments_data = []
-
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith('.json') and file.startswith('batch_output_'):
-                experiment_stats = extract_experiment_statistics(os.path.join(root, file))
-                experiments_data.append(experiment_stats)
+def write_statistics_to_csv(creatures_stats, game_stats, experiment_stats):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Create the "statistics/" folder if it doesn't exist
     os.makedirs('statistics', exist_ok=True)
 
-    # Use the experiment hash from the first experiment in the list
-    if experiments_data:
-        experiment_hash = experiments_data[0]['experiment_hash']
-        output_csv_path = f'statistics/experiment_statistics_{experiment_hash}.csv'
-        with open(output_csv_path, 'w', newline='') as csvfile:
-            fieldnames = ['experiment_hash', 'score_values', 'num_simulations', 'num_creatures', 'creature_types', 'arena_sizes', 'time_limit', 'pct_games_not_ended_by_time', 'avg_score', 'std_score', 'avg_winner_score', 'std_winner_score']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    # Write creature statistics to CSV
+    creature_csv_path = f'statistics/creature_statistics_{timestamp}.csv'
+    with open(creature_csv_path, 'w', newline='') as csvfile:
+        fieldnames = ['game_filename', 'creature_id', 'creature_type', 'speed', 'max_turn_rate', 'damage', 'bullet_speed', 'shoot_cooldown', 'bullet_range', 'score', 'brake_cooldown', 'brake_power']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(creatures_stats)
 
-            writer.writeheader()
-            for experiment_data in experiments_data:
-                writer.writerow(experiment_data)
-    else:
-        print("No experiment data found.")
+    # Write game statistics to CSV
+    game_csv_path = f'statistics/game_statistics_{timestamp}.csv'
+    with open(game_csv_path, 'w', newline='') as csvfile:
+        fieldnames = ['filename', 'num_creatures', 'total_score', 'avg_score_per_player', 'winner', 'winner_score', 'max_score']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(game_stats)
 
-def extract_all_statistics(folder_path):
-    creature_data_extractor_path = 'AutoChessCreatureDataExtractor.py'
-    game_data_extractor_path = 'AutoChessGameDataExtractor.py'
+    # Write experiment statistics to CSV
+    experiment_csv_path = f'statistics/experiment_statistics_{timestamp}.csv'
+    with open(experiment_csv_path, 'w', newline='') as csvfile:
+        fieldnames = [
+            'experiment_hash', 'score_values', 'num_simulations', 'num_creatures', 'creature_types',
+            'time_limit', 'arena_sizes', 'jitter_range', 'pct_games_not_ended_by_time', 'avg_score',
+            'std_score', 'avg_winner_score', 'std_winner_score', 'avg_speed', 'std_speed',
+            'avg_max_turn_rate', 'std_max_turn_rate', 'avg_damage', 'std_damage', 'avg_bullet_speed',
+            'std_bullet_speed', 'avg_shoot_cooldown', 'std_shoot_cooldown', 'avg_bullet_range',
+            'std_bullet_range', 'avg_brake_cooldown', 'std_brake_cooldown', 'avg_brake_power',
+            'std_brake_power'
+        ]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(experiment_stats)
 
-    # Run the creature data extractor
-    os.system(f'python {creature_data_extractor_path}')
+def extract_all_statistics():
+    creatures_stats = []
+    game_stats = []
+    experiment_stats = []
 
-    # Run the game data extractor
-    os.system(f'python {game_data_extractor_path}')
+    # Extract creature and game statistics from playback files
+    for root, dirs, files in os.walk('playbacks'):
+        for file in files:
+            if file.endswith('.json') and 'AutoChessSimulationRun' in file:
+                with open(os.path.join(root, file), 'r') as f:
+                    game_data = json.load(f)
+                    game_data['filename'] = file
+                    creatures_stats.extend(extract_creature_statistics(game_data))
+                    game_stats.append(extract_game_statistics(game_data, creatures_stats))
 
-    # Run the experiment statistics extractor
-    write_experiment_statistics_to_csv(folder_path)
+    # Extract experiment statistics from experiment files
+    for root, dirs, files in os.walk('experiments'):
+        for file in files:
+            if file.endswith('.json') and file.startswith('batch_output_'):
+                with open(os.path.join(root, file), 'r') as f:
+                    experiment_data = json.load(f)
+                    experiment_stats.append(extract_experiment_statistics(experiment_data, game_stats, creatures_stats))
 
-folder_path = 'experiments/'
-extract_all_statistics(folder_path)
+    # Write all statistics to CSV files
+    write_statistics_to_csv(creatures_stats, game_stats, experiment_stats)
+
+if __name__ == "__main__":
+    extract_all_statistics()

@@ -74,12 +74,9 @@ class AutoChessBatchedSimulator:
             if len(alive_creatures) == 1:
                 self.game.winner = alive_creatures[0].name
                 break
-            if Game.get_time() >= self.time_limit or len(alive_creatures) == 0:
-                if alive_creatures:
-                    creatures_by_score = sorted(alive_creatures, key=lambda creature: creature.score, reverse=True)
-                    self.game.winner = creatures_by_score[0].name
-                else:
-                    self.game.winner = "Draw"
+            if Game.get_time() >= self.time_limit:
+                creatures_by_score = sorted(self.game.game_objects, key=lambda creature: creature.score if isinstance(creature, SimulationCreature) else float('-inf'), reverse=True)
+                self.game.winner = creatures_by_score[0].name if creatures_by_score else None
                 break
 
         filename = generate_batch_filename(self.game.creature_counts, self.experiment_hash, simulation_number)
