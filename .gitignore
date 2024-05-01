@@ -1,4 +1,5 @@
 .venv/
+.vscode/
 playbacks/
 experiments/
 statistics/
