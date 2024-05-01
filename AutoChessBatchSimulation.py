@@ -42,10 +42,15 @@ class AutoChessBatchedSimulator:
 
     def generate_experiment_hash(self, experiment_config):
         config_json = json.dumps(experiment_config, sort_keys=True)
-        hash_object = hashlib.sha256(config_json.encode('utf-8'))
-        full_hash = hash_object.hexdigest()
-        truncated_hash = full_hash[:8]  # Use the first 8 characters of the hash
-        return truncated_hash
+        config_hash_object = hashlib.sha256(config_json.encode('utf-8'))
+        config_hash = config_hash_object.hexdigest()[:6]  # Use the first 6 characters of the config hash
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")  # Generate a timestamp with milliseconds
+        timestamp_hash_object = hashlib.sha256(timestamp.encode('utf-8'))
+        timestamp_hash = timestamp_hash_object.hexdigest()[:5]  # Use the first 5 characters of the timestamp hash
+
+        combined_hash = f"{config_hash}.{timestamp_hash}"
+        return combined_hash
 
     def initialize_game(self):
         arena_size = random.choice(self.arena_sizes)
@@ -91,21 +96,22 @@ class AutoChessBatchedSimulator:
             self.run_simulation(i + 1)
 
     def save_batch_output(self, output_file):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate a timestamp
         batch_output = {
             'experiment_config': self.experiment_config,
             'experiment_hash': self.experiment_hash,
             'score_values': self.game.score_values,
             'num_simulations': self.experiment_config['num_simulations']
         }
-        output_path = os.path.join("experiments", output_file)  # Save in the "experiments" folder
+        output_path = os.path.join("experiments", f"{output_file}_{timestamp}.json")  # Include timestamp in the file name
         with open(output_path, 'w') as file:
             json.dump(batch_output, file, indent=4)
 
 
 def generate_batch_filename(creature_counts, experiment_hash, simulation_number):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate a timestamp
     game_hash = f"{experiment_hash}_{simulation_number}"
-    return f"AutoChessSimulationRun--{timestamp}--{game_hash}.json"
+    return f"AutoChessSimulationRun--{timestamp}--{game_hash}.json"  # Include timestamp in the file name
 
 if __name__ == "__main__":
     experiment_config_file = 'experiment_config.json'
@@ -114,6 +120,6 @@ if __name__ == "__main__":
     simulator = AutoChessBatchedSimulator(experiment_config)
     simulator.run_batch_simulations(experiment_config['num_simulations'])
 
-    batch_output_file = f"batch_output_{simulator.experiment_hash}.json"
+    batch_output_file = "batch_output"  # Remove the experiment hash from the file name
     simulator.save_batch_output(batch_output_file)
-    print(f"Batch output saved to experiments/{batch_output_file}")
+    print(f"Batch output saved to experiments/{batch_output_file}_<timestamp>.json")

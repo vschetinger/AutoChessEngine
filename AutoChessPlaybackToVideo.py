@@ -10,7 +10,7 @@ import pygame
 
 
 class AutoChessPlaybackToVideo(AutoChessPlayer):
-    def __init__(self, battle_log_path, config_path=None, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670)):
+    def __init__(self, battle_log_path, config_path=None, screen_size=(800, 800), offset=(80, 80), canvas_dimensions=(670, 670), frame_rate=20):
         super().__init__(battle_log_path, screen_size, offset, canvas_dimensions, output_image=True, render=True)
         if config_path:
             with open(config_path, 'r') as f:
@@ -18,7 +18,7 @@ class AutoChessPlaybackToVideo(AutoChessPlayer):
         else:
             self.config = {}
         self.frame_directory = self.config.get('frame_directory', 'frames')
-        self.frame_rate = self.config.get('frame_rate', 20)
+        self.frame_rate = frame_rate
         self.video_file = self.config.get('video_file', 'output.mp4')
         self.frames = [] # List to store frames in memory
 
@@ -38,13 +38,13 @@ class AutoChessPlaybackToVideo(AutoChessPlayer):
 def main():
     parser = argparse.ArgumentParser(description='Generate a video from an AutoChess replay.')
     parser.add_argument('battle_log_path', type=str, help='Path to the JSON file containing the game replay.')
-    parser.add_argument('config_path', type=str, nargs='?', help='Path to the configuration file.')
+    parser.add_argument('-c', '--config', type=str, help='Path to the configuration file.')
     parser.add_argument('-o', '--output', type=str, help='Output video file name.')
+    parser.add_argument('-f', '--fps', type=int, default=20, help='Frames per second for the output video.')
 
     args = parser.parse_args()
 
-
-    player = AutoChessPlaybackToVideo(args.battle_log_path, args.config_path)
+    player = AutoChessPlaybackToVideo(args.battle_log_path, args.config, frame_rate=args.fps)
 
     # If no output file name is provided, use the base name of the .json file with .mp4 extension
     if not args.output:

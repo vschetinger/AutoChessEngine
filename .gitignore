@@ -1,5 +1,7 @@
 .venv/
 playbacks/
+experiments/
+statistics/
 *.csv
 *.mp4
 __pycache__/

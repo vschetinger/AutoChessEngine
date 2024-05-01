@@ -1018,11 +1018,13 @@ class SimulationGame(Game):
                     break
 
         # Prepare the game record
+        max_turns = max(self.global_events.keys()) if self.global_events else 0
         game_record = {
             "header": {
                 "arena": {"width": self.arena.width, "height": self.arena.height},
-                "winner": self.winner.split(' ')[0] if self.winner else None,
+                "winner": self.winner,
                 "winner_score": winner_creature.score if winner_creature else None,
+                "max_turns": max_turns,
                 "creatures": creatures_data,  # Include the serialized creatures
                 "score_values": self.score_values,  # Include the score_values dictionary
             },
