@@ -44,7 +44,9 @@ brew install python
 pip3 install pygame moviepy
 brew install ffmpeg
 ```
-
+#### On Windows:
+1. Download the latest version of python
+2. MAKE SURE TO CHECK "add to path" DURING INSTALLATION
 
 ### Usage
 
