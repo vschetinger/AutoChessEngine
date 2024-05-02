@@ -22,6 +22,21 @@ This project provides a game engine for simulating and playing Auto Chess games.
 - Pygame library
 - MoviePy library
 
+#### On Mac:
+1. Install homebrew:
+```bash 
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+2. Install python using homebrew:
+```bash 
+brew install python
+```
+3. Install other dependencies
+```bash 
+pip3 install pygame moviepy
+brew install ffmpeg
+```
+
 ### Installation
 
 1. Clone the repository:
