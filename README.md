@@ -31,19 +31,9 @@ git clone https://github.com/vschetinger/AutoChessEngine.git
 pip install pygame moviepy
 
 #### On Mac:
-1. Install homebrew:
-```bash 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-2. Install python using homebrew:
-```bash 
-brew install python
-```
-3. Install other dependencies
-```bash 
-pip3 install pygame moviepy
-brew install ffmpeg
-```
+
+TODO: find a solution
+
 #### On Windows:
 1. Download the latest version of python
 2. MAKE SURE TO CHECK "add to path" DURING INSTALLATION
