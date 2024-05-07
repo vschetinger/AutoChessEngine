@@ -1,5 +1,5 @@
 {
-  "num_simulations": 100,
+  "num_simulations": 50,
   "creature_types": ["simple_creature"],
   "num_creatures": [8, 3],
   "time_limit": 400,
@@ -23,13 +23,13 @@
   "obstacles": [
     {
       "position": [1000, 1000],
-      "angle": 45,
-      "size": [400, 400]
+      "angle": 0,
+      "size": [1400, 200]
     },
     {
-      "position": [300, 300],
-      "angle": 80,
-      "size": [400, 400]
+      "position": [1000, 1000],
+      "angle": 0,
+      "size": [200, 800]
     }
 
 
