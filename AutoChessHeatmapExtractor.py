@@ -17,6 +17,11 @@ num_bins = 50
 accumulated_damage_grid = None
 accumulated_position_grid = None
 
+# Initialize variables to store the additional information
+total_games = 0
+total_creatures = 0
+total_turns = 0
+
 # Iterate through all JSON files in the playbacks directory
 for filename in os.listdir(playbacks_dir):
     if filename.endswith(".json"):
@@ -56,6 +61,11 @@ for filename in os.listdir(playbacks_dir):
                             x_bin = int(position[0] / bin_width)
                             y_bin = int(position[1] / bin_height)
                             accumulated_position_grid[y_bin, x_bin] += 1
+        
+        # Update the additional information
+        total_games += 1
+        total_creatures += len(data['header']['creatures'])
+        total_turns += len(data['events'])  # Accumulate the total number of turns
 
 # Apply Gaussian blur to the accumulated grids (optional)
 from scipy.ndimage import gaussian_filter
@@ -73,25 +83,31 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # Save the heatmap of accumulated damage occurrences
 damage_output_file = os.path.join(output_dir, f"damage_heatmap_{timestamp}.png")
-plt.figure(figsize=(10, 10))
-plt.imshow(accumulated_damage_grid, cmap='hot', interpolation='nearest')
-plt.colorbar(label='Accumulated Damage Occurrences')
-plt.title('Heatmap of Accumulated Damage Occurrences')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.savefig(damage_output_file)
-plt.close()
+fig, ax = plt.subplots(figsize=(10, 10))
+im = ax.imshow(accumulated_damage_grid, cmap='hot', interpolation='nearest')
+ax.set_title('Heatmap of Accumulated Damage Occurrences')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+cbar = ax.figure.colorbar(im, ax=ax, label='Accumulated Damage Occurrences')
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+fig.text(0.5, 0.01, f"Total Games: {total_games}, Total Creatures: {total_creatures}, Total Turns: {total_turns}",
+         ha='center', fontsize=12, bbox=dict(facecolor='white', alpha=0.8))
+fig.savefig(damage_output_file)
+plt.close(fig)
 
 # Save the heatmap of car positions
 position_output_file = os.path.join(output_dir, f"car_positions_heatmap_{timestamp}.png")
-plt.figure(figsize=(10, 10))
-plt.imshow(accumulated_position_grid, cmap='hot', interpolation='nearest')
-plt.colorbar(label='Normalized Car Position Occurrences')
-plt.title('Heatmap of Car Positions')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.savefig(position_output_file)
-plt.close()
+fig, ax = plt.subplots(figsize=(10, 10))
+im = ax.imshow(accumulated_position_grid, cmap='hot', interpolation='nearest')
+ax.set_title('Heatmap of Car Positions')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+cbar = ax.figure.colorbar(im, ax=ax, label='Normalized Car Position Occurrences')
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+fig.text(0.5, 0.01, f"Total Games: {total_games}, Total Creatures: {total_creatures}, Total Turns: {total_turns}",
+         ha='center', fontsize=12, bbox=dict(facecolor='white', alpha=0.8))
+fig.savefig(position_output_file)
+plt.close(fig)
 
 print(f"Damage heatmap saved as {damage_output_file}")
 print(f"Car positions heatmap saved as {position_output_file}")
