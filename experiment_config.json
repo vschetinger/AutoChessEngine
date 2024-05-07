@@ -1,5 +1,5 @@
 {
-  "num_simulations": 5,
+  "num_simulations": 40,
   "creature_types": ["simple_creature"],
   "num_creatures": [3, 3],
   "time_limit": 400,
