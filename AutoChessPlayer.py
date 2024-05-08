@@ -10,7 +10,6 @@ import pygame
 import moviepy
 import argparse
 
-
 class SpriteManager:
     def __init__(self):
         self.loaded_sprites = {}
@@ -93,7 +92,7 @@ class PlaybackGame(Game):
             if isinstance(creature, PlaybackCreature): # Check if the object is a PlaybackCreature
                 creature.reset_to_initial_state()
                 self.game_objects.append(creature)
-        self.game_objects = [obj for obj in self.game_objects if isinstance(obj, PlaybackCreature)]
+        self.game_objects = [obj for obj in self.game_objects if isinstance(obj, PlaybackCreature) or isinstance(obj, PlaybackObstacle)]
         # The game_objects now only contains PlaybackCreatures
         self.cemetery.clear()
         
@@ -183,7 +182,6 @@ class AutoChessPlayer:
             sprite_filename = info['sprite_filename']
             sprite = self.sprite_manager.get_sprite(sprite_filename)
 
-
             creature = PlaybackCreature(
                 playback_id=info['id'],
                 health=info['health'],
@@ -202,7 +200,22 @@ class AutoChessPlayer:
             )
             self.game.add_game_object(creature)  # This method should set the game for the creature
             creatures.append(creature)
+
         self.game.game_objects = creatures
+
+        obstacles = []
+        for info in self.battle_log['header'].get('obstacles', []):
+            obstacle = PlaybackObstacle(
+                playback_id=info['id'],
+                position=tuple(info['position']),
+                angle=info['angle'],
+                size=tuple(info['size']),
+                scale_size=self.scale_size,
+                scale_position=self.scale_position
+            )
+            obstacles.append(obstacle)
+
+        self.game.game_objects = creatures + obstacles
         self.game.winner = self.battle_log['header']['winner']
 
     def initialize_global_events(self):

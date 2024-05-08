@@ -549,16 +549,13 @@ class SimulationCreature(SimulationGameObject, BaseCreature):
         will_collide = False
         for other in self.game.game_objects:
             if other is not self and temp_collider.check_collision(other.collider):
+                will_collide = True
                 if isinstance(other, SimulationProjectile) and other.origin_id != self.id:
-                    will_collide = True
                     self.take_damage(other.damage, other.origin_id)  # Pass the origin_id to take_damage
                     other.die()
                     # print(f"Collision detected between {self.id} and {other.id}")
                     break
-                elif isinstance(other, SimulationCreature) and other.id != self.id:
-                    will_collide = True
-                    # print(f"Collision detected between {self.id} and {other.id}")
-                    break
+
 
         # Check for collisions with arena walls
         arena_bounds = pygame.Rect(0, 0, self.game.arena.width, self.game.arena.height)
@@ -823,6 +820,47 @@ class SimulationProjectile(SimulationGameObject, BaseProjectile):
         self._internal_id = value # Set the internal id to the new value
 
 
+class Obstacle(SimulationGameObject):
+    def __init__(self, position, angle, size, game=None, collider=None, **kwargs):
+        collider = RectCollider(center=position, size=size, angle=angle)
+        super().__init__(position, angle, game=game, collider=collider, **kwargs)
+        self._internal_id = self.game.generate_id() if self.game else None
+        self.angle = angle  # Add this line to store the angle
+
+    def think(self):
+        pass
+
+    def move(self):
+        pass
+
+class PlaybackObstacle(PlaybackGameObject):
+    def __init__(self, playback_id, position, angle, size, scale_size, scale_position):
+        super().__init__(playback_id, position, angle)
+        self.size = size
+        self.scale_size = scale_size
+        self.scale_position = scale_position
+
+    def draw(self, screen, convert_to_screen):
+        # Convert the position to screen coordinates
+        screen_position = convert_to_screen(self.position)
+
+        # Scale the size to screen coordinates
+        screen_size = self.scale_size(self.size)
+
+        # Create a Surface for the obstacle
+        obstacle_surface = pygame.Surface(screen_size, pygame.SRCALPHA)
+        obstacle_surface.fill((255, 100, 100))  # Fill with the desired color
+
+        # Rotate the obstacle surface
+        rotated_surface = pygame.transform.rotate(obstacle_surface, -self.angle)
+        rotated_rect = rotated_surface.get_rect(center=screen_position)
+
+        # Draw the rotated obstacle
+        screen.blit(rotated_surface, rotated_rect)
+
+        
+
+
 class PlaybackProjectile(PlaybackGameObject, BaseProjectile):
     def __init__(self, playback_id,origin_id, position, angle, speed,  events, collider=None,color = None, scale_size=None, scale_position=None):
         self.scale_size = scale_size
@@ -1018,6 +1056,15 @@ class SimulationGame(Game):
                     break
 
         # Prepare the game record
+        obstacles_data = [
+        {
+            'id': obstacle.id,
+            'position': obstacle.position,
+            'angle': obstacle.angle,
+            'size': obstacle.collider.size,
+        }
+        for obstacle in self.game_objects if isinstance(obstacle, Obstacle)]
+
         max_turns = max(self.global_events.keys()) if self.global_events else 0
         game_record = {
             "header": {
@@ -1027,6 +1074,7 @@ class SimulationGame(Game):
                 "max_turns": max_turns,
                 "creatures": creatures_data,  # Include the serialized creatures
                 "score_values": self.score_values,  # Include the score_values dictionary
+                "obstacles": obstacles_data,  # Include the serialized obstacles
             },
             "experiment_hash": self.experiment_hash,  # Include the experiment_hash
             "events": events,

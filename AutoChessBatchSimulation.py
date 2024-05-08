@@ -1,14 +1,59 @@
 from datetime import datetime
 import os
 import json
+import math
 import random
 from AutoChessGameSimulation import initialize_game, generate_filename, calculate_lattice_position_with_jitter
-from AutoChessEngine import Game, SimulationCreature, Arena, SimulationGame
+from AutoChessEngine import Game, SimulationCreature, Arena, SimulationGame, Obstacle
 import hashlib
 
 def load_experiment_config(config_file):
     with open(config_file, 'r') as file:
         return json.load(file)
+    
+class CreatureSpawner:
+    def __init__(self, arena, creature_config, jitter_range, min_distance):
+        self.arena = arena
+        self.creature_config = creature_config
+        self.jitter_range = jitter_range
+        self.min_distance = min_distance
+
+    def is_valid_position(self, position, existing_creatures, obstacles):
+        for creature in existing_creatures:
+            if self.distance(position, creature.position) < self.min_distance:
+                return False
+
+        for obstacle in obstacles:
+            if self.distance(position, obstacle.position) < obstacle.collider.size[0] / 2 + self.min_distance:
+                return False
+
+        return (
+            position[0] >= 0 and position[0] < self.arena.width and
+            position[1] >= 0 and position[1] < self.arena.height
+        )
+
+    def distance(self, pos1, pos2):
+        return math.sqrt((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2)
+
+    def spawn_creatures(self, creature_counts, game):
+        creatures = []
+        obstacles = [obj for obj in game.game_objects if isinstance(obj, Obstacle)]
+
+        for creature_type, count in creature_counts.items():
+            for i in range(count):
+                while True:
+                    position = (
+                        random.uniform(0, self.arena.width),
+                        random.uniform(0, self.arena.height)
+                    )
+                    if self.is_valid_position(position, creatures, obstacles):
+                        creature = create_creature(creature_type, position, len(creatures), self.creature_config)
+                        creatures.append(creature)
+                        game.add_game_object(creature)
+                        break
+
+        return creatures
+
 
 def create_creature(creature_type, position, i, creature_config):
     return SimulationCreature(
@@ -38,6 +83,8 @@ class AutoChessBatchedSimulator:
         self.time_limit = experiment_config['time_limit']
         self.arena_sizes = experiment_config['arena_sizes']
         self.creature_config = experiment_config['creature_config']
+        self.obstacles_config = experiment_config['obstacles']  # Add this line to store the obstacles configuration
+
         self.experiment_hash = self.generate_experiment_hash(experiment_config)
 
     def generate_experiment_hash(self, experiment_config):
@@ -58,15 +105,20 @@ class AutoChessBatchedSimulator:
 
         game = SimulationGame(arena, [], experiment_hash=self.experiment_hash)
         Game.reset_time()
-        creatures = []
-        creature_counts = {creature_type: 0 for creature_type in self.creature_types}
 
-        for creature_type, count in zip(self.creature_types, self.n):
-            for i in range(count):
-                creature = create_creature(creature_type, calculate_lattice_position_with_jitter(arena, sum(self.n), len(creatures), jitter_range=self.jitter_range), len(creatures), self.creature_config)
-                creatures.append(creature)
-                game.add_game_object(creature)
-                creature_counts[creature_type] += 1
+        # Add obstacles to the game
+        for obstacle_config in self.obstacles_config:
+            obstacle = Obstacle(
+                position=obstacle_config['position'],
+                angle=obstacle_config['angle'],
+                size=obstacle_config['size'],
+                game=game
+            )
+            game.add_game_object(obstacle)
+
+        creature_counts = {creature_type: count for creature_type, count in zip(self.creature_types, self.n)}
+        spawner = CreatureSpawner(arena, self.creature_config, self.jitter_range, min_distance=50)
+        creatures = spawner.spawn_creatures(creature_counts, game)
 
         game.creature_counts = creature_counts
         return game
@@ -80,7 +132,7 @@ class AutoChessBatchedSimulator:
                 self.game.winner = alive_creatures[0].name
                 break
             if Game.get_time() >= self.time_limit:
-                creatures_by_score = sorted(self.game.game_objects, key=lambda creature: creature.score if isinstance(creature, SimulationCreature) else float('-inf'), reverse=True)
+                creatures_by_score = sorted([obj for obj in self.game.game_objects if isinstance(obj, SimulationCreature)], key=lambda creature: creature.score, reverse=True)
                 self.game.winner = creatures_by_score[0].name if creatures_by_score else None
                 break
 
