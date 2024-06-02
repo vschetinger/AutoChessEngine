@@ -25,7 +25,7 @@ This project provides a game engine for simulating and playing Auto Chess games.
 ### Installation
 
 1. Clone the repository:
-git clone https://github.com/your-username/auto-chess-engine.git
+git clone https://github.com/vschetinger/auto-chess-engine.git
 
 
 2. Install the required dependencies:
